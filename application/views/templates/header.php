@@ -1,13 +1,13 @@
-<?php $this->load->helper('url'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $title; ?></title>
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrapValidator.min.css"); ?>">
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/jquery.dataTables.min.css"); ?>">
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.css"); ?>">
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
+	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
+	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
+	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
+	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/datepicker.css"); ?>">
+	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
 </head>
 <body>
 	<div class="navbar navbar-default" role="navigation">
@@ -19,17 +19,18 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">DTS</a>
+				<a class="navbar-brand" href="<?php echo base_url("home"); ?>">DTS</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="<?php echo base_url("user"); ?>">User</a></li>
-					<li><a href="<?php echo base_url("division"); ?>">Division</a></li>
+					<?php if($userType == 'ADMIN') {?>
+						<li><a href="<?php echo base_url("user"); ?>">User</a></li>
+						<li><a href="<?php echo base_url("division"); ?>">Division</a></li>
+					<?php }?>
 					<li><a href="<?php echo base_url("document"); ?>">Documents</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="<?php echo base_url("login"); ?>">Login</a></li>
-					<li><a href="logout">Logout</a></li>
+					<li><a href="<?php echo base_url("home/logout"); ?>">Logout</a></li>
 				</ul>
 			</div>
 		</div>

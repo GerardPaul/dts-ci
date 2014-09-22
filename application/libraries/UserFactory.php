@@ -13,6 +13,19 @@ class UserFactory {
     	$this->_ci->load->model("user_model");
     }
 
+	public function getUserLogin($username=''){
+		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.username, u.password, u.salt, u.userType,
+					d.id AS 'divisionID', d.name, d.description
+				FROM user u, division d WHERE u.division = d.id AND u.username = ?";
+    	$query = $this->_ci->db->query($sql, array($username));
+    	//Check if any results were returned
+    	if ($query->num_rows() > 0) {
+    		//Pass the data to our local function to create an object for us and return this new object
+    		return $this->createObjectFromData($query->row());
+    	}
+    	return false;
+	}
+	
     public function getUser($id = 0) {
     	//Are we getting an individual user or are we getting them all
     	if ($id > 0) {
@@ -49,6 +62,24 @@ class UserFactory {
     	}
     }
 
+	public function addUser($firstname, $lastname, $username, $password, $userType, $division){
+		$user = new User_Model();
+		$user->setFirstName($firstname);
+		$user->setLastName($lastname);
+		$user->setUserType($userType);
+		$user->setDivision($division);
+		$user->setUsername($username);
+		
+		$salt1 = md5(uniqid(rand(),true));
+		$salt = substr($salt1,0,50);
+		$hashPassword = hash('sha256', $salt . $password . $salt);
+		
+		$user->setPassword($hashPassword);
+		$user->setSalt($salt);
+		
+		return $user->commit();
+	}
+	
     public function createObjectFromData($row) {
     	//Create a new user_model object
     	$user = new User_Model();

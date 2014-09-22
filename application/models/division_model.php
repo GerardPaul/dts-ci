@@ -1,7 +1,7 @@
 <?php 
 
 class Division_Model extends CI_Model{
-	private $_id;
+	private $_id = 0;
 	private $_divisionName;
 	private $_divisionDescription;
 	

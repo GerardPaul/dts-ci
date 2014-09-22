@@ -1,7 +1,9 @@
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
-		<button class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#addDivisionModal">Add Division</button>
+		<button id="addDivision" class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#addDivisionModal" data-backdrop="static" data-keyboard="false">
+			Add Division
+		</button>
 	</div>
 </div>
 <div class="space-10"></div>
@@ -13,7 +15,7 @@ if ($divisions !== FALSE) {
 		//Create the HTML table header
 		echo <<<HTML
 
-		<table class="table table-condensed table-striped table-responsive table-hover display" id="divisionTable">
+		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
 			<thead>
 				<tr>
 					<th>ID #</th>
@@ -60,7 +62,7 @@ HTML;
 		//Now user could be found so display an error messsage to the user
 		echo <<<HTML
 
-			<p>A user could not be found with the specified user ID#, please try again.</p>	
+			<div class="alert alert-warning">There are no <strong>Divisions</strong> to display.</div>
 
 HTML;
 	}
@@ -73,10 +75,10 @@ HTML;
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<button type="button" class="close cancelDivisionForm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="addDivisionModalLabel">Add Division</h4>
 			</div>
-			<form id="addDivisionForm" method="post" class="form-horizontal">
+			<form id="addDivisionForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>division/add">
 				<div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Division Name</label>
@@ -92,8 +94,8 @@ HTML;
                     </div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-primary">Confirm Add</button>
+					<button type="button" class="btn btn-default cancelDivisionForm" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-primary saveDivisionForm">Confirm Add</button>
 				</div>
 			</form>
 		</div>

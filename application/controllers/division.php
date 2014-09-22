@@ -5,28 +5,46 @@ class Division extends CI_Controller {
 	var $title = 'Division';
 	
 	public function index()	{
-		$this->load->library("DivisionFactory");
-		$data = array(
-			"divisions" => $this->divisionfactory->getDivision(),
-			"title" => $this->title
-		);
-		$this->load->template('show_divisions',$data);
+		if($this->session->userdata('logged_in')){
+			$session_data = $this->session->userdata('logged_in');
+			$this->load->library("DivisionFactory");
+			$data = array(
+				"divisions" => $this->divisionfactory->getDivision(),
+				"title" => $this->title,
+				"userType" => $session_data['userType']
+			);
+			$this->load->template('show_divisions',$data);
+		}else{
+			redirect('login', 'refresh');
+		}
 	}
 	
-	public function show($divisionId = 0)
-	{
-		$divisionId = (int)$divisionId;
-		//Load the user factory
-		$this->load->library("DivisionFactory");
-		//Create a data array so we can pass information to the view
-		$data = array(
-			"divisions" => $this->divisionfactory->getDivision($divisionId),
-			"title" => $this->title
-		);
-		$this->load->template('show_divisions',$data);
+	public function show($divisionId = 0){
+		if($this->session->userdata('logged_in')){
+			$session_data = $this->session->userdata('logged_in');
+			$divisionId = (int)$divisionId;
+			$this->load->library("DivisionFactory");
+			$data = array(
+				"divisions" => $this->divisionfactory->getDivision($divisionId),
+				"title" => $this->title,
+				"userType" => $session_data['userType']
+			);
+			$this->load->template('show_divisions',$data);
+		}else{
+			redirect('login', 'refresh');
+		}
 	}
 	
 	public function add(){
-		
+		if($this->session->userdata('logged_in')){
+			$this->load->library("DivisionFactory");
+			if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){
+				redirect('division');
+			}else{
+				echo "Failed!";
+			}
+		}else{
+			redirect('login', 'refresh');
+		}
 	}
 }

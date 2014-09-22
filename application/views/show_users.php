@@ -1,7 +1,7 @@
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
-		<button class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#addUserModal">
+		<button class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#addUserModal" data-backdrop="static" data-keyboard="false">
 		  Add User
 		</button>
 	</div>
@@ -15,16 +15,11 @@ if ($users !== FALSE) {
 		//Create the HTML table header
 		echo <<<HTML
 
-		<table class="table table-condensed table-striped table-responsive table-hover display" id="userTable">
+		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
 			<thead>
 				<tr>
-					<th>ID #</th>
-					<th>Username</th>
-					<th>Password</th>
 					<th>Full Name</th>
 					<th>User Type</th>
-					<th>Salt</th>
-					<th>Division</th>
 					<th>Division Name</th>
 					<th>Division Desciription</th>
 				</tr>
@@ -38,13 +33,8 @@ HTML;
 				echo <<<HTML
 
 					<tr>
-						<td>{$user->getId()}</td>
-						<td>{$user->getUsername()}</td>
-						<td>{$user->getPassword()}</td>
 						<td>{$user->getLastName()}, {$user->getFirstName()}</td>
 						<td>{$user->getUserType()}</td>
-						<td>{$user->getSalt()}</td>
-						<td>{$user->getDivision()}</td>
 						<td>{$user->getDivisionName()}</td>
 						<td>{$user->getDivisionDescription()}</td>
 					</tr>
@@ -57,13 +47,8 @@ HTML;
 			echo <<<HTML
 
 					<tr>
-						<td>{$users->getId()}</td>
-						<td>{$users->getUsername()}</td>
-						<td>{$users->getPassword()}</td>
 						<td>{$users->getLastName()}, {$users->getFirstName()}</td>
 						<td>{$users->getUserType()}</td>
-						<td>{$users->getSalt()}</td>
-						<td>{$users->getDivision()}</td>
 						<td>{$users->getDivisionName()}</td>
 						<td>{$users->getDivisionDescription()}</td>
 					</tr>
@@ -80,7 +65,7 @@ HTML;
 		//Now user could be found so display an error messsage to the user
 		echo <<<HTML
 
-			<p>A user could not be found with the specified user ID#, please try again.</p>	
+			<div class="alert alert-warning">There are no <strong>Users</strong> to display.</div>	
 
 HTML;
 	}
@@ -90,19 +75,72 @@ HTML;
 </div>
 <!-- Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="addUserModalLabel">Add User</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close cancelAddForm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="addUserModalLabel">Add User</h4>
+			</div>
+			<form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>user/add">
+				<div class="modal-body">
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Full Name</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="firstname" placeholder="First Name" />
+                        </div>
+						<div class="col-md-4">
+                            <input type="text" class="form-control" name="lastname" placeholder="Last Name" />
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Username</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="username" />
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Password</label>
+                        <div class="col-md-4">
+                            <input type="password" class="form-control" name="password" placeholder="Password"/>
+                        </div>
+						<div class="col-md-4">
+                            <input type="password" class="form-control" name="cpassword" placeholder="Confirm Password" />
+                        </div>
+                        <span class="btn btn-primary hide"><i class="glyphicon glyphicon-refresh"></i></span>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">User Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="userType">
+								<option value="">- Select -</option>
+								<option value="RD">RD</option>
+								<option value="SEC">SEC</option>
+								<option value="ARD">ARD</option>
+								<option value="EMP">EMP</option>
+								<option value="ADMIN">ADMIN</option>
+							</select>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Division</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="division">
+								<option value="">- Select -</option>
+								<?php foreach($divisions as $division){
+								echo <<<HTML
+									<option value="{$division->getId()}">{$division->getDivisionName()}</option>
+HTML;
+								} ?>
+								
+							</select>
+                        </div>
+                    </div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default cancelUserForm" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary saveUserForm">Save Changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
