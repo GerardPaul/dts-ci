@@ -15,7 +15,7 @@ class User extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_users',$data);
+			$this->load->admin_template('show_users',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -31,7 +31,7 @@ class User extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_users',$data);
+			$this->load->admin_template('show_users',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -40,8 +40,8 @@ class User extends CI_Controller {
 	public function add(){
 		if($this->session->userdata('logged_in')){
 			$this->load->library("UserFactory");
-			if($this->userfactory->addUser($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
-				redirect('user');
+			if($this->userfactory->addUser($_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
+				redirect('admin/user');
 			}else{
 				echo "Failed!";
 			}

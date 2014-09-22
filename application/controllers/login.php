@@ -40,7 +40,11 @@ class Login extends CI_Controller {
 					 'userType' => $userUserType
 				   );
 				$this->session->set_userdata('logged_in', $sess_array);
-				redirect('home','refresh');
+				if($userUserType == 'ADMIN' || $userUserType == 'RD' || $userUserType == 'SEC' || $userUserType == 'ARD'){
+					redirect('admin/home','refresh');
+				}else{
+					redirect('home','refresh');
+				}
 			}else{
 				$this->message = "Invalid username or password!";
 				$data = array(

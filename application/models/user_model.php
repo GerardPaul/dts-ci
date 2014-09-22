@@ -4,6 +4,7 @@ class User_Model extends CI_Model{
 	private $_username;
 	private $_password;
 	private $_salt;
+	private $_email;
 	private $_firstname;
 	private $_lastname;
 	private $_userType;
@@ -72,6 +73,15 @@ class User_Model extends CI_Model{
 	{
 		$this->_firstname = $value;
 	}
+	public function getEmail()
+	{
+		return $this->_email;
+	}
+
+	public function setEmail($value)
+	{
+		$this->_email = $value;
+	}
 	
 	public function getLastName()
 	{
@@ -134,6 +144,7 @@ class User_Model extends CI_Model{
 			'password' => $this->_password,
 			'salt' => $this->_salt,
 			'userType' => $this->_userType,
+			'email' => $this->_email,
 			'firstname' => $this->_firstname,
 			'lastname' => $this->_lastname,
 			'division' => $this->_division

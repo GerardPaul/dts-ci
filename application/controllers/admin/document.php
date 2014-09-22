@@ -13,7 +13,7 @@ class Document extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_documents',$data);
+			$this->load->admin_template('show_documents',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -29,31 +29,36 @@ class Document extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_document',$data);
+			$this->load->admin_template('show_document',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
 	}
-	
-	public function attachFile(){
-		try{
-			if($this->input->post("submit")){
-				$this->load->library("app/uploader");
-				$this->uploader->do_upload();
-			}
-			return $this->view();
-		}
-		catch(Exception $err){
-			log_message("error",$err->getMessage());
-			return show_error($err->getMessage());
-		}
-	}
-	
+
 	public function add(){
+		$attachment_path = 'No File.';
+		$config = array(
+            'upload_path' => './upload/',
+            'allowed_types' => 'gif|jpg|jpeg|png|pdf|txt|doc|docx|xls|xlsx',
+            'max_size' => 2048,
+        );
+		$this->load->library('upload', $config);
+		
+		if(!$this->upload->do_upload('attachment')){
+			$error = $this->upload->display_errors();
+			echo $error;
+		}else{
+			$upload_data = $this->upload->data();
+			if(isset($upload_data['full_path'])) {
+                $attachment_path = $upload_data['full_path'];
+            }else{
+				$attachment_path = "No File.";
+			}
+		}
 		if($this->session->userdata('logged_in')){
 			$this->load->library("DocumentFactory");
-			if($this->documentfactory->addDocument($_POST['subject'],$_POST['from'],$_POST['dueDate'],$_POST['attachment'],$_POST['status'],$_POST['referenceNumber'])){
-				redirect('document');
+			if($this->documentfactory->addDocument($_POST['subject'],$_POST['from'],$_POST['dueDate'],$attachment_path,$_POST['status'],$_POST['referenceNumber'])){
+				redirect('admin/document');
 			}else{
 				echo "Failed!";
 			}

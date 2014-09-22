@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title><?php echo $title; ?></title>
+	<title>Document Tracking System | <?php echo $title; ?></title>
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
@@ -24,13 +24,13 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<?php if($userType == 'ADMIN') {?>
-						<li><a href="<?php echo base_url("user"); ?>">User</a></li>
-						<li><a href="<?php echo base_url("division"); ?>">Division</a></li>
+						<li><a href="<?php echo base_url("admin/user"); ?>">User</a></li>
+						<li><a href="<?php echo base_url("admin/division"); ?>">Division</a></li>
 					<?php }?>
-					<li><a href="<?php echo base_url("document"); ?>">Documents</a></li>
+					<li><a href="<?php echo base_url("admin/document"); ?>">Documents</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="<?php echo base_url("home/logout"); ?>">Logout</a></li>
+					<li><a href="<?php echo base_url("admin/home/logout"); ?>">Logout</a></li>
 				</ul>
 			</div>
 		</div>

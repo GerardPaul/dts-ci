@@ -18,11 +18,12 @@ if ($documents !== FALSE) {
 		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
 			<thead>
 				<tr>
+					<th>Due Date</th>
 					<th>Ref #</th>
 					<th>Subject</th>
 					<th>From</th>
-					<th>Due Date</th>
 					<th>Status</th>
+					<th>Attachment</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,11 +35,12 @@ HTML;
 				echo <<<HTML
 
 					<tr>
+						<td>{$document->getDueDate()}</td>
 						<td>{$document->getReferenceNumber()}</td>
 						<td>{$document->getSubject()}</td>
 						<td>{$document->getFrom()}</td>
-						<td>{$document->getDueDate()}</td>
 						<td>{$document->getStatus()}</td>
+						<td><a href="{$document->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
 					</tr>
 
 HTML;
@@ -49,11 +51,12 @@ HTML;
 			echo <<<HTML
 
 					<tr>
+						<td>{$documents->getDueDate()}</td>
 						<td>{$documents->getReferenceNumber()}</td>
 						<td>{$documents->getSubject()}</td>
 						<td>{$documents->getFrom()}</td>
-						<td>{$documents->getDueDate()}</td>
 						<td>{$documents->getStatus()}</td>
+						<td><a href="{$documents->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
 					</tr>
 
 HTML;
@@ -84,7 +87,7 @@ HTML;
 				<button type="button" class="close cancelDocumentForm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="addDocumentModalLabel">Add Document</h4>
 			</div>
-			<form id="addDocumentForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>document/add">
+			<form enctype="multipart/form-data" id="addDocumentForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/document/add">
 				<div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Reference No.</label>
@@ -108,7 +111,7 @@ HTML;
                         <label class="col-md-3 control-label">Due Date</label>
                         <div class="col-md-8">
 							<div class="input-group date" id="dueDate">
-								<input type="text" class="form-control" name="dueDate" date-date-format="YYYY/MM/DD" />
+								<input id="dateDue" type="text" class="form-control" name="dueDate" date-date-format="YYYY/MM/DD" />
 								<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</span>
@@ -129,7 +132,7 @@ HTML;
 					<div class="form-group">
                         <label class="col-md-3 control-label">Attachment</label>
                         <div class="col-md-8">
-                            <input type="file" data-filename-placement="inside" name="attachment" title="Browse"/>
+                            <input type="file" data-filename-placement="inside" name="attachment" title="Browse" id="attachment"/>
                         </div>
                     </div>
 				</div>

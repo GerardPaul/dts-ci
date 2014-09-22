@@ -19,6 +19,7 @@ if ($users !== FALSE) {
 			<thead>
 				<tr>
 					<th>Full Name</th>
+					<th>E-mail Address</th>
 					<th>User Type</th>
 					<th>Division Name</th>
 					<th>Division Desciription</th>
@@ -34,6 +35,7 @@ HTML;
 
 					<tr>
 						<td>{$user->getLastName()}, {$user->getFirstName()}</td>
+						<td>{$user->getEmail()}</td>
 						<td>{$user->getUserType()}</td>
 						<td>{$user->getDivisionName()}</td>
 						<td>{$user->getDivisionDescription()}</td>
@@ -48,6 +50,7 @@ HTML;
 
 					<tr>
 						<td>{$users->getLastName()}, {$users->getFirstName()}</td>
+						<td>{$user->getEmail()}</td>
 						<td>{$users->getUserType()}</td>
 						<td>{$users->getDivisionName()}</td>
 						<td>{$users->getDivisionDescription()}</td>
@@ -81,7 +84,7 @@ HTML;
 				<button type="button" class="close cancelAddForm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="addUserModalLabel">Add User</h4>
 			</div>
-			<form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>user/add">
+			<form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/user/add">
 				<div class="modal-body">
 					<div class="form-group">
                         <label class="col-md-3 control-label">Full Name</label>
@@ -90,6 +93,12 @@ HTML;
                         </div>
 						<div class="col-md-4">
                             <input type="text" class="form-control" name="lastname" placeholder="Last Name" />
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">E-mail</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="email" />
                         </div>
                     </div>
 					<div class="form-group">

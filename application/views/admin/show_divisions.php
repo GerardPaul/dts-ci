@@ -78,7 +78,7 @@ HTML;
 				<button type="button" class="close cancelDivisionForm" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="addDivisionModalLabel">Add Division</h4>
 			</div>
-			<form id="addDivisionForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>division/add">
+			<form id="addDivisionForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/division/add">
 				<div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Division Name</label>

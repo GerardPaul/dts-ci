@@ -13,7 +13,7 @@ class Division extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_divisions',$data);
+			$this->load->admin_template('show_divisions',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -29,7 +29,7 @@ class Division extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->template('show_divisions',$data);
+			$this->load->admin_template('show_divisions',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -39,7 +39,7 @@ class Division extends CI_Controller {
 		if($this->session->userdata('logged_in')){
 			$this->load->library("DivisionFactory");
 			if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){
-				redirect('division');
+				redirect('admin/division');
 			}else{
 				echo "Failed!";
 			}
