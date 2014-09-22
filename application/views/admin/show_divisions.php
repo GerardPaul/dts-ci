@@ -15,7 +15,7 @@ if ($divisions !== FALSE) {
 		//Create the HTML table header
 		echo <<<HTML
 
-		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
+		<table class="table table-condensed table-striped table-responsive table-hover display" id="divisionsTable">
 			<thead>
 				<tr>
 					<th>ID #</th>

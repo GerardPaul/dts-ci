@@ -15,13 +15,13 @@ if ($documents !== FALSE) {
 		//Create the HTML table header
 		echo <<<HTML
 
-		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
+		<table class="table table-condensed table-striped table-responsive table-hover display" id="documentsTable">
 			<thead>
 				<tr>
-					<th>Due Date</th>
 					<th>Ref #</th>
 					<th>Subject</th>
 					<th>From</th>
+					<th>Due Date</th>
 					<th>Status</th>
 					<th>Attachment</th>
 				</tr>
@@ -32,14 +32,18 @@ HTML;
 		if (is_array($documents) && count($documents)) {
 			//Loop through all the users and create a row for each within the table
 			foreach ($documents as $document) {
+				$status = '';
+				if($document->getStatus()=='Cancelled') $status = '<strong><span class="text-danger">'.$document->getStatus().'</span></strong>';
+				else if($document->getStatus()=='On-Going') $status = '<strong><span class="text-warning">'.$document->getStatus().'</span></strong>';
+				else if($document->getStatus()=='Compiled') $status = '<strong><span class="text-success">'.$document->getStatus().'</span></strong>';
 				echo <<<HTML
 
 					<tr>
-						<td>{$document->getDueDate()}</td>
 						<td>{$document->getReferenceNumber()}</td>
 						<td>{$document->getSubject()}</td>
 						<td>{$document->getFrom()}</td>
-						<td>{$document->getStatus()}</td>
+						<td>{$document->getDueDate()}</td>
+						<td>{$status}</td>
 						<td><a href="{$document->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
 					</tr>
 
@@ -47,15 +51,20 @@ HTML;
 			}
 
 		} else {
+			$status = '';
+			if($documents->getStatus()=='Cancelled') $status = '<strong><span class="text-danger">'.$documents->getStatus().'</span></strong>';
+			else if($documents->getStatus()=='On-Going') $status = '<strong><span class="text-warning">'.$documents->getStatus().'</span></strong>';
+			else if($documents->getStatus()=='Compiled') $status = '<strong><span class="text-success">'.$documents->getStatus().'</span></strong>';
+				
 			//Only a single user object so just create one row within the table
 			echo <<<HTML
 
 					<tr>
-						<td>{$documents->getDueDate()}</td>
 						<td>{$documents->getReferenceNumber()}</td>
 						<td>{$documents->getSubject()}</td>
 						<td>{$documents->getFrom()}</td>
-						<td>{$documents->getStatus()}</td>
+						<td>{$documents->getDueDate()}</td>
+						<td>{$status}</td>
 						<td><a href="{$documents->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
 					</tr>
 

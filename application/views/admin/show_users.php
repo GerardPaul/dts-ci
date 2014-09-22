@@ -15,7 +15,7 @@ if ($users !== FALSE) {
 		//Create the HTML table header
 		echo <<<HTML
 
-		<table class="table table-condensed table-striped table-responsive table-hover display" id="dataTable">
+		<table class="table table-condensed table-striped table-responsive table-hover display" id="usersTable">
 			<thead>
 				<tr>
 					<th>Full Name</th>

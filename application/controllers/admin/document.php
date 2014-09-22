@@ -13,7 +13,10 @@ class Document extends CI_Controller {
 				"title" => $this->title,
 				"userType" => $session_data['userType']
 			);
-			$this->load->admin_template('show_documents',$data);
+			if($session_data['userType']=='RD'){$this->load->admin_template('rd_documents',$data);}
+			else if($session_data['userType']=='SEC'){$this->load->admin_template('sec_documents',$data);}
+			else if($session_data['userType']=='ARD'){$this->load->admin_template('ard_documents',$data);}
+			else{$this->load->admin_template('show_documents',$data);}
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -37,8 +40,10 @@ class Document extends CI_Controller {
 
 	public function add(){
 		$attachment_path = 'No File.';
+		$filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
 		$config = array(
             'upload_path' => './upload/',
+			'file_name' => $filename,
             'allowed_types' => 'gif|jpg|jpeg|png|pdf|txt|doc|docx|xls|xlsx',
             'max_size' => 2048,
         );

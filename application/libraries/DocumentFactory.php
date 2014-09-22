@@ -57,13 +57,17 @@ class DocumentFactory {
 		return $document->commit();
 	}
 	
+	private function formatDate($date){
+		return date('M j, Y', strtotime($date));
+	}
+	
     public function createObjectFromData($row) {
     	$document = new Document_Model();
 		
     	$document->setId($row->id);
 		$document->setSubject($row->subject);
 		$document->setFrom($row->from);
-		$document->setDueDate($row->dueDate);
+		$document->setDueDate($this->formatDate($row->dueDate));
 		$document->setAttachment($row->attachment);
 		$document->setStatus($row->status);
 		$document->setReferenceNumber($row->referenceNumber);
