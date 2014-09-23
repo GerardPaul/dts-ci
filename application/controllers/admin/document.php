@@ -14,7 +14,7 @@ class Document extends CI_Controller {
 				"userType" => $session_data['userType']
 			);
 			if($session_data['userType']=='RD'){$this->load->admin_template('rd_documents',$data);}
-			else if($session_data['userType']=='SEC'){$this->load->admin_template('sec_documents',$data);}
+			else if($session_data['userType']=='SEC'){$this->load->admin_template('show_documents',$data);}
 			else if($session_data['userType']=='ARD'){$this->load->admin_template('ard_documents',$data);}
 			else{$this->load->admin_template('show_documents',$data);}
 		}else{
@@ -22,17 +22,24 @@ class Document extends CI_Controller {
 		}
 	}
 	
-	public function show($documentId = 0){
+	public function view($documentId = 0){
 		if($this->session->userdata('logged_in')){
 			$session_data = $this->session->userdata('logged_in');
 			$documentId = (int)$documentId;
 			$this->load->library("DocumentFactory");
+			$documents = $this->documentfactory->getDocument($documentId);
+			$status = '';
+			$stat = $documents->getStatus();
+			if($stat=='Cancelled') $status = '&nbsp;&nbsp;<small class="text-danger"><a><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'"></i></a></small>';
+			else if($stat=='On-Going') $status = '&nbsp;&nbsp;<small class="text-warning"><a><i class="glyphicon glyphicon-info-sign" title="'.$stat.'"></i></a></small>';
+			else if($stat=='Compiled') $status = '&nbsp;&nbsp;<small class="text-success"><a><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'"></i></a></small>';
+				
 			$data = array(
-				"documents" => $this->documentfactory->getDocument($documentId),
-				"title" => $this->title,
+				"documents" => $documents,
+				"title" => '<small>Subject: </small>' . $documents->getSubject() . $status,
 				"userType" => $session_data['userType']
 			);
-			$this->load->admin_template('show_document',$data);
+			$this->load->admin_template('view_document',$data);
 		}else{
 			redirect('login', 'refresh');
 		}
@@ -44,7 +51,7 @@ class Document extends CI_Controller {
 		$config = array(
             'upload_path' => './upload/',
 			'file_name' => $filename,
-            'allowed_types' => 'gif|jpg|jpeg|png|pdf|txt|doc|docx|xls|xlsx',
+            'allowed_types' => 'gif|jpg|jpeg|png|pdf|txt',
             'max_size' => 2048,
         );
 		$this->load->library('upload', $config);
@@ -62,7 +69,7 @@ class Document extends CI_Controller {
 		}
 		if($this->session->userdata('logged_in')){
 			$this->load->library("DocumentFactory");
-			if($this->documentfactory->addDocument($_POST['subject'],$_POST['from'],$_POST['dueDate'],$attachment_path,$_POST['status'],$_POST['referenceNumber'])){
+			if($this->documentfactory->addDocument($_POST['subject'],$_POST['from'],$_POST['dueDate'],$attachment_path,$_POST['status'],$_POST['referenceNumber'],$_POST['dateReceived'])){
 				redirect('admin/document');
 			}else{
 				echo "Failed!";

@@ -18,12 +18,12 @@ if ($documents !== FALSE) {
 		<table class="table table-condensed table-striped table-responsive table-hover display" id="documentsTable">
 			<thead>
 				<tr>
-					<th>Ref #</th>
-					<th>Subject</th>
 					<th>From</th>
+					<th>Subject</th>
+					<th>Date Received</th>
 					<th>Due Date</th>
 					<th>Status</th>
-					<th>Attachment</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,42 +33,33 @@ HTML;
 			//Loop through all the users and create a row for each within the table
 			foreach ($documents as $document) {
 				$status = '';
-				if($document->getStatus()=='Cancelled') $status = '<strong><span class="text-danger">'.$document->getStatus().'</span></strong>';
-				else if($document->getStatus()=='On-Going') $status = '<strong><span class="text-warning">'.$document->getStatus().'</span></strong>';
-				else if($document->getStatus()=='Compiled') $status = '<strong><span class="text-success">'.$document->getStatus().'</span></strong>';
+				$stat = $document->getStatus();
+				if($stat=='Cancelled') $status = '<span class="text-danger"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'"></i></span>';
+				else if($stat=='On-Going') $status = '<span class="text-warning"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'"></i></span>';
+				else if($stat=='Compiled') $status = '<span class="text-success"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'"></i></span>';
+				
+				$viewLink = base_url('admin/document/view/'.$document->getId());
+				$editLink = base_url('admin/document/edit/'.$document->getId());
+				$deleteLink = base_url('admin/document/delete/'.$document->getId());
+				
 				echo <<<HTML
 
 					<tr>
-						<td>{$document->getReferenceNumber()}</td>
-						<td>{$document->getSubject()}</td>
 						<td>{$document->getFrom()}</td>
+						<td>{$document->getSubject()}</td>
+						<td>{$document->getDateReceived()}</td>
 						<td>{$document->getDueDate()}</td>
 						<td>{$status}</td>
-						<td><a href="{$document->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
+						<td>
+							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View"><i class="glyphicon glyphicon-search"></i></a>
+							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="{$deleteLink}" class="btn btn-danger btn-xs" title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+						</td>
 					</tr>
 
 HTML;
 			}
 
-		} else {
-			$status = '';
-			if($documents->getStatus()=='Cancelled') $status = '<strong><span class="text-danger">'.$documents->getStatus().'</span></strong>';
-			else if($documents->getStatus()=='On-Going') $status = '<strong><span class="text-warning">'.$documents->getStatus().'</span></strong>';
-			else if($documents->getStatus()=='Compiled') $status = '<strong><span class="text-success">'.$documents->getStatus().'</span></strong>';
-				
-			//Only a single user object so just create one row within the table
-			echo <<<HTML
-
-					<tr>
-						<td>{$documents->getReferenceNumber()}</td>
-						<td>{$documents->getSubject()}</td>
-						<td>{$documents->getFrom()}</td>
-						<td>{$documents->getDueDate()}</td>
-						<td>{$status}</td>
-						<td><a href="{$documents->getAttachment()}" class="btn btn-success btn-xs">Download</a></td>
-					</tr>
-
-HTML;
 		}
 		//Close the table HTML
 		echo <<<HTML
@@ -79,9 +70,7 @@ HTML;
 	} else {
 		//Now user could be found so display an error messsage to the user
 		echo <<<HTML
-
 			<div class="alert alert-warning">There are no <strong>Documents</strong> to display.</div>
-
 HTML;
 	}
 ?>
@@ -99,6 +88,17 @@ HTML;
 			<form enctype="multipart/form-data" id="addDocumentForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/document/add">
 				<div class="modal-body">
                     <div class="form-group">
+                        <label class="col-md-3 control-label">Date Received</label>
+                        <div class="col-md-8">
+							<div class="input-group date" id="dateReceived">
+								<input id="dateReceived" type="text" class="form-control" name="dateReceived" date-date-format="YYYY/MM/DD" />
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+                        </div>
+                    </div>
+					<div class="form-group">
                         <label class="col-md-3 control-label">Reference No.</label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" name="referenceNumber" />
@@ -141,8 +141,9 @@ HTML;
 					<div class="form-group">
                         <label class="col-md-3 control-label">Attachment</label>
                         <div class="col-md-8">
-                            <input type="file" data-filename-placement="inside" name="attachment" title="Browse" id="attachment"/>
-                        </div>
+                            <input type="file" name="attachment" title="Browse" id="attachment" title="Browse for file..."/>
+							<span class="help-block">* Allowed file types (jpeg,png,gif,pdf).</span>
+						</div>
                     </div>
 				</div>
 				<div class="modal-footer">

@@ -7,6 +7,7 @@ class Document_Model extends CI_Model{
 	private $_attachment;
 	private $_status;
 	private $_referenceNumber;
+	private $_dateReceived;
 
 	function __construct(){
 		parent::__construct();
@@ -54,6 +55,12 @@ class Document_Model extends CI_Model{
 	public function getReferenceNumber(){
 		return $this->_referenceNumber;
 	}
+	public function setDateReceived($value){
+		$this->_dateReceived = $value;
+	}
+	public function getDateReceived(){
+		return $this->_dateReceived;
+	}
 	/*
 	* Class Methods
 	*/
@@ -70,6 +77,7 @@ class Document_Model extends CI_Model{
 			'attachment' => $this->_attachment,
 			'status' => $this->_status,
 			'referenceNumber' => $this->_referenceNumber,
+			'dateReceived' => $this->_dateReceived,
 		);
 
 		if ($this->_id > 0) {

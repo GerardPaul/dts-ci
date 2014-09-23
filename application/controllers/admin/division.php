@@ -2,7 +2,7 @@
 
 class Division extends CI_Controller {
 	
-	var $title = 'Division';
+	var $title = 'Divisions';
 	
 	public function index()	{
 		if($this->session->userdata('logged_in')){

@@ -45,7 +45,7 @@ class DocumentFactory {
     	}
     }
 
-	public function addDocument($subject,$from,$dueDate,$attachment,$status,$referenceNumber){
+	public function addDocument($subject,$from,$dueDate,$attachment,$status,$referenceNumber,$dateReceived){
 		$document = new Document_Model();
 		$document->setSubject($subject);
 		$document->setFrom($from);
@@ -53,6 +53,7 @@ class DocumentFactory {
 		$document->setAttachment($attachment);
 		$document->setStatus($status);
 		$document->setReferenceNumber($referenceNumber);
+		$document->setDateReceived($dateReceived);
 		
 		return $document->commit();
 	}
@@ -71,6 +72,7 @@ class DocumentFactory {
 		$document->setAttachment($row->attachment);
 		$document->setStatus($row->status);
 		$document->setReferenceNumber($row->referenceNumber);
+		$document->setDateReceived($this->formatDate($row->dateReceived));
 		
     	return $document;
     }
