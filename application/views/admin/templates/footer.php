@@ -1,4 +1,4 @@
-	<div class="navbar navbar-inverse navbar-fixed-bottom" id="footer">
+	<div id="footer">
 		<div class="container">
 			<p class="navbar-text">Copyright &copy; 
 				<script>
@@ -23,6 +23,7 @@
 			$('.dataTables_wrapper .dataTables_filter input').addClass('form-control, input-sm').attr('display','inline');
 			$('.dataTables_wrapper .dataTables_length select').addClass('form-control, input-sm').attr('display','inline');
 			
+			$('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
 		});
 	</script>
 </body>

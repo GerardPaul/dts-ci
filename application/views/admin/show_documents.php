@@ -22,7 +22,6 @@ if ($documents !== FALSE) {
 					<th>Subject</th>
 					<th>Date Received</th>
 					<th>Due Date</th>
-					<th>Status</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -34,9 +33,9 @@ HTML;
 			foreach ($documents as $document) {
 				$status = '';
 				$stat = $document->getStatus();
-				if($stat=='Cancelled') $status = '<span class="text-danger"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'"></i></span>';
-				else if($stat=='On-Going') $status = '<span class="text-warning"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'"></i></span>';
-				else if($stat=='Compiled') $status = '<span class="text-success"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'"></i></span>';
+				if($stat=='Cancelled') $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'" data-toggle="tooltip"></i></span>';
+				else if($stat=='On-Going') $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'" data-toggle="tooltip"></i></span>';
+				else if($stat=='Compiled') $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'" data-toggle="tooltip"></i></span>';
 				
 				$viewLink = base_url('admin/document/view/'.$document->getId());
 				$editLink = base_url('admin/document/edit/'.$document->getId());
@@ -46,14 +45,13 @@ HTML;
 
 					<tr>
 						<td>{$document->getFrom()}</td>
-						<td>{$document->getSubject()}</td>
+						<td>{$status}&nbsp;{$document->getSubject()}</td>
 						<td>{$document->getDateReceived()}</td>
 						<td>{$document->getDueDate()}</td>
-						<td>{$status}</td>
 						<td>
-							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View"><i class="glyphicon glyphicon-search"></i></a>
-							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-							<a href="{$deleteLink}" class="btn btn-danger btn-xs" title="Delete"><i class="glyphicon glyphicon-trash"></i></a>
+							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
+							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="{$deleteLink}" class="btn btn-danger btn-xs" title="Delete" data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
 						</td>
 					</tr>
 

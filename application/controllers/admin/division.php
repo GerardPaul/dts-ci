@@ -11,6 +11,7 @@ class Division extends CI_Controller {
 			$data = array(
 				"divisions" => $this->divisionfactory->getDivision(),
 				"title" => $this->title,
+				"header" => 'All Divisions',
 				"userType" => $session_data['userType']
 			);
 			$this->load->admin_template('show_divisions',$data);
@@ -27,6 +28,7 @@ class Division extends CI_Controller {
 			$data = array(
 				"divisions" => $this->divisionfactory->getDivision($divisionId),
 				"title" => $this->title,
+				"header" => 'Division Details',
 				"userType" => $session_data['userType']
 			);
 			$this->load->admin_template('show_divisions',$data);

@@ -21,8 +21,8 @@ if ($users !== FALSE) {
 					<th>Full Name</th>
 					<th>E-mail Address</th>
 					<th>User Type</th>
-					<th>Division Name</th>
-					<th>Division Desciription</th>
+					<th>Division</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,32 +31,27 @@ HTML;
 		if (is_array($users) && count($users)) {
 			//Loop through all the users and create a row for each within the table
 			foreach ($users as $user) {
+				$status = '';
+				if($user->getStatus()){ $status = '<span class="text-success status"><i class="glyphicon glyphicon-eye-open" title="Active" data-toggle="tooltip"></i></span>';}
+				else{$status = '<span class="text-danger status"><i class="glyphicon glyphicon-eye-close" title="Inactive" data-toggle="tooltip"></i></span>';}
+				
+				$editLink = base_url('admin/user/edit/'.$user->getId());
+				
 				echo <<<HTML
 
 					<tr>
-						<td>{$user->getLastName()}, {$user->getFirstName()}</td>
+						<td>{$status}&nbsp;{$user->getLastName()}, {$user->getFirstName()}</td>
 						<td>{$user->getEmail()}</td>
 						<td>{$user->getUserType()}</td>
 						<td>{$user->getDivisionName()}</td>
-						<td>{$user->getDivisionDescription()}</td>
+						<td>
+							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>
+						</td>
 					</tr>
 
 HTML;
 			}
 
-		} else {
-			//Only a single user object so just create one row within the table
-			echo <<<HTML
-
-					<tr>
-						<td>{$users->getLastName()}, {$users->getFirstName()}</td>
-						<td>{$user->getEmail()}</td>
-						<td>{$users->getUserType()}</td>
-						<td>{$users->getDivisionName()}</td>
-						<td>{$users->getDivisionDescription()}</td>
-					</tr>
-
-HTML;
 		}
 		//Close the table HTML
 		echo <<<HTML

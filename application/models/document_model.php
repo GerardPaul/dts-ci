@@ -1,6 +1,6 @@
 <?php
 class Document_Model extends CI_Model{
-	private $_id;
+	private $_id = 0;
 	private $_subject;
 	private $_from;
 	private $_dueDate;

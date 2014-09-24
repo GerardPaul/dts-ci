@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Document Tracking System | <?php echo $title; ?></title>
+	<title><?php echo $title; ?> | Document Tracking System</title>
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
@@ -40,5 +40,5 @@
 		</div>
 	</div>
 	<div class="container">
-		<?php echo "<h1>$title</h1>";?>
+		<?php echo "<h1>$header</h1>";?>
 	</div>

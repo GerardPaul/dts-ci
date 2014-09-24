@@ -15,6 +15,7 @@ class Home extends CI_Controller {
 			$data = array(
 				"username" => $session_data['username'],
 				"title" => $this->title,
+				"header" => 'Home',
 				"userType" => $session_data['userType']
 			);
 			$this->load->admin_template('home_view', $data);

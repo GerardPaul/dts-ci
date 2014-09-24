@@ -13,6 +13,7 @@ class User extends CI_Controller {
 				"users" => $this->userfactory->getUser(),
 				"divisions" => $this->divisionfactory->getDivision(),
 				"title" => $this->title,
+				"header" => 'All Users',
 				"userType" => $session_data['userType']
 			);
 			$this->load->admin_template('show_users',$data);

@@ -1,6 +1,6 @@
 <?php
 class User_Model extends CI_Model{
-	private $_id;
+	private $_id = 0;
 	private $_username;
 	private $_password;
 	private $_salt;
@@ -11,6 +11,7 @@ class User_Model extends CI_Model{
 	private $_division;
 	private $_divisionName;
 	private $_divisionDescription;
+	private $_status = 1;
 
 	function __construct()
 	{
@@ -130,6 +131,15 @@ class User_Model extends CI_Model{
 	{
 		$this->_divisionDescription = $value;
 	}
+	public function getStatus()
+	{
+		return $this->_status;
+	}
+
+	public function setStatus($value)
+	{
+		$this->_status = $value;
+	}
 	/*
 	* Class Methods
 	*/
@@ -147,7 +157,8 @@ class User_Model extends CI_Model{
 			'email' => $this->_email,
 			'firstname' => $this->_firstname,
 			'lastname' => $this->_lastname,
-			'division' => $this->_division
+			'division' => $this->_division,
+			'status' => $this->_status
 		);
 
 		if ($this->_id > 0) {

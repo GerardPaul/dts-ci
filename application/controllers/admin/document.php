@@ -11,6 +11,7 @@ class Document extends CI_Controller {
 			$data = array(
 				"documents" => $this->documentfactory->getDocument(),
 				"title" => $this->title,
+				"header" => 'All Documents',
 				"userType" => $session_data['userType']
 			);
 			if($session_data['userType']=='RD'){$this->load->admin_template('rd_documents',$data);}
@@ -30,13 +31,14 @@ class Document extends CI_Controller {
 			$documents = $this->documentfactory->getDocument($documentId);
 			$status = '';
 			$stat = $documents->getStatus();
-			if($stat=='Cancelled') $status = '&nbsp;&nbsp;<small class="text-danger"><a><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'"></i></a></small>';
-			else if($stat=='On-Going') $status = '&nbsp;&nbsp;<small class="text-warning"><a><i class="glyphicon glyphicon-info-sign" title="'.$stat.'"></i></a></small>';
-			else if($stat=='Compiled') $status = '&nbsp;&nbsp;<small class="text-success"><a><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'"></i></a></small>';
+			if($stat=='Cancelled') $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
+			else if($stat=='On-Going') $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
+			else if($stat=='Compiled') $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
 				
 			$data = array(
 				"documents" => $documents,
-				"title" => '<small>Subject: </small>' . $documents->getSubject() . $status,
+				"title" => 'Document Details',
+				"header" => $status . $documents->getSubject() ,
 				"userType" => $session_data['userType']
 			);
 			$this->load->admin_template('view_document',$data);
@@ -74,6 +76,30 @@ class Document extends CI_Controller {
 			}else{
 				echo "Failed!";
 			}
+		}else{
+			redirect('login', 'refresh');
+		}
+	}
+	//edits
+	public function show($documentId = 0){
+		if($this->session->userdata('logged_in')){
+			$session_data = $this->session->userdata('logged_in');
+			$documentId = (int)$documentId;
+			$this->load->library("DocumentFactory");
+			$documents = $this->documentfactory->getDocument($documentId);
+			$status = '';
+			$stat = $documents->getStatus();
+			if($stat=='Cancelled') $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
+			else if($stat=='On-Going') $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
+			else if($stat=='Compiled') $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
+				
+			$data = array(
+				"documents" => $documents,
+				"title" => 'Document Details',
+				"header" => $status . $documents->getSubject() ,
+				"userType" => $session_data['userType']
+			);
+			$this->load->admin_template('view_document',$data);
 		}else{
 			redirect('login', 'refresh');
 		}

@@ -14,7 +14,7 @@ class UserFactory {
     }
 
 	public function getUserLogin($username=''){
-		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType,
+		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
 					d.id AS 'divisionID', d.name, d.description
 				FROM user u, division d WHERE u.division = d.id AND u.username = ?";
     	$query = $this->_ci->db->query($sql, array($username));
@@ -30,7 +30,7 @@ class UserFactory {
     	//Are we getting an individual user or are we getting them all
     	if ($id > 0) {
     		//Getting an individual user
-			$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType,
+			$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
 						d.id AS 'divisionID', d.name, d.description
 					FROM user u, division d WHERE u.division = d.id AND u.id = ?";
     		$query = $this->_ci->db->query($sql, array($id));
@@ -42,7 +42,7 @@ class UserFactory {
     		return false;
     	} else {
     		//Getting all the users
-    		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType,
+    		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
 						d.id AS 'divisionID', d.name, d.description
 					FROM user u, division d WHERE u.division = d.id";
     		$query = $this->_ci->db->query($sql);
@@ -99,6 +99,7 @@ class UserFactory {
 		$user->setDivision($row->divisionID);
 		$user->setDivisionName($row->name);
 		$user->setDivisionDescription($row->description);
+		$user->setStatus($row->status);
     	//Return the new user object
     	return $user;
     }
