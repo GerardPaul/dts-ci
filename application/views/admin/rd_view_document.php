@@ -83,27 +83,48 @@ HTML;
                         <div class="col-md-4">
                             <select class="form-control" name="ard" id="ard">
 								<option value="">- Select -</option>
-								<option value="1">ARD-TS</option>
-								<option value="2">ARD-TSSD</option>
-								<option value="3">ARD-FAS</option>
+								<option value="1">TSD</option>
+								<option value="2">TSSD</option>
+								<option value="3">FASD</option>
 							</select>
                         </div>
 						<div class="col-md-4 hide" id="tsd_emp">
                             <select class="form-control" name="emp">
 								<option value="">- Select -</option>
-								<option value="1">ARD-TS</option>
+								<?php 
+									if (is_array($usersTSD) && count($usersTSD)) {
+										foreach ($usersTSD as $userTSD) {
+											if($userTSD->getUserType()!='ADMIN')
+												echo '<option value="'.$userTSD->getId().'">'.$userTSD->getLastName().', '.$userTSD->getFirstName().'</option>';
+										}
+									}
+								?>
 							</select>
                         </div>
 						<div class="col-md-4 hide" id="tssd_emp">
                             <select class="form-control" name="emp">
 								<option value="">- Select -</option>
-								<option value="2">ARD-TSSD</option>
+								<?php 
+									if (is_array($usersTSSD) && count($usersTSSD)) {
+										foreach ($usersTSSD as $userTSSD) {
+											if($userTSSD->getUserType()!='ADMIN')
+												echo '<option value="'.$userTSSD->getId().'">'.$userTSSD->getLastName().', '.$userTSSD->getFirstName().'</option>';
+										}
+									}
+								?>
 							</select>
                         </div>
 						<div class="col-md-4 hide" id="fasd_emp">
                             <select class="form-control" name="emp">
 								<option value="">- Select -</option>
-								<option value="3">ARD-FAS</option>
+								<?php 
+									if (is_array($usersFASD) && count($usersFASD)) {
+										foreach ($usersFASD as $userFASD) {
+											if($userFASD->getUserType()!='ADMIN')
+												echo '<option value="'.$userFASD->getId().'">'.$userFASD->getLastName().', '.$userFASD->getFirstName().'</option>';
+										}
+									}
+								?>
 							</select>
                         </div>
                     </div>

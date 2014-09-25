@@ -21,6 +21,21 @@ class UserFactory {
     	return false;
 	}
 	
+	public function getUserByDivision($division){
+		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
+						d.id AS 'divisionID', d.name, d.description
+					FROM user u, division d WHERE u.division = d.id AND d.name = ?";
+		$query = $this->_ci->db->query($sql, array($division));
+		if ($query->num_rows() > 0) {
+    		$users = array();
+    		foreach ($query->result() as $row) {
+    			$users[] = $this->createObjectFromData($row);
+    		}
+    		return $users;
+    	}
+    	return false;
+	}
+	
     public function getUser($id = 0) {
     	if ($id > 0) {
 			$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,

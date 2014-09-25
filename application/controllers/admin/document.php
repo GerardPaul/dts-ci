@@ -164,12 +164,16 @@ class Document extends CI_Controller {
 					if($stat=='Cancelled') $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
 					else if($stat=='On-Going') $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
 					else if($stat=='Compiled') $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'" data-toggle="tooltip"></i></small>&nbsp;';
-						
+					
+					$this->load->library("UserFactory");
 					$data = array(
 						"documents" => $documents,
 						"title" => 'Document Details',
 						"header" => $status . $documents->getSubject() ,
-						"userType" => $this->userType
+						"userType" => $this->userType,
+						"usersTSD" => $this->userfactory->getUserByDivision('TSD'),
+						"usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
+						"usersFASD" => $this->userfactory->getUserByDivision('FASD')
 					);
 					$this->load->admin_template('rd_view_document',$data);
 				}
