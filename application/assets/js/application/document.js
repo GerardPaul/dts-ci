@@ -79,4 +79,24 @@ $(document).ready(function() {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
     });
+	
+	$('#ard').change(function(){
+		var value = $(this).val();
+		if(value==='1'){
+			$('#tsd_emp').removeClass('hide');
+			$('#tssd_emp').addClass('hide');
+			$('#fasd_emp').addClass('hide');
+		}
+		else if(value==='2'){
+			$('#tssd_emp').removeClass('hide');
+			$('#tsd_emp').addClass('hide');
+			$('#fasd_emp').addClass('hide');
+		}
+		else{
+			$('#fasd_emp').removeClass('hide');
+			$('#tsd_emp').addClass('hide');
+			$('#tssd_emp').addClass('hide');
+		}
+	});
+	
 });

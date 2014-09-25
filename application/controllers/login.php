@@ -19,6 +19,9 @@ class Login extends CI_Controller {
 	}
 	
 	public function auth(){
+		if(!isset($_POST['username']) || !isset($_POST['password'])){
+			redirect('login','refresh');
+		}
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		

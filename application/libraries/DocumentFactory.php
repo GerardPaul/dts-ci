@@ -22,11 +22,11 @@ class DocumentFactory {
     		$sql = "SELECT * FROM document";
     		$query = $this->_ci->db->query($sql);
     		if ($query->num_rows() > 0) {
-    			$users = array();
+    			$documents = array();
     			foreach ($query->result() as $row) {
-					$users[] = $this->createObjectFromData($row);
+					$documents[] = $this->createObjectFromData($row);
     			}
-    			return $users;
+    			return $documents;
     		}
     		return false;
     	}

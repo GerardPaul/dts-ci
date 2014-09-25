@@ -3,47 +3,69 @@
 class Division extends CI_Controller {
 	
 	var $title = 'Divisions';
+	var $login = FALSE;
+	var $userType = '';
 	
-	public function index()	{
+	private function checkLogin(){
 		if($this->session->userdata('logged_in')){
+			$this->login = TRUE;
 			$session_data = $this->session->userdata('logged_in');
-			$this->load->library("DivisionFactory");
-			$data = array(
-				"divisions" => $this->divisionfactory->getDivision(),
-				"title" => $this->title,
-				"header" => 'All Divisions',
-				"userType" => $session_data['userType']
-			);
-			$this->load->admin_template('show_divisions',$data);
+			$this->userType = $session_data['userType'];
 		}else{
-			redirect('login', 'refresh');
+			$this->login = FALSE;
+			$this->userType = 'EMP';
 		}
 	}
 	
-	public function show($divisionId = 0){
-		if($this->session->userdata('logged_in')){
-			$session_data = $this->session->userdata('logged_in');
-			$divisionId = (int)$divisionId;
-			$this->load->library("DivisionFactory");
-			$data = array(
-				"divisions" => $this->divisionfactory->getDivision($divisionId),
-				"title" => $this->title,
-				"header" => 'Division Details',
-				"userType" => $session_data['userType']
-			);
-			$this->load->admin_template('show_divisions',$data);
+	private function error(){
+		$data = array(
+			"title" => 'Error 403',
+			"header" => 'Error 403 Forbidden',
+			"userType" => $this->userType
+		);
+		$this->load->admin_template('error_view',$data);
+	}
+	
+	public function index()	{
+		$this->checkLogin();
+		if($this->login){
+			if($this->userType=='EMP'){
+				$this->error();
+			}else{
+				if($this->userType=='RD' || $this->userType=='ARD'){
+					$this->error();
+				}else{
+					$this->load->library("DivisionFactory");
+					$data = array(
+						"divisions" => $this->divisionfactory->getDivision(),
+						"title" => $this->title,
+						"header" => 'All Divisions',
+						"userType" => $this->userType
+					);
+					$this->load->admin_template('show_divisions',$data);
+				}
+			}
 		}else{
 			redirect('login', 'refresh');
 		}
 	}
 	
 	public function add(){
-		if($this->session->userdata('logged_in')){
-			$this->load->library("DivisionFactory");
-			if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){
-				redirect('admin/division');
+		$this->checkLogin();
+		if($this->login){
+			if($this->userType=='EMP'){
+				$this->error();
 			}else{
-				echo "Failed!";
+				if($this->userType=='RD' || $this->userType=='ARD'){
+					$this->error();
+				}else{
+					$this->load->library("DivisionFactory");
+					if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){
+						redirect('admin/division');
+					}else{
+						echo "Failed!";
+					}
+				}
 			}
 		}else{
 			redirect('login', 'refresh');

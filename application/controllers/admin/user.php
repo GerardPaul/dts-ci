@@ -3,48 +3,71 @@
 class User extends CI_Controller {
 	
 	var $title = 'Users';
+	var $login = FALSE;
+	var $userType = '';
 	
-	public function index()	{
+	private function checkLogin(){
 		if($this->session->userdata('logged_in')){
+			$this->login = TRUE;
 			$session_data = $this->session->userdata('logged_in');
-			$this->load->library("UserFactory");
-			$this->load->library("DivisionFactory");
-			$data = array(
-				"users" => $this->userfactory->getUser(),
-				"divisions" => $this->divisionfactory->getDivision(),
-				"title" => $this->title,
-				"header" => 'All Users',
-				"userType" => $session_data['userType']
-			);
-			$this->load->admin_template('show_users',$data);
+			$this->userType = $session_data['userType'];
 		}else{
-			redirect('login', 'refresh');
+			$this->login = FALSE;
+			$this->userType = 'EMP';
 		}
 	}
 	
-	public function show($userId = 0){
-		if($this->session->userdata('logged_in')){
-			$session_data = $this->session->userdata('logged_in');
-			$userId = (int)$userId;
-			$this->load->library("UserFactory");
-			$data = array(
-				"users" => $this->userfactory->getUser($userId),
-				"title" => $this->title,
-				"userType" => $session_data['userType']
-			);
-			$this->load->admin_template('show_users',$data);
+	private function error(){
+		$data = array(
+			"title" => 'Error 403',
+			"header" => 'Error 403 Forbidden',
+			"userType" => $this->userType
+		);
+		$this->load->admin_template('error_view',$data);
+	}
+	
+	public function index()	{
+		$this->checkLogin();
+		if($this->login){
+			if($this->userType=='EMP'){
+				$this->error();
+			}else{
+				if($this->userType=='RD' || $this->userType=='ARD'){
+					$this->error();
+				}else{
+					$this->load->library("UserFactory");
+					$this->load->library("DivisionFactory");
+					$data = array(
+						"users" => $this->userfactory->getUser(),
+						"divisions" => $this->divisionfactory->getDivision(),
+						"title" => $this->title,
+						"header" => 'All Users',
+						"userType" => $this->userType
+					);
+					$this->load->admin_template('show_users',$data);
+				}
+			}
 		}else{
 			redirect('login', 'refresh');
 		}
 	}
 	
 	public function add(){
-		if($this->session->userdata('logged_in')){
-			$this->load->library("UserFactory");
-			if($this->userfactory->addUser($_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
-				redirect('admin/user');
+		$this->checkLogin();
+		if($this->login){
+			if($this->userType=='EMP'){
+				$this->error();
 			}else{
-				echo "Failed!";
+				if($this->userType=='RD' || $this->userType=='ARD'){
+					$this->error();
+				}else{
+					$this->load->library("UserFactory");
+					if($this->userfactory->addUser($_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
+						redirect('admin/user');
+					}else{
+						echo "Failed!";
+					}
+				}
 			}
 		}else{
 			redirect('login', 'refresh');

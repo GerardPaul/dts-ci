@@ -5,9 +5,7 @@ class DivisionFactory{
 
 	private $_ci;
 
- 	function __construct()
-    {
-    	//When the class is constructed get an instance of codeigniter so we can access it locally
+ 	function __construct(){
     	$this->_ci =& get_instance();
     	$this->_ci->load->model("division_model");
     }
@@ -43,13 +41,12 @@ class DivisionFactory{
 	}
 	
     public function createObjectFromData($row) {
-    	//Create a new object
     	$division = new Division_Model();
 		
     	$division->setId($row->id);
 		$division->setDivisionName($row->name);
 		$division->setDivisionDescription($row->description);
-    	//Return the new object
+		
     	return $division;
     }
 

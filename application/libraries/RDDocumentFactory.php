@@ -1,7 +1,7 @@
 <?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
-class DocumentFactory {
+class RDDocumentFactory {
 
 	private $_ci;
 
@@ -32,19 +32,19 @@ class DocumentFactory {
 					WHERE r.document = d.id';
     		$query = $this->_ci->db->query($sql);
     		if ($query->num_rows() > 0) {
-    			$users = array();
+    			$documents = array();
     			foreach ($query->result() as $row) {
-					$users[] = $this->createObjectFromData($row);
+					$documents[] = $this->createObjectFromData($row);
     			}
-    			return $users;
+    			return $documents;
     		}
     		return false;
     	}
     }
 	
 	private function formatDate($date){
-		if($date == '')
-			return '';
+		if($date == '0')
+			return '0';
 	
 		return date('M j, Y', strtotime($date));
 	}
@@ -68,4 +68,12 @@ class DocumentFactory {
 		
     	return $document;
     }
+	
+	public function updateReceived($id){
+		$date = date('m/d/Y');
+		$sql = "UPDATE rdtrack SET dateReceived = '$date' WHERE id = ?";
+		if($this->_ci->db->query($sql, array($id)))
+			return true;
+		return false;
+	}
 }

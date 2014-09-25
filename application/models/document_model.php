@@ -90,6 +90,7 @@ class Document_Model extends CI_Model{
 			if ($this->db->insert("document", $data)) {
 				//Now we can get the ID and update the newly created object
 				$this->_id = $this->db->insert_id();
+				$this->db->insert("rdtrack", array('document' => $this->_id));
 				return true;
 			}
 		}

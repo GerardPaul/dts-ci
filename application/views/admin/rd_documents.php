@@ -29,13 +29,17 @@ HTML;
 				else if($stat=='On-Going') $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="'.$stat.'" data-toggle="tooltip"></i></span>';
 				else if($stat=='Compiled') $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="'.$stat.'" data-toggle="tooltip"></i></span>';
 				
-				$viewLink = base_url('admin/document/view/'.$document->getId());
+				$viewLink = base_url('admin/document/details/'.$document->getId());
+				
+				$subject = $document->getSubject();
+				if($document->getMarkReceived()=='0')
+					$subject = '<strong>'.$document->getSubject().'</strong>';
 				
 				echo <<<HTML
 
 					<tr>
 						<td>{$document->getFrom()}</td>
-						<td>{$status}&nbsp;{$document->getSubject()}</td>
+						<td>{$status}&nbsp;{$subject}</td>
 						<td>{$document->getDateReceived()}</td>
 						<td>{$document->getDueDate()}</td>
 						<td>
