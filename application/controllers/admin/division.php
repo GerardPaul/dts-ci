@@ -17,10 +17,20 @@ class Division extends CI_Controller {
 		}
 	}
 	
-	private function error(){
+	private function error($er = 0){
+		$header = '';
+		$content = '';
+		if($er == 403){
+			$header = 'Forbidden';
+			$content = 'You have no permission to view this page.';
+		}else if($er == 404){
+			$header = 'Not Found';
+			$content = 'We cannot find the page you are looking for.';
+		}
 		$data = array(
-			"title" => 'Error 403',
-			"header" => 'Error 403 Forbidden',
+			"title" => 'Error '.$er,
+			"header" => 'Error '.$er.' ' . $header,
+			"content" => $content,
 			"userType" => $this->userType
 		);
 		$this->load->admin_template('error_view',$data);
@@ -30,10 +40,10 @@ class Division extends CI_Controller {
 		$this->checkLogin();
 		if($this->login){
 			if($this->userType=='EMP'){
-				$this->error();
+				$this->error(403);
 			}else{
 				if($this->userType=='RD' || $this->userType=='ARD'){
-					$this->error();
+					$this->error(403);
 				}else{
 					$this->load->library("DivisionFactory");
 					$data = array(
@@ -54,10 +64,10 @@ class Division extends CI_Controller {
 		$this->checkLogin();
 		if($this->login){
 			if($this->userType=='EMP'){
-				$this->error();
+				$this->error(403);
 			}else{
 				if($this->userType=='RD' || $this->userType=='ARD'){
-					$this->error();
+					$this->error(403);
 				}else{
 					$this->load->library("DivisionFactory");
 					if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){

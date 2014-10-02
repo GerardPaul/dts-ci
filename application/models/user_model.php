@@ -162,6 +162,20 @@ class User_Model extends CI_Model{
 		);
 
 		if ($this->_id > 0) {
+			if($this->_password == ''){
+				$data1 = array(
+					'username' => $this->_username,
+					'userType' => $this->_userType,
+					'email' => $this->_email,
+					'firstname' => $this->_firstname,
+					'lastname' => $this->_lastname,
+					'division' => $this->_division,
+					'status' => $this->_status
+				);
+				if ($this->db->update("user", $data1, array("id" => $this->_id))) {
+					return true;
+				}
+			}
 			//We have an ID so we need to update this object because it is not new
 			if ($this->db->update("user", $data, array("id" => $this->_id))) {
 				return true;

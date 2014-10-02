@@ -103,4 +103,9 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
+	var userType = $('#currentUserType').val();
+	var division = $('#currentDivision').val();
+	$('#userType').val(userType);
+	$('#division').val(division);
 });

@@ -29,7 +29,7 @@
 						<button class="close" type="button" data-dismiss="alert">
 							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 						</button>
-						Invalid username or password!
+						{$message}
 					</div>
 HTML;
 			} ?>

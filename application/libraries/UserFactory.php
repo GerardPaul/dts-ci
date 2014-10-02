@@ -24,7 +24,7 @@ class UserFactory {
 	public function getUserByDivision($division){
 		$sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
 						d.id AS 'divisionID', d.name, d.description
-					FROM user u, division d WHERE u.division = d.id AND d.name = ?";
+					FROM user u, division d WHERE u.division = d.id AND d.name = ? ORDER BY u.userType ASC";
 		$query = $this->_ci->db->query($sql, array($division));
 		if ($query->num_rows() > 0) {
     		$users = array();
@@ -77,6 +77,29 @@ class UserFactory {
 		
 		$user->setPassword($hashPassword);
 		$user->setSalt($salt);
+		
+		return $user->commit();
+	}
+	
+	public function updateUser($status, $id, $firstname, $lastname, $email, $username, $password, $userType, $division){
+		$user = new User_Model();
+		$user->setId($id);
+		$user->setFirstName($firstname);
+		$user->setLastName($lastname);
+		$user->setEmail($email);
+		$user->setUserType($userType);
+		$user->setDivision($division);
+		$user->setUsername($username);
+		$user->setStatus($status);
+		
+		if($password != 'password'){
+			$salt1 = md5(uniqid(rand(),true));
+			$salt = substr($salt1,0,50);
+			$hashPassword = hash('sha256', $salt . $password . $salt);
+			
+			$user->setPassword($hashPassword);
+			$user->setSalt($salt);
+		}
 		
 		return $user->commit();
 	}

@@ -35,15 +35,18 @@ HTML;
                         $viewLink = base_url('admin/document/details/' . $document->getId());
 
                         $subject = $document->getSubject();
-                        if ($document->getMarkReceived() == '0')
+                        $received = $document->getMarkReceived();
+						if ($document->getMarkReceived() == '0'){
                             $subject = '<strong>' . $document->getSubject() . '</strong>';
+							$received = $document->getDateReceived();
+						}
 
                         echo <<<HTML
 
 					<tr>
 						<td>{$document->getFrom()}</td>
 						<td>{$status}&nbsp;{$subject}</td>
-						<td>{$document->getDateReceived()}</td>
+						<td>{$received}</td>
 						<td>{$document->getDueDate()}</td>
 						<td>
 							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
