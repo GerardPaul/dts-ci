@@ -19,6 +19,10 @@ class RDTrack_Model extends CI_Model{
 	private $_ard;
 	private $_emp;
 	
+	private $_ardName;
+	private $_empName;
+	private $_division;
+	
 	function __construct(){
 		parent::__construct();
 	}
@@ -120,6 +124,24 @@ class RDTrack_Model extends CI_Model{
 	}
 	public function getArd(){
 		return $this->_ard;
+	}
+	public function setArdName($value){
+		$this->_ardName = $value;
+	}
+	public function getArdName(){
+		return $this->_ardName;
+	}
+	public function setEmpName($value){
+		$this->_empName = $value;
+	}
+	public function getEmpName(){
+		return $this->_empName;
+	}
+	public function setDivision($value){
+		$this->_division = $value;
+	}
+	public function getDivision(){
+		return $this->_division;
 	}
 	
 	public function commit()

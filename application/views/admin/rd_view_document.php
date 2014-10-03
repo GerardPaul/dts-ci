@@ -4,7 +4,6 @@
             <div class="pull-right">
                 <?php
                 $received = '';
-				$forwarded = '';
                 if ($documents->getMarkReceived() == '0') {
                     $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a>';
                 }else{
@@ -12,7 +11,10 @@
                     if($documents->getArd() == '0'){
 						echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
 					}else{
-						echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded</a>';
+						$ardName = $documents->getArdName();
+						$empName = $documents->getEmpName();
+						$division = $documents->getDivision();
+						echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>'.$division.'</strong>) '.$ardName.'/'.$empName.'</a>';
 					}
                 }
                 ?>
@@ -51,6 +53,57 @@ HTML;
             }
             ?>	
         </div>
+		<?php 
+			if($documents->getArd() != '0'){ ?>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-sm-2">
+						<button class="btn btn-sm btn-success" type="button">
+							<strong><?php echo $documents->getAction(); ?></strong>
+						</button>
+						<div class="space-10"></div>
+						<div class="well well-sm">
+							<?php echo $documents->getNotes(); ?>
+						</div>
+					</div>
+					<div class="col-sm-10">
+						
+					</div>
+				</div>
+			</div>
+			<div class="chatBox">
+				<div class="chatContainer">
+					<div class="chatHeading">
+						<div class="pull-right">
+							<span id="toggleChat">
+								<i class="glyphicon glyphicon-chevron-down" id="open"></i>
+								<i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
+							</span>
+						</div>
+						<h3 class="chatTitle">Chat</h3>
+					</div>
+					<div id="chatContents">
+						<div class="chatBody">
+							<div class="message other">
+								<p>This is a sample text to see if it is readable in this text size.</p>
+							</div>
+							<div class="message self">
+								<p>This is a sample text to see if it is readable in this text size. 
+									kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+							</div>
+							<div class="message other">
+								<p>This is a sample text to see if it is readable in this text size. 
+									kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+							</div>
+						</div>
+						<div class="chatFooter">
+							<input class="form-control" type="text" name="message" id="message">
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php }
+		?>
     </div>
 </div>
 

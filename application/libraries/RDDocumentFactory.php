@@ -15,8 +15,17 @@ class RDDocumentFactory {
 	public function getRDDocument($id = 0) {
     	if ($id > 0) {
 			$sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
-						d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-						d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived
+							d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
+							d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, 					r.empDateReceived,
+							(SELECT CONCAT(u.lastname, \',\', u.firstname) 
+							 FROM user u
+							 WHERE u.id = r.ard) AS "ardName",
+							 (SELECT CONCAT(u.lastname, \',\', u.firstname) 
+							 FROM user u
+							 WHERE u.id = r.emp) AS "empName",
+							 (SELECT v.name
+							 FROM user u, division v
+							 WHERE u.id = r.ard AND u.division = v.id) AS "division"
 					FROM document d, rdtrack r
 					WHERE r.document = d.id AND d.id = ?';
     		$query = $this->_ci->db->query($sql, array($id));
@@ -26,8 +35,17 @@ class RDDocumentFactory {
     		return false;
     	} else {
     		$sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
-						d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-						d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived
+							d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
+							d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, 					r.empDateReceived,
+							(SELECT CONCAT(u.lastname, \',\', u.firstname) 
+							 FROM user u
+							 WHERE u.id = r.ard) AS "ardName",
+							 (SELECT CONCAT(u.lastname, \',\', u.firstname) 
+							 FROM user u
+							 WHERE u.id = r.emp) AS "empName",
+							 (SELECT v.name
+							 FROM user u, division v
+							 WHERE u.id = r.ard AND u.division = v.id) AS "division"
 					FROM document d, rdtrack r
 					WHERE r.document = d.id';
     		$query = $this->_ci->db->query($sql);
@@ -69,6 +87,10 @@ class RDDocumentFactory {
 		$document->setEmp($row->emp);
 		$document->setArdDateReceived($row->ardDateReceived);
 		$document->setEmpDateReceived($row->empDateReceived);
+		
+		$document->setArdName($row->ardName);
+		$document->setEmpName($row->empName);
+		$document->setDivision($row->division);
 		
     	return $document;
     }

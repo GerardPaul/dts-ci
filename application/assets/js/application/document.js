@@ -164,4 +164,17 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
+	$('#toggleChat').click(function(){
+		$('#toggleChat i').toggle();
+		$('#chatContents').toggle();
+		
+		
+		if($('.chatBox').height()===300){
+			$('.chatBox').height(35);
+		}
+		else{
+			$('.chatBox').height(300);
+		}
+	});
 });
