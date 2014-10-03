@@ -4,11 +4,16 @@
             <div class="pull-right">
                 <?php
                 $received = '';
+				$forwarded = '';
                 if ($documents->getMarkReceived() == '0') {
                     $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a>';
-                } else {
+                }else{
                     $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
-                    echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
+                    if($documents->getArd() == '0'){
+						echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
+					}else{
+						echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded</a>';
+					}
                 }
                 ?>
                 <div class="space-10"></div>
@@ -76,7 +81,7 @@ HTML;
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="markReceivedLabel">Forward To</h4>
             </div>
-            <form id="mardReceivedForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/forward/<?php echo $documents->getId(); ?>">
+            <form id="markReceivedForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/forward/<?php echo $documents->getId(); ?>">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">To</label>
@@ -88,45 +93,58 @@ HTML;
                                 <option value="3">FASD</option>
                             </select>
                         </div>
+						<?php 
+							$ardTSSD = ''; //This is the ID of the ARD.
+							$ardTSD = ''; //This is the ID of the ARD.
+							$ardFASD = ''; //This is the ID of the ARD.
+						?>
                         <div class="col-md-4 hide" id="tsd_emp">
-                            <select class="form-control" name="emp">
-                                <option value="">- Select -</option>
+                            <select class="form-control" name="empTSD" id="empTSD">
                                 <?php
                                 if (is_array($usersTSD) && count($usersTSD)) {
                                     foreach ($usersTSD as $userTSD) {
-                                        if ($userTSD->getUserType() != 'ADMIN')
-                                            echo '<option value="' . $userTSD->getId() . '">' . $userTSD->getLastName() . ', ' . $userTSD->getFirstName() . '</option>';
-                                    }
+                                        if ($userTSD->getUserType() != 'ADMIN'){
+                                            if($userTSD->getUserType() == 'ARD'){$ardTSD = $userTSD->getId();}
+											echo '<option value="' . $userTSD->getId() . '">' . $userTSD->getLastName() . ', ' . $userTSD->getFirstName() . '</option>';
+										}
+									}
                                 }
                                 ?>
                             </select>
                         </div>
                         <div class="col-md-4 hide" id="tssd_emp">
-                            <select class="form-control" name="emp">
-                                <option value="">- Select -</option>
+                            <select class="form-control" name="empTSSD" id="empTSSD">
                                 <?php
                                 if (is_array($usersTSSD) && count($usersTSSD)) {
                                     foreach ($usersTSSD as $userTSSD) {
-                                        if ($userTSSD->getUserType() != 'ADMIN')
-                                            echo '<option value="' . $userTSSD->getId() . '">' . $userTSSD->getLastName() . ', ' . $userTSSD->getFirstName() . '</option>';
-                                    }
+                                        if ($userTSSD->getUserType() != 'ADMIN'){
+											if($userTSSD->getUserType() == 'ARD'){$ardTSSD = $userTSSD->getId();}
+											echo '<option value="' . $userTSSD->getId() . '">' . $userTSSD->getLastName() . ', ' . $userTSSD->getFirstName() . '</option>';
+										}
+									}
                                 }
                                 ?>
                             </select>
                         </div>
                         <div class="col-md-4 hide" id="fasd_emp">
-                            <select class="form-control" name="emp">
-                                <option value="">- Select -</option>
+                            <select class="form-control" name="empFASD" id="empFASD">
                                 <?php
                                 if (is_array($usersFASD) && count($usersFASD)) {
                                     foreach ($usersFASD as $userFASD) {
-                                        if ($userFASD->getUserType() != 'ADMIN')
-                                            echo '<option value="' . $userFASD->getId() . '">' . $userFASD->getLastName() . ', ' . $userFASD->getFirstName() . '</option>';
-                                    }
+                                        if ($userFASD->getUserType() != 'ADMIN'){
+											if($userFASD->getUserType() == 'ARD'){$ardFASD = $userFASD->getId();}
+											echo '<option value="' . $userFASD->getId() . '">' . $userFASD->getLastName() . ', ' . $userFASD->getFirstName() . '</option>';
+										}
+									}
                                 }
                                 ?>
                             </select>
                         </div>
+						<input type="hidden" value="<?php echo $ardTSD; ?>" id="ardTSD">
+						<input type="hidden" value="<?php echo $ardTSSD; ?>" id="ardTSSD">
+						<input type="hidden" value="<?php echo $ardFASD; ?>" id="ardFASD">
+						<input type="hidden" name="ardId" value="" id="ardId">
+						<input type="hidden" name="empId" value="" id="empId">
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Action</label>

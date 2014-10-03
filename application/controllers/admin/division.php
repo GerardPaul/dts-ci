@@ -17,6 +17,17 @@ class Division extends CI_Controller {
 		}
 	}
 	
+	function cleanString($string) {
+		$detagged = strip_tags($string);
+		if(get_magic_quotes_gpc()) {
+			$stripped = stripslashes($detagged);
+			$escaped = mysql_real_escape_string($stripped);
+		} else {
+			$escaped = mysql_real_escape_string($detagged);
+		}
+		return $escaped;
+	}
+	
 	private function error($er = 0){
 		$header = '';
 		$content = '';
@@ -70,7 +81,10 @@ class Division extends CI_Controller {
 					$this->error(403);
 				}else{
 					$this->load->library("DivisionFactory");
-					if($this->divisionfactory->addDivision($_POST['divisionName'],$_POST['description'])){
+					$divisionName = $this->cleanString($_POST['divisionName']);
+					$desc = $this->cleanString($_POST['description']);
+					
+					if($this->divisionfactory->addDivision($divisionName,$desc)){
 						redirect('admin/division');
 					}else{
 						echo "Failed!";

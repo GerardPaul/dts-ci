@@ -17,6 +17,17 @@ class User extends CI_Controller {
 		}
 	}
 	
+	function cleanString($string) {
+		$detagged = strip_tags($string);
+		if(get_magic_quotes_gpc()) {
+			$stripped = stripslashes($detagged);
+			$escaped = mysql_real_escape_string($stripped);
+		} else {
+			$escaped = mysql_real_escape_string($detagged);
+		}
+		return $escaped;
+	}
+	
 	private function error($er = 0){
 		$header = '';
 		$content = '';
@@ -72,7 +83,15 @@ class User extends CI_Controller {
 					$this->error(403);
 				}else{
 					$this->load->library("UserFactory");
-					if($this->userfactory->addUser($_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
+					$firstname = $this->cleanString($_POST['firstname']);
+					$lastname = $this->cleanString($_POST['lastname']);
+					$email = $this->cleanString($_POST['email']);
+					$username = $this->cleanString($_POST['username']);
+					$password = $this->cleanString($_POST['password']);
+					$type = $this->cleanString($_POST['userType']);
+					$division = $this->cleanString($_POST['division']);
+					
+					if($this->userfactory->addUser($firstname,$lastname,$email,$username,$password,$type,$division)){
 						redirect('admin/user');
 					}else{
 						echo "Failed!";
@@ -126,7 +145,17 @@ class User extends CI_Controller {
 					$this->error(403);
 				}else{
 					$this->load->library("UserFactory");
-					if($this->userfactory->updateUser($_POST['status'],$_POST['userId'],$_POST['firstname'],$_POST['lastname'],$_POST['email'],$_POST['username'],$_POST['password'],$_POST['userType'],$_POST['division'])){
+					$status = $this->cleanString($_POST['status']);
+					$userId = $this->cleanString($_POST['userId']);
+					$firstname = $this->cleanString($_POST['firstname']);
+					$lastname = $this->cleanString($_POST['lastname']);
+					$email = $this->cleanString($_POST['email']);
+					$username = $this->cleanString($_POST['username']);
+					$password = $this->cleanString($_POST['password']);
+					$type = $this->cleanString($_POST['userType']);
+					$division = $this->cleanString($_POST['division']);
+					
+					if($this->userfactory->updateUser($status ,$userId,$firstname,$lastname,$email,$username,$password,$type,$division)){
 						redirect('admin/user');
 					}else{
 						echo "Failed!";

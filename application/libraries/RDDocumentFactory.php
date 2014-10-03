@@ -16,7 +16,7 @@ class RDDocumentFactory {
     	if ($id > 0) {
 			$sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
 						d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-						d.referenceNumber, d.dateReceived
+						d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived
 					FROM document d, rdtrack r
 					WHERE r.document = d.id AND d.id = ?';
     		$query = $this->_ci->db->query($sql, array($id));
@@ -27,7 +27,7 @@ class RDDocumentFactory {
     	} else {
     		$sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
 						d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-						d.referenceNumber, d.dateReceived
+						d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived
 					FROM document d, rdtrack r
 					WHERE r.document = d.id';
     		$query = $this->_ci->db->query($sql);
@@ -65,6 +65,10 @@ class RDDocumentFactory {
 		$document->setAction($row->action);
 		$document->setMarkReceived($this->formatDate($row->markReceived));
 		$document->setNotes($row->notes);
+		$document->setArd($row->ard);
+		$document->setEmp($row->emp);
+		$document->setArdDateReceived($row->ardDateReceived);
+		$document->setEmpDateReceived($row->empDateReceived);
 		
     	return $document;
     }
@@ -72,6 +76,16 @@ class RDDocumentFactory {
 	public function updateReceived($id){
 		$date = date('m/d/Y');
 		$sql = "UPDATE rdtrack SET dateReceived = '$date' WHERE id = ?";
+		if($this->_ci->db->query($sql, array($id)))
+			return true;
+		return false;
+	}
+	
+	public function forwardTo($id, $ardId, $empId, $action, $notes){
+		$sql = "UPDATE rdtrack SET ard = '$ardId', emp = '$empId', notes = '$notes', action = '$action' WHERE id = ?";
+		if($empId == '')
+			$sql = "UPDATE rdtrack SET ard = '$ardId', notes = '$notes', action = '$action' WHERE id = ?";
+			
 		if($this->_ci->db->query($sql, array($id)))
 			return true;
 		return false;

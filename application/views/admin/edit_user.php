@@ -84,6 +84,7 @@ HTML;
 					<div class="form-group">
 						<div class="col-md-offset-2 col-md-8">
 							<button type="submit" class="btn btn-success saveUserForm">Confirm Update</button>
+							<a class="btn btn-default" href="<?php echo base_url();?>admin/user">Cancel</a>
 						</div>
 					</div>
 				</form>

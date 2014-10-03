@@ -17,6 +17,17 @@ class Document extends CI_Controller {
 		}
 	}
 	
+	function cleanString($string) {
+		$detagged = strip_tags($string);
+		if(get_magic_quotes_gpc()) {
+			$stripped = stripslashes($detagged);
+			$escaped = mysql_real_escape_string($stripped);
+		} else {
+			$escaped = mysql_real_escape_string($detagged);
+		}
+		return $escaped;
+	}
+	
 	private function error($er){
 		$header = '';
 		$content = '';
@@ -146,7 +157,14 @@ class Document extends CI_Controller {
 					}
 					if($this->session->userdata('logged_in')){
 						$this->load->library("DocumentFactory");
-						if($this->documentfactory->addDocument($_POST['subject'],$_POST['from'],$_POST['dueDate'],$attachment_path,$_POST['status'],$_POST['referenceNumber'],$_POST['dateReceived'])){
+						$subject = $this->cleanString($_POST['subject']);
+						$from = $this->cleanString($_POST['from']);
+						$dueDate = $this->cleanString($_POST['dueDate']);
+						$status = $this->cleanString($_POST['status']);
+						$refNo = $this->cleanString($_POST['referenceNumber']);
+						$dateReceived = $this->cleanString($_POST['dateReceived']);
+						
+						if($this->documentfactory->addDocument($subject, $from, $dueDate , $attachment_path, $status, $refNo, $dateReceived)){
 							redirect('admin/document');
 						}else{
 							echo "Failed!";
@@ -214,6 +232,34 @@ class Document extends CI_Controller {
 					$this->load->library("RDDocumentFactory");
 					if($this->rddocumentfactory->updateReceived($documentId)){
 						redirect('admin/document/details/'.$documentId);
+					}else{
+						echo "Failed!";
+					}
+				}
+			}
+		}
+	}
+	
+	public function forward($id = 0){
+		$this->checkLogin();
+		if($this->login){
+			if($this->userType=='EMP'){
+				$this->error(403);
+			}else{
+				if($this->userType=='ADMIN' || $this->userType=='SEC' || $this->userType=='ARD'){
+					$this->error(403);
+				}else{
+					$id = (int)$id;
+					$notes = $this->cleanString($_POST['note']);
+					$action = $this->cleanString($_POST['action']);
+					$ardId = $this->cleanString($_POST['ardId']);
+					$empId = $this->cleanString($_POST['empId']);
+					if($ardId == $empId)
+						$empId = '';
+					
+					$this->load->library("RDDocumentFactory");
+					if($this->rddocumentfactory->forwardTo($id, $ardId, $empId, $action, $notes)){
+						redirect('admin/document/details/'.$id);
 					}else{
 						echo "Failed!";
 					}

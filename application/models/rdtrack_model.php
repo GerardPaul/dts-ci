@@ -14,6 +14,11 @@ class RDTrack_Model extends CI_Model{
 	private $_markReceived;
 	private $_notes;
 	
+	private $_ardDateReceived;
+	private $_empDateReceived;
+	private $_ard;
+	private $_emp;
+	
 	function __construct(){
 		parent::__construct();
 	}
@@ -91,6 +96,32 @@ class RDTrack_Model extends CI_Model{
 	public function getDateReceived(){
 		return $this->_dateReceived;
 	}
+	
+	public function setEmpDateReceived($value){
+		$this->_empDateReceived = $value;
+	}
+	public function getEmpDateReceived(){
+		return $this->_empDateReceived;
+	}
+	public function setArdDateReceived($value){
+		$this->_ardDateReceived = $value;
+	}
+	public function getArdDateReceived(){
+		return $this->_ardDateReceived;
+	}
+	public function setEmp($value){
+		$this->_emp = $value;
+	}
+	public function getEmp(){
+		return $this->_emp;
+	}
+	public function setArd($value){
+		$this->_ard = $value;
+	}
+	public function getArd(){
+		return $this->_ard;
+	}
+	
 	public function commit()
 	{
 		$data = array(
