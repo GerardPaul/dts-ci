@@ -6,16 +6,16 @@
                 $received = '';
                 if ($documents->getMarkReceived() == '0') {
                     $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a>';
-                }else{
+                } else {
                     $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
-                    if($documents->getArd() == '0'){
-						echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
-					}else{
-						$ardName = $documents->getArdName();
-						$empName = $documents->getEmpName();
-						$division = $documents->getDivision();
-						echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>'.$division.'</strong>) '.$ardName.'/'.$empName.'</a>';
-					}
+                    if ($documents->getArd() == '0') {
+                        echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
+                    } else {
+                        $ardName = $documents->getArdName();
+                        $empName = $documents->getEmpName();
+                        $division = $documents->getDivision();
+                        echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
+                    }
                 }
                 ?>
                 <div class="space-10"></div>
@@ -53,57 +53,56 @@ HTML;
             }
             ?>	
         </div>
-		<?php 
-			if($documents->getArd() != '0'){ ?>
-			<div class="col-xs-12">
-				<div class="row">
-					<div class="col-sm-2">
-						<button class="btn btn-sm btn-success" type="button">
-							<strong><?php echo $documents->getAction(); ?></strong>
-						</button>
-						<div class="space-10"></div>
-						<div class="well well-sm">
-							<?php echo $documents->getNotes(); ?>
-						</div>
-					</div>
-					<div class="col-sm-10">
-						
-					</div>
-				</div>
-			</div>
-			<div class="chatBox">
-				<div class="chatContainer">
-					<div class="chatHeading">
-						<div class="pull-right">
-							<span id="toggleChat">
-								<i class="glyphicon glyphicon-chevron-down" id="open"></i>
-								<i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
-							</span>
-						</div>
-						<h3 class="chatTitle">Chat</h3>
-					</div>
-					<div id="chatContents">
-						<div class="chatBody">
-							<div class="message other">
-								<p>This is a sample text to see if it is readable in this text size.</p>
-							</div>
-							<div class="message self">
-								<p>This is a sample text to see if it is readable in this text size. 
-									kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
-							</div>
-							<div class="message other">
-								<p>This is a sample text to see if it is readable in this text size. 
-									kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
-							</div>
-						</div>
-						<div class="chatFooter">
-							<input class="form-control" type="text" name="message" id="message">
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php }
-		?>
+        <?php if ($documents->getArd() != '0') { ?>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button class="btn btn-sm btn-success" type="button">
+                            <strong><?php echo $documents->getAction(); ?></strong>
+                        </button>
+                        <div class="space-10"></div>
+                        <div class="well well-sm">
+                            <p><?php echo $documents->getNotes(); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+
+                    </div>
+                </div>
+            </div>
+            <div class="chatBox">
+                <div class="chatContainer">
+                    <div class="chatHeading">
+                        <div class="pull-right">
+                            <span id="toggleChat">
+                                <i class="glyphicon glyphicon-chevron-down" id="open"></i>
+                                <i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
+                            </span>
+                        </div>
+                        <h3 class="chatTitle">Chat</h3>
+                    </div>
+                    <div id="chatContents">
+                        <div class="chatBody">
+                            <div class="message other">
+                                <p>This is a sample text to see if it is readable in this text size.</p>
+                            </div>
+                            <div class="message self">
+                                <p>This is a sample text to see if it is readable in this text size. 
+                                    kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+                            </div>
+                            <div class="message other">
+                                <p>This is a sample text to see if it is readable in this text size. 
+                                    kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+                            </div>
+                        </div>
+                        <div class="chatFooter">
+                            <input class="form-control" type="text" name="message" id="message">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php }
+        ?>
     </div>
 </div>
 
@@ -146,21 +145,23 @@ HTML;
                                 <option value="3">FASD</option>
                             </select>
                         </div>
-						<?php 
-							$ardTSSD = ''; //This is the ID of the ARD.
-							$ardTSD = ''; //This is the ID of the ARD.
-							$ardFASD = ''; //This is the ID of the ARD.
-						?>
+                        <?php
+                        $ardTSSD = ''; //This is the ID of the ARD.
+                        $ardTSD = ''; //This is the ID of the ARD.
+                        $ardFASD = ''; //This is the ID of the ARD.
+                        ?>
                         <div class="col-md-4 hide" id="tsd_emp">
                             <select class="form-control" name="empTSD" id="empTSD">
                                 <?php
                                 if (is_array($usersTSD) && count($usersTSD)) {
                                     foreach ($usersTSD as $userTSD) {
-                                        if ($userTSD->getUserType() != 'ADMIN'){
-                                            if($userTSD->getUserType() == 'ARD'){$ardTSD = $userTSD->getId();}
-											echo '<option value="' . $userTSD->getId() . '">' . $userTSD->getLastName() . ', ' . $userTSD->getFirstName() . '</option>';
-										}
-									}
+                                        if ($userTSD->getUserType() != 'ADMIN') {
+                                            if ($userTSD->getUserType() == 'ARD') {
+                                                $ardTSD = $userTSD->getId();
+                                            }
+                                            echo '<option value="' . $userTSD->getId() . '">' . $userTSD->getLastName() . ', ' . $userTSD->getFirstName() . '</option>';
+                                        }
+                                    }
                                 }
                                 ?>
                             </select>
@@ -170,11 +171,13 @@ HTML;
                                 <?php
                                 if (is_array($usersTSSD) && count($usersTSSD)) {
                                     foreach ($usersTSSD as $userTSSD) {
-                                        if ($userTSSD->getUserType() != 'ADMIN'){
-											if($userTSSD->getUserType() == 'ARD'){$ardTSSD = $userTSSD->getId();}
-											echo '<option value="' . $userTSSD->getId() . '">' . $userTSSD->getLastName() . ', ' . $userTSSD->getFirstName() . '</option>';
-										}
-									}
+                                        if ($userTSSD->getUserType() != 'ADMIN') {
+                                            if ($userTSSD->getUserType() == 'ARD') {
+                                                $ardTSSD = $userTSSD->getId();
+                                            }
+                                            echo '<option value="' . $userTSSD->getId() . '">' . $userTSSD->getLastName() . ', ' . $userTSSD->getFirstName() . '</option>';
+                                        }
+                                    }
                                 }
                                 ?>
                             </select>
@@ -184,20 +187,22 @@ HTML;
                                 <?php
                                 if (is_array($usersFASD) && count($usersFASD)) {
                                     foreach ($usersFASD as $userFASD) {
-                                        if ($userFASD->getUserType() != 'ADMIN'){
-											if($userFASD->getUserType() == 'ARD'){$ardFASD = $userFASD->getId();}
-											echo '<option value="' . $userFASD->getId() . '">' . $userFASD->getLastName() . ', ' . $userFASD->getFirstName() . '</option>';
-										}
-									}
+                                        if ($userFASD->getUserType() != 'ADMIN') {
+                                            if ($userFASD->getUserType() == 'ARD') {
+                                                $ardFASD = $userFASD->getId();
+                                            }
+                                            echo '<option value="' . $userFASD->getId() . '">' . $userFASD->getLastName() . ', ' . $userFASD->getFirstName() . '</option>';
+                                        }
+                                    }
                                 }
                                 ?>
                             </select>
                         </div>
-						<input type="hidden" value="<?php echo $ardTSD; ?>" id="ardTSD">
-						<input type="hidden" value="<?php echo $ardTSSD; ?>" id="ardTSSD">
-						<input type="hidden" value="<?php echo $ardFASD; ?>" id="ardFASD">
-						<input type="hidden" name="ardId" value="" id="ardId">
-						<input type="hidden" name="empId" value="" id="empId">
+                        <input type="hidden" value="<?php echo $ardTSD; ?>" id="ardTSD">
+                        <input type="hidden" value="<?php echo $ardTSSD; ?>" id="ardTSSD">
+                        <input type="hidden" value="<?php echo $ardFASD; ?>" id="ardFASD">
+                        <input type="hidden" name="ardId" value="" id="ardId">
+                        <input type="hidden" name="empId" value="" id="empId">
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Action</label>

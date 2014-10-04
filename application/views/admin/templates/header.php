@@ -9,8 +9,8 @@
 	<title><?php echo $title; ?> | Document Tracking System</title>
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
-	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/datepicker.css"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
 </head>
 <body>
