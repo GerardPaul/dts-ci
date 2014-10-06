@@ -93,8 +93,8 @@ class Document extends CI_Controller {
     }
 
     private function ardIndex($data) {
-        $this->load->library("ARDDocumentFactory");
-        $data['documents'] = $this->arddocumentfactory->getARDDocument();
+        $this->load->library("RDDocumentFactory");
+        $data['documents'] = $this->rddocumentfactory->getARDDocument($this->userId);
 
         $this->load->admin_template('ard_documents', $data);
     }
@@ -114,13 +114,13 @@ class Document extends CI_Controller {
                     if ($documentId > 0 && $documents) {
                         $status = '';
                         $stat = $documents->getStatus();
-                        if ($stat == 'Cancelled')
+                        if ($stat == 'Cancelled') {
                             $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        else if ($stat == 'On-Going')
+                        } else if ($stat == 'On-Going') {
                             $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        else if ($stat == 'Compiled')
+                        } else if ($stat == 'Compiled') {
                             $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-
+                        }
                         $data = array(
                             "documents" => $documents,
                             "title" => 'Document Details',
@@ -128,7 +128,7 @@ class Document extends CI_Controller {
                             "userType" => $this->userType
                         );
                         $this->load->admin_template('view_document', $data);
-                    }else {
+                    } else {
                         $this->error(404);
                     }
                 }
@@ -170,7 +170,7 @@ class Document extends CI_Controller {
                     }
                     if ($this->session->userdata('logged_in')) {
                         $this->load->library("DocumentFactory");
-                        
+
                         $subject = $this->cleanString($_POST['subject']);
                         $from = $this->cleanString($_POST['from']);
                         $dueDate = $this->cleanString($_POST['dueDate']);
@@ -200,40 +200,16 @@ class Document extends CI_Controller {
             if ($this->userType == 'EMP') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'ARD') {
+                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' ) {
                     $this->error(403);
-                } else {
+                }else {
                     $documentId = (int) $documentId;
-                    
                     $this->load->library("RDDocumentFactory");
-                    $documents = $this->rddocumentfactory->getRDDocument($documentId);
-                    if ($documentId > 0 && $documents) {
-                        
-                        //$session_data['lastID_'.$this->userId.'_'.$documentId] = 0;
-                        //$this->session->set_userdata('logged_in', $session_data);
-                        
-                        $status = '';
-                        $stat = $documents->getStatus();
-                        if ($stat == 'Cancelled')
-                            $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        else if ($stat == 'On-Going')
-                            $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        else if ($stat == 'Compiled')
-                            $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-
-                        $this->load->library("UserFactory");
-                        $data = array(
-                            "documents" => $documents,
-                            "title" => 'Document Details',
-                            "header" => $status . $documents->getSubject(),
-                            "userType" => $this->userType,
-                            "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
-                            "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
-                            "usersFASD" => $this->userfactory->getUserByDivision('FASD')
-                        );
-                        $this->load->admin_template('rd_view_document', $data);
+                    
+                    if($this->userType == 'ARD'){ 
+                        $this->ardDetails($documentId);
                     }else {
-                        $this->error(404);
+                        $this->rdDetails($documentId);
                     }
                 }
             }
@@ -241,7 +217,70 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
+    
+    private function ardDetails($documentId){
+        $documents = $this->rddocumentfactory->getRDDocument($documentId);
+        if ($documentId > 0 && $documents) {
+            $status = $this->status($documents->getStatus());
+            
+            $this->load->library("UserFactory");
+            
+            $division = $documents->getDivision();
+            $users = 'users'.$division;
+            
+            $usersByDivision = '';
+            if($division=='TSSD'){
+                $usersByDivision = $this->userfactory->getUserByDivision('TSSD');
+            }else if($division=='TSD'){
+                $usersByDivision = $this->userfactory->getUserByDivision('TSD');
+            }else if($division=='FASD'){
+                $usersByDivision = $this->userfactory->getUserByDivision('FASD');
+            }
+                
+            $data = array(
+                "documents" => $documents,
+                "title" => 'Document Details',
+                "header" => $status . $documents->getSubject(),
+                "userType" => $this->userType,
+                $users => $usersByDivision
+            );
+            $this->load->admin_template('ard_view_document', $data);
+        }else {
+            $this->error(404);
+        }
+    }
 
+    private function rdDetails($documentId) {
+        $documents = $this->rddocumentfactory->getRDDocument($documentId);
+        if ($documentId > 0 && $documents) {
+            $status = $this->status($documents->getStatus());
+            
+            $this->load->library("UserFactory");
+            $data = array(
+                "documents" => $documents,
+                "title" => 'Document Details',
+                "header" => $status . $documents->getSubject(),
+                "userType" => $this->userType,
+                "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
+                "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
+                "usersFASD" => $this->userfactory->getUserByDivision('FASD')
+            );
+            $this->load->admin_template('rd_view_document', $data);
+        }else {
+            $this->error(404);
+        }
+    }
+
+    private function status($status){
+        if ($status == 'Cancelled'){
+            return '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+        }else if ($status == 'On-Going'){
+            return '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+        }else if ($status == 'Compiled'){
+            return '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+        }
+    }
+    
     public function receive($documentId = 0) {
         $this->checkLogin();
         if ($this->login) {

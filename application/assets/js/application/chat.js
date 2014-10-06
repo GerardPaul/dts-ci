@@ -1,12 +1,13 @@
 $(document).ready(function() {
     var document = $('input#document').val();
     var chat = $('input#chat').val();
-    //getMessages();
-    setInterval(function(){ 
+    
+    setInterval(function(){
         getMessages();
         $('input#chat').val('0');
         chat = $('input#chat').val();
     }, 2500);
+    
     
     function scrollChat(){
         $("#chatBody").animate({ scrollTop: $('#chatBody')[0].scrollHeight}, 900);
@@ -15,9 +16,6 @@ $(document).ready(function() {
     setTimeout(function(){
         scrollChat();
     },3000);
-    
-    //$('input#chat').val('0');
-    //chat = $('input#chat').val();
     
     $('input#message').keypress(function(e){
         if(e.which == 13){
@@ -50,6 +48,8 @@ $(document).ready(function() {
             } else {
 
             }
+            //if(data.content == '')
+                //clearInterval(loop);
         }, "json");
     }
 

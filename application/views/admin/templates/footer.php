@@ -10,8 +10,6 @@
         <script type="text/javascript">
             var base_url = "<?php echo base_url(); ?>";
         </script>
-	<script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery-2.1.1.min.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrapValidator.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery.dataTables.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap-datepicker.js"); ?>"></script>
@@ -21,18 +19,13 @@
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/application/user.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/application/division.js"); ?>"></script>
         
-        <?php 
-            $current_method = $this->router->fetch_method();
-            if(isset($current_method) && $current_method == 'details'){ ?>
-                <script type="text/javascript" src="<?php echo base_url("application/assets/js/application/chat.js"); ?>"></script>
-        <?php }?>
 	<script>
-		$(document).ready(function() {
-			$('.dataTables_wrapper .dataTables_filter input').addClass('form-control, input-sm').attr('display','inline');
-			$('.dataTables_wrapper .dataTables_length select').addClass('form-control, input-sm').attr('display','inline');
-			
-			$('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
-		});
+            $(document).ready(function() {
+                $('.dataTables_wrapper .dataTables_filter input').addClass('form-control, input-sm').attr('display','inline');
+                $('.dataTables_wrapper .dataTables_length select').addClass('form-control, input-sm').attr('display','inline');
+
+                $('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
+            });
 	</script>
 </body>
 </html>

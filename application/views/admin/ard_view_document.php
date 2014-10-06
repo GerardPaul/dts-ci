@@ -4,17 +4,16 @@
             <div class="pull-right">
                 <?php
                 $received = '';
-                if ($documents->getMarkReceived() == '0') {
+                if ($documents->getArdDateReceived() == '0') {
                     $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a>';
                 } else {
-                    $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
-                    if ($documents->getArd() == '0') {
+                    $received = $documents->getArdDateReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
+                    if ($documents->getEmp() == '0') {
                         echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
                     } else {
-                        $ardName = $documents->getArdName();
                         $empName = $documents->getEmpName();
                         $division = $documents->getDivision();
-                        echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
+                        echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $empName . '</a>';
                     }
                 }
                 ?>
