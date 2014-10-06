@@ -84,15 +84,21 @@ HTML;
                     <div id="chatContents">
                         <div class="chatBody">
                             <div class="message other">
-                                <p>This is a sample text to see if it is readable in this text size.</p>
+                                <p class="name">Gerard Paul Labitad</p>
+                                <p>This is a sample text to see if it is readable in this text size.
+                                </p>
+                                <time>Oct. 4, 2014 9:00PM</time>
                             </div>
                             <div class="message self">
                                 <p>This is a sample text to see if it is readable in this text size. 
                                     kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+                                <time>Oct. 4, 2014 9:00PM</time>
                             </div>
                             <div class="message other">
+                                <p class="name">Gerard Paul Labitad</p>
                                 <p>This is a sample text to see if it is readable in this text size. 
                                     kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
+                                <time>Oct. 4, 2014 9:00PM</time>
                             </div>
                         </div>
                         <div class="chatFooter">

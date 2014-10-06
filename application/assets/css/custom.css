@@ -126,6 +126,13 @@ body{
     word-wrap: break-word; /* Internet Explorer 5.5+ */
     white-space : normal;
 }
+.message time{
+    color: #B3B4BD;
+}
+.message .name{
+    font-size: 10px;
+    font-weight: bold;
+}
 #toggleChat{
     cursor: pointer;
 }
@@ -235,16 +242,16 @@ body{
     top: 50%;
 }
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+    border-radius: 8px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 .datepicker{
