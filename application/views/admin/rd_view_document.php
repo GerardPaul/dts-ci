@@ -82,26 +82,12 @@ HTML;
                         <h3 class="chatTitle">Chat</h3>
                     </div>
                     <div id="chatContents">
-                        <div class="chatBody">
-                            <div class="message other">
-                                <p class="name">Gerard Paul Labitad</p>
-                                <p>This is a sample text to see if it is readable in this text size.
-                                </p>
-                                <time>Oct. 4, 2014 9:00PM</time>
-                            </div>
-                            <div class="message self">
-                                <p>This is a sample text to see if it is readable in this text size. 
-                                    kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
-                                <time>Oct. 4, 2014 9:00PM</time>
-                            </div>
-                            <div class="message other">
-                                <p class="name">Gerard Paul Labitad</p>
-                                <p>This is a sample text to see if it is readable in this text size. 
-                                    kjskdfsfsdfsdfsdfsdf dfhkjfhkejrfhdjfhsdkjfhjkhjksdhfsjkdhfksjdhfsjdfhsejfhsdffsd</p>
-                                <time>Oct. 4, 2014 9:00PM</time>
-                            </div>
+                        <div class="chatBody" id="chatBody">
+                            
                         </div>
                         <div class="chatFooter">
+                            <input type="hidden" name="document" id="document" value="<?php echo $documents->getDocument(); ?>">
+                            <input type="hidden" name="chat" id="chat" value="1">
                             <input class="form-control" type="text" name="message" id="message">
                         </div>
                     </div>

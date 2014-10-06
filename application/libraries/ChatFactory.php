@@ -12,28 +12,32 @@ class ChatFactory {
         $this->_ci->load->model("chat_model");
     }
 
-    public function getChat($document = 0) {
+    public function getChat($id = 0, $lastID = 0) {
         if ($id > 0) {
-            $sql = 'SELECT c.id, c.document, c. user, c.message, c.created, CONCAT(u.lastname, \',\', u.firstname) AS "fullname"
+            $sql = 'SELECT c.id, c.document, c.user, c.message, DATE_FORMAT(c.created, "%M %d, %Y at %H:%i:%s") AS "created", CONCAT(u.lastname, ",", u.firstname) AS "fullname"
                     FROM chat c, user u
-                    WHERE c.user = u.id AND document = ?';
-            $query = $this->_ci->db->query($sql, array($id));
+                    WHERE c.user = u.id AND c.document = ? AND c.id > ? ORDER BY c.id ASC';
+            $query = $this->_ci->db->query($sql, array($id, $lastID));
             if ($query->num_rows() > 0) {
-                return $this->createObjectFromData($query->row());
+                $chat = array();
+                foreach ($query->result() as $row) {
+                    $chat[] = $this->createObjectFromData($row);
+                }
+                return $chat;
             }
             return false;
         } else {
-            $sql = 'SELECT c.id, c.document, c.user, c.message, c.created, CONCAT(u.lastname, \',\', u.firstname) AS "fullname"
-                    FROM chat c, user u
-                    WHERE c.user = u.id';
-            $query = $this->_ci->db->query($sql);
-            if ($query->num_rows() > 0) {
-                $division = array();
-                foreach ($query->result() as $row) {
-                    $division[] = $this->createObjectFromData($row);
-                }
-                return $division;
-            }
+//            $sql = 'SELECT c.id, c.document, c.user, c.message, DATE_FORMAT(c.created, "%M %d, %Y at %H:%i:%s") AS "created", CONCAT(u.lastname, ",", u.firstname) AS "fullname"
+//                    FROM chat c, user u
+//                    WHERE c.user = u.id AND c.id > ? ORDER BY c.id ASC';
+//            $query = $this->_ci->db->query($sql, array($lastID));
+//            if ($query->num_rows() > 0) {
+//                $chat = array();
+//                foreach ($query->result() as $row) {
+//                    $chat[] = $this->createObjectFromData($row);
+//                }
+//                return $chat;
+//            }
             return false;
         }
     }

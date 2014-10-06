@@ -8,12 +8,14 @@ class Document extends CI_Controller {
     var $title = 'Documents';
     var $login = FALSE;
     var $userType = '';
+    var $userId = '';
 
     private function checkLogin() {
         if ($this->session->userdata('logged_in')) {
             $this->login = TRUE;
             $session_data = $this->session->userdata('logged_in');
             $this->userType = $session_data['userType'];
+            $this->userId = $session_data['id'];
         } else {
             $this->login = FALSE;
             $this->userType = 'EMP';
@@ -168,6 +170,7 @@ class Document extends CI_Controller {
                     }
                     if ($this->session->userdata('logged_in')) {
                         $this->load->library("DocumentFactory");
+                        
                         $subject = $this->cleanString($_POST['subject']);
                         $from = $this->cleanString($_POST['from']);
                         $dueDate = $this->cleanString($_POST['dueDate']);
@@ -201,9 +204,14 @@ class Document extends CI_Controller {
                     $this->error(403);
                 } else {
                     $documentId = (int) $documentId;
+                    
                     $this->load->library("RDDocumentFactory");
                     $documents = $this->rddocumentfactory->getRDDocument($documentId);
                     if ($documentId > 0 && $documents) {
+                        
+                        //$session_data['lastID_'.$this->userId.'_'.$documentId] = 0;
+                        //$this->session->set_userdata('logged_in', $session_data);
+                        
                         $status = '';
                         $stat = $documents->getStatus();
                         if ($stat == 'Cancelled')
