@@ -265,3 +265,9 @@ body{
     word-wrap: break-word; /* Internet Explorer 5.5+ */
     white-space : normal;
 }
+#documentDetails th{
+	width: 20%;
+}
+#documentDetails td{
+	width: 80%;
+}

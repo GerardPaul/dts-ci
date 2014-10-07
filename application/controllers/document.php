@@ -50,7 +50,11 @@ class Document extends CI_Controller {
             "content" => $content,
             "userType" => $this->userType
         );
-        $this->load->template('error_view', $data);
+		if($this->userType == 'EMP'){
+			$this->load->template('error_view', $data);
+		}else{
+			$this->load->admin_template('error_view', $data);
+		}
     }
 	
 	public function index() {

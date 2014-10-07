@@ -1,29 +1,41 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <div class="pull-right">
-                <?php
-                $received = '';
-                if ($documents->getMarkReceived() == '0') {
-                    $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a> <small>*Mark as received to forward this document to a user.</small>';
-                } else {
-                    $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
-                    if ($documents->getArd() == '0') {
-                        echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
-                    } else {
-                        $ardName = $documents->getArdName();
-                        $empName = $documents->getEmpName();
-                        $division = $documents->getDivision();
-                        echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
-                    }
-                }
-                ?>
-                <div class="space-10"></div>
-            </div>
+			<div class="col-sm-6">
+				<a class="btn btn-sm btn-primary" href="<?php echo base_url(); ?>admin/document"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+			</div>
+			<div class="col-sm-6">
+				<div class="pull-right">
+					<?php
+					$received = '';
+					if ($documents->getMarkReceived() == '0') {
+						$received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a> <small>*Mark as received to forward this document to a user.</small>';
+					} else {
+						$received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
+						if ($documents->getArd() == '0') {
+							echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
+						} else {
+							$ardName = $documents->getArdName();
+							$empName = $documents->getEmpName();
+							$division = $documents->getDivision();
+							echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
+						}
+					}
+					?>
+					<div class="space-10"></div>
+				</div>
+			</div>
             <?php
             if ($documents !== FALSE) {
+				$download = '';
+				if($documents->getAttachment() != 'No File.'){
+					$download = '<button class="btn btn-sm btn-success" id="download"><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
+					echo '<input type="hidden" id="path" value="'.$documents->getAttachment().'">';
+				}else{
+					$download = '<button class="btn btn-sm btn-success"><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
+				}
                 echo <<<HTML
-				<table class="table table-condensed table-responsive">
+				<table class="table table-condensed table-responsive" id="documentDetails">
 					<tr>
 						<th>Ref. #</th>
 						<td>{$documents->getReferenceNumber()}</td>
@@ -42,7 +54,7 @@
 					</tr>
 					<tr>
 						<th>Attachment</th>
-						<td>{$documents->getAttachment()}</td>
+						<td>{$download}</td>
 					</tr>
 				</table>
 HTML;

@@ -215,4 +215,15 @@ $(document).ready(function() {
 			$('.chatBox').height(300);
 		}
 	});
+	
+	$('#download').click(function(){
+		var path = $('#path').val();
+		$.post(base_url + "admin/document/download", {path: path}, function(data) {
+            if (data.status == 'ok') {
+                
+            } else {
+
+            }
+        }, "json");
+	});
 });
