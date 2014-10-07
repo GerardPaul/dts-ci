@@ -4,6 +4,7 @@
 				<script>
 					document.write(new Date().getFullYear());
 				</script>
+                                <a href="http://gpplworx.com" target="_blank">Gerard Paul P. Labitad</a>
 			</p>
 		</div>
 	</div>

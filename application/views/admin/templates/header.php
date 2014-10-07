@@ -1,12 +1,13 @@
 <?php
     $current_controller = $this->router->fetch_class();
-    $active[$current_controller] = 'class="active"';
+    $active[$current_controller] = 'active';
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title><?php echo $title; ?> | Document Tracking System</title>
+        <link rel="shortcut icon" href="<?php echo base_url("application/assets/images/favicon.ico"); ?>" type="image/x-icon"/>
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/datepicker.css"); ?>">
@@ -29,18 +30,23 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo base_url("admin/home"); ?>">DTS</a>
+                    <a class="navbar-brand" href="<?php echo base_url("admin/home"); ?>">Document Tracking System</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <?php if ($userType == 'ADMIN') { ?>
-                            <li <?php if (isset($active['user'])) echo $active['user']; ?>><a href="<?php echo base_url("admin/user"); ?>">User</a></li>
-                            <li <?php if (isset($active['division'])) echo $active['division']; ?>><a href="<?php echo base_url("admin/division"); ?>">Division</a></li>
-                        <?php } ?>
-                        <li <?php if (isset($active['document'])) echo $active['document']; ?>><a href="<?php echo base_url("admin/document"); ?>">Documents</a></li>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="<?php echo base_url("admin/home/logout"); ?>">Logout</a></li>
+                        <?php if ($userType == 'ADMIN') { ?>
+                            <li class="<?php if (isset($active['user'])) echo $active['user']; ?>"><a href="<?php echo base_url("admin/user"); ?>">User</a></li>
+                            <li class="<?php if (isset($active['division'])) echo $active['division']; ?>"><a href="<?php echo base_url("admin/division"); ?>">Division</a></li>
+                        <?php } ?>
+                        <li class="<?php if (isset($active['document'])) echo $active['document']; ?>"><a href="<?php echo base_url("admin/document"); ?>">Documents</a></li>
+                        <li class="dropdown <?php if (isset($active['profile'])) echo $active['profile']; ?>">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $username; ?><span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="<?php echo base_url("admin/profile"); ?>">Profile</a></li>
+                                <li class="divider"></li>
+                                <li><a href="<?php echo base_url("admin/home/logout"); ?>">Logout</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

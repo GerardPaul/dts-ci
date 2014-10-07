@@ -1,15 +1,19 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
+            <div class="col-sm-6">
+                <a class="btn btn-sm btn-primary" href="<?php echo base_url(); ?>admin/document"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+                <div class="space-10"></div>
+            </div>
+            <div class="col-sm-6">
+                
+            </div>
             <?php
             if ($documents !== FALSE) {
-				$download = '';
-				if($documents->getAttachment() != 'No File.'){
-					$download = '<button class="btn btn-sm btn-success" id="download"><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
-					echo '<input type="hidden" id="path" value="'.$documents->getAttachment().'">';
-				}else{
-					$download = '<button class="btn btn-sm btn-success" ><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
-				}
+                $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
+                if ($documents->getAttachment() != 'No File.') {
+                    $download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
+                }
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
 					<tr>

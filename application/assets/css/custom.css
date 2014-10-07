@@ -1,7 +1,9 @@
+html, body{
+    font-family: 'Open Sans', Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
 html{
     position: relative;
     min-height: 100%;
-    font-family: 'Open Sans', Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
 body{
     padding-top: 50px;

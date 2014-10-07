@@ -1,39 +1,39 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-			<div class="col-sm-6">
-				<a class="btn btn-sm btn-primary" href="<?php echo base_url(); ?>admin/document"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
-			</div>
-			<div class="col-sm-6">
-				<div class="pull-right">
-					<?php
-					$received = '';
-					if ($documents->getMarkReceived() == '0') {
-						$received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a> <small>*Mark as received to forward this document to a user.</small>';
-					} else {
-						$received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
-						if ($documents->getArd() == '0') {
-							echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
-						} else {
-							$ardName = $documents->getArdName();
-							$empName = $documents->getEmpName();
-							$division = $documents->getDivision();
-							echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
-						}
-					}
-					?>
-					<div class="space-10"></div>
-				</div>
-			</div>
+            <div class="col-sm-6">
+                <a class="btn btn-sm btn-primary" href="<?php echo base_url(); ?>admin/document"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+            </div>
+            <div class="col-sm-6">
+                <div class="pull-right">
+                    <?php
+                    $received = '';
+                    if ($documents->getMarkReceived() == '0') {
+                        $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a> <small>*Mark as received to forward this document to a user.</small>';
+                    } else {
+                        $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
+                        if ($documents->getArd() == '0') {
+                            echo '<a class="btn btn-primary" href="" id="btn_forward" data-toggle="modal" data-target="#forward" data-backdrop="static" data-keyboard="false">Forward To</a>';
+                        } else {
+                            $ardName = $documents->getArdName();
+                            $empName = $documents->getEmpName();
+                            $division = $documents->getDivision();
+                            echo '<a class="btn btn-primary disabled" href="" id="btn_forward">Forwarded To (<strong>' . $division . '</strong>) ' . $ardName . '/' . $empName . '</a>';
+                        }
+                    }
+                    ?>
+                    <div class="space-10"></div>
+                </div>
+            </div>
             <?php
             if ($documents !== FALSE) {
-				$download = '';
-				if($documents->getAttachment() != 'No File.'){
-					$download = '<button class="btn btn-sm btn-success" id="download"><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
-					echo '<input type="hidden" id="path" value="'.$documents->getAttachment().'">';
-				}else{
-					$download = '<button class="btn btn-sm btn-success"><i class="glyphicon glyphicon-download"></i> Download Attachment</button>';
-				}
+                $download = '';
+                if ($documents->getAttachment() != 'No File.') {
+                    $download = '<button class="btn btn-sm btn-success" id="download"><i class="glyphicon glyphicon-download"></i> Download Attachments</button>';
+                    echo '<input type="hidden" id="path" value="' . $documents->getAttachment() . '">';
+                } else {
+                    $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
+                }
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
 					<tr>
@@ -65,7 +65,8 @@ HTML;
             }
             ?>	
         </div>
-        <?php if ($documents->getArd() != '0') { $forwarded = TRUE; ?>
+        <?php if ($documents->getArd() != '0') {
+            $forwarded = TRUE; ?>
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-sm-2">
@@ -78,9 +79,11 @@ HTML;
                         </div>
                     </div>
                     <div class="col-sm-10">
-						<?php if ($documents->getArd() != '0') {
-							echo '<button class="btn btn-sm btn-primary" id="change" data-toggle="modal" data-target="#changeStatus" data-backdrop="static" data-keyboard="false">Change Status</button> <small><strong>*Change status after taking appropriate action.</strong></small>';
-						} ?>
+                        <?php
+                        if ($documents->getArd() != '0') {
+                            echo '<button class="btn btn-sm btn-primary" id="change" data-toggle="modal" data-target="#changeStatus" data-backdrop="static" data-keyboard="false">Change Status</button> <small><strong>*Change status after taking appropriate action.</strong></small>';
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -97,7 +100,7 @@ HTML;
                     </div>
                     <div id="chatContents">
                         <div class="chatBody" id="chatBody">
-                            
+
                         </div>
                         <div class="chatFooter">
                             <input type="hidden" name="document" id="document" value="<?php echo $documents->getDocument(); ?>">
@@ -107,8 +110,8 @@ HTML;
                     </div>
                 </div>
             </div>
-        <?php }
-        ?>
+<?php }
+?>
     </div>
 </div>
 
@@ -250,22 +253,22 @@ HTML;
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="changeStatusLabel">Change Status</h4>
             </div>
-			<form id="changeStatusForm" class="form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>admin/document/statusChange/<?php echo $documents->getId(); ?>">
-				<div class="modal-body">
-					<div class="form-group">
+            <form id="changeStatusForm" class="form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>admin/document/statusChange/<?php echo $documents->getId(); ?>">
+                <div class="modal-body">
+                    <div class="form-group">
                         <label class="col-md-3 control-label">Status</label>
                         <div class="col-md-8">
                             <select class="form-control" name="status" id="status">
-								<option value="">- Select -</option>
-								<option value="On-Going">On-Going</option>
-								<option value="Compiled">Compiled</option>
-								<option value="Cancelled">Cancelled</option>
-							</select>
-							<span class="help-block">*Change Status only after taking appropriate action.</span>
+                                <option value="">- Select -</option>
+                                <option value="On-Going">On-Going</option>
+                                <option value="Compiled">Compiled</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <span class="help-block">*Change Status only after taking appropriate action.</span>
                         </div>
                     </div>
-				</div>
-				<div class="modal-footer">
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-sm btn-primary" type="submit"><i class="glyphicon glyphicon-refresh"></i> Change</button>
                 </div>
@@ -274,8 +277,10 @@ HTML;
     </div>
 </div>
 
-<?php 
-    $current_method = $this->router->fetch_method();
-    if(isset($current_method) && $current_method == 'details' && isset($forwarded)  && $forwarded){ ?>
-        <script type="text/javascript" src="<?php echo base_url("application/assets/js/application/chat.js"); ?>"></script>
-<?php }?>
+<?php
+$current_method = $this->router->fetch_method();
+if (isset($current_method) && $current_method == 'details' && isset($forwarded) && $forwarded) {
+    ?>
+    <script type="text/javascript" src="<?php echo base_url("application/assets/js/application/chat.js"); ?>"></script>
+<?php
+}?>

@@ -9,6 +9,7 @@ class Document extends CI_Controller {
     var $login = FALSE;
     var $userType = '';
     var $userId = '';
+    var $username = '';
 
     private function checkLogin() {
         if ($this->session->userdata('logged_in')) {
@@ -16,6 +17,7 @@ class Document extends CI_Controller {
             $session_data = $this->session->userdata('logged_in');
             $this->userType = $session_data['userType'];
             $this->userId = $session_data['id'];
+            $this->username = $session_data['username'];
         } else {
             $this->login = FALSE;
             $this->userType = 'EMP';
@@ -30,7 +32,7 @@ class Document extends CI_Controller {
         } else {
             $escaped = mysql_real_escape_string($detagged);
         }
-		
+
         return addslashes($escaped);
     }
 
@@ -48,13 +50,14 @@ class Document extends CI_Controller {
             "title" => 'Error ' . $er,
             "header" => 'Error ' . $er . ' ' . $header,
             "content" => $content,
-            "userType" => $this->userType
+            "userType" => $this->userType,
+            "username" => $this->username
         );
-		if($this->userType == 'EMP'){
-			$this->load->template('error_view', $data);
-		}else{
-			$this->load->admin_template('error_view', $data);
-		}
+        if ($this->userType == 'EMP') {
+            $this->load->template('error_view', $data);
+        } else {
+            $this->load->admin_template('error_view', $data);
+        }
     }
 
     public function index() {
@@ -66,7 +69,8 @@ class Document extends CI_Controller {
                 $data = array(
                     "title" => $this->title,
                     "header" => 'All Documents',
-                    "userType" => $this->userType
+                    "userType" => $this->userType,
+                    "username" => $this->username
                 );
                 if ($this->userType == 'RD') {
                     $this->rdIndex($data);
@@ -130,7 +134,8 @@ class Document extends CI_Controller {
                             "documents" => $documents,
                             "title" => 'Document Details',
                             "header" => $status . $documents->getSubject(),
-                            "userType" => $this->userType
+                            "userType" => $this->userType,
+                            "username" => $this->username
                         );
                         $this->load->admin_template('view_document', $data);
                     } else {
@@ -205,15 +210,15 @@ class Document extends CI_Controller {
             if ($this->userType == 'EMP') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' ) {
+                if ($this->userType == 'ADMIN' || $this->userType == 'SEC') {
                     $this->error(403);
-                }else {
+                } else {
                     $documentId = (int) $documentId;
                     $this->load->library("RDDocumentFactory");
-                    
-                    if($this->userType == 'ARD'){ 
+
+                    if ($this->userType == 'ARD') {
                         $this->ardDetails($documentId);
-                    }else {
+                    } else {
                         $this->rdDetails($documentId);
                     }
                 }
@@ -222,34 +227,35 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-    
-    private function ardDetails($documentId){
+
+    private function ardDetails($documentId) {
         $documents = $this->rddocumentfactory->getRDDocument($documentId);
         if ($documentId > 0 && $documents) {
             $status = $this->status($documents->getStatus());
-            
+
             $this->load->library("UserFactory");
-            
+
             $division = $documents->getDivision();
-            
+
             $usersByDivision = '';
-            if($division=='TSSD'){
+            if ($division == 'TSSD') {
                 $usersByDivision = $this->userfactory->getUserByDivision('TSSD');
-            }else if($division=='TSD'){
+            } else if ($division == 'TSD') {
                 $usersByDivision = $this->userfactory->getUserByDivision('TSD');
-            }else if($division=='FASD'){
+            } else if ($division == 'FASD') {
                 $usersByDivision = $this->userfactory->getUserByDivision('FASD');
             }
-                
+
             $data = array(
                 "documents" => $documents,
                 "title" => 'Document Details',
                 "header" => $status . $documents->getSubject(),
                 "userType" => $this->userType,
-                "users" => $usersByDivision
+                "users" => $usersByDivision,
+                "username" => $this->username
             );
             $this->load->admin_template('ard_view_document', $data);
-        }else {
+        } else {
             $this->error(404);
         }
     }
@@ -258,7 +264,7 @@ class Document extends CI_Controller {
         $documents = $this->rddocumentfactory->getRDDocument($documentId);
         if ($documentId > 0 && $documents) {
             $status = $this->status($documents->getStatus());
-            
+
             $this->load->library("UserFactory");
             $data = array(
                 "documents" => $documents,
@@ -267,24 +273,25 @@ class Document extends CI_Controller {
                 "userType" => $this->userType,
                 "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
                 "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
-                "usersFASD" => $this->userfactory->getUserByDivision('FASD')
+                "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
+                "username" => $this->username
             );
             $this->load->admin_template('rd_view_document', $data);
-        }else {
+        } else {
             $this->error(404);
         }
     }
 
-    private function status($status){
-        if ($status == 'Cancelled'){
+    private function status($status) {
+        if ($status == 'Cancelled') {
             return '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
-        }else if ($status == 'On-Going'){
+        } else if ($status == 'On-Going') {
             return '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
-        }else if ($status == 'Compiled'){
+        } else if ($status == 'Compiled') {
             return '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
         }
     }
-    
+
     public function receive($documentId = 0) {
         $this->checkLogin();
         if ($this->login) {
@@ -307,8 +314,8 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	
-	public function ardReceive($documentId = 0) {
+
+    public function ardReceive($documentId = 0) {
         $this->checkLogin();
         if ($this->login) {
             if ($this->userType == 'EMP') {
@@ -330,17 +337,17 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	
-	public function statusChange($documentId = 0) {
+
+    public function statusChange($documentId = 0) {
         $this->checkLogin();
         if ($this->login) {
             if ($this->userType == 'EMP' || $this->userType == 'ADMIN') {
                 $this->error(403);
             } else {
                 $documentId = (int) $documentId;
-				$status = $this->cleanString($_POST['status']);
+                $status = $this->cleanString($_POST['status']);
                 $this->load->library("RDDocumentFactory");
-                if ($this->rddocumentfactory->updateStatus($documentId,$status)) {
+                if ($this->rddocumentfactory->updateStatus($documentId, $status)) {
                     redirect('admin/document/details/' . $documentId);
                 } else {
                     echo "Failed!";
@@ -380,8 +387,8 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	
-	public function forwardToEmp($id = 0) {
+
+    public function forwardToEmp($id = 0) {
         $this->checkLogin();
         if ($this->login) {
             if ($this->userType == 'EMP') {
@@ -392,7 +399,7 @@ class Document extends CI_Controller {
                 } else {
                     $id = (int) $id;
                     $empId = $this->cleanString($_POST['emp']);
-                    
+
                     $this->load->library("RDDocumentFactory");
                     if ($this->rddocumentfactory->forwardToEmp($id, $empId)) {
                         redirect('admin/document/details/' . $id);
@@ -405,46 +412,52 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	
-	public function download(){
-		$this->checkLogin();
+
+    public function download() {
+        $this->checkLogin();
         if ($this->login) {
-			if(isset($_POST['path'])){
-				$path = $this->cleanString($_POST['path']);
-				$name = date('mdYHis');
-				$this->_push_file($path,$name);
-			}else{
-				$this->error(404);
-			}
-		}else {
+            if (isset($_POST['document'])) {
+                $this->load->library("DocumentFactory");
+                $document = $this->documentfactory->getDocument($_POST['document']);
+                
+                $path = $document->getAttachment();
+                $name = date('mdYHis');
+                $this->_push_file($path, $name);
+            } else {
+                $this->error(404);
+            }
+        } else {
             redirect('login', 'refresh');
         }
-	}
-	
-	function _push_file($path, $name){
-		// make sure it's a file before doing anything!
-		if(is_file($path)){
-		// required for IE
-		if(ini_get('zlib.output_compression')) { ini_set('zlib.output_compression', 'Off'); }
+    }
 
-			// get the file mime type using the file extension
-			$this->load->helper('file');
+    function _push_file($path, $name) {
+        // make sure it's a file before doing anything!
+        if (is_file($path)) {
+            // required for IE
+            if (ini_get('zlib.output_compression')) {
+                ini_set('zlib.output_compression', 'Off');
+            }
 
-			$mime = get_mime_by_extension($path);
+            // get the file mime type using the file extension
+            $this->load->helper('file');
 
-			// Build the headers to push out the file properly.
-			header('Pragma: public');     // required
-			header('Expires: 0');         // no cache
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($path)).' GMT');
-			header('Cache-Control: private',false);
-			header('Content-Type: '.$mime);  // Add the mime type from Code igniter.
-			header('Content-Disposition: attachment; filename="'.basename($name).'"');  // Add the file name
-			header('Content-Transfer-Encoding: binary');
-			header('Content-Length: '.filesize($path)); // provide file size
-			header('Connection: close');
-			readfile($path); // push it out
-			exit();
-		}
-	}
+            $mime = get_mime_by_extension($path);
+            
+            // Build the headers to push out the file properly.
+            header('Pragma: public');     // required
+            header('Expires: 0');         // no cache
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');
+            header('Cache-Control: private', false);
+            header('Content-Type: ' . $mime);  // Add the mime type from Code igniter.
+            header('Content-Disposition: attachment; filename="' . basename($name) . '"');  // Add the file name
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . filesize($path)); // provide file size
+            header('Connection: close');
+            readfile($path); // push it out
+            exit();
+        }
+    }
+
 }

@@ -1,8 +1,8 @@
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
-		<button id="addDivision" class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#addDivisionModal" data-backdrop="static" data-keyboard="false">
-			Add Division
+		<button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDivisionModal" data-backdrop="static" data-keyboard="false">
+			<i class="glyphicon glyphicon-plus-sign"></i> Add Division
 		</button>
 	</div>
 </div>

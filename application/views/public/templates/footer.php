@@ -1,11 +1,12 @@
 	<div id="footer">
-		<div class="container">
-			<p class="navbar-text">Copyright &copy; 
-				<script>
-					document.write(new Date().getFullYear());
-				</script>
-			</p>
-		</div>
+            <div class="container">
+                <p class="navbar-text">Copyright &copy; 
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                    <a href="http://gpplworx.com" target="_blank">Gerard Paul P. Labitad</a>
+                </p>
+            </div>
 	</div>
         <script type="text/javascript">
             var base_url = "<?php echo base_url(); ?>";
