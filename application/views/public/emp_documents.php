@@ -32,11 +32,11 @@ HTML;
                         else if ($stat == 'Compiled')
                             $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
 
-                        $viewLink = base_url('admin/document/details/' . $document->getId());
+                        $viewLink = base_url('document/details/' . $document->getId());
 
                         $subject = $document->getSubject();
-                        $received = $document->getArdDateReceived();
-                        if ($document->getArdDateReceived() == '0') {
+                        $received = $document->getEmpDateReceived();
+                        if ($document->getEmpDateReceived() == '0') {
                             $subject = '<strong>' . $document->getSubject() . '</strong>';
                             $received = $document->getDateReceived();
                         }

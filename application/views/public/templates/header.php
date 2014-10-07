@@ -1,16 +1,25 @@
+<?php
+    $current_controller = $this->router->fetch_class();
+    $active[$current_controller] = 'class="active"';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title><?php echo $title; ?></title>
+	<title><?php echo $title; ?> | Document Tracking System</title>
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/datepicker.css"); ?>">
 	<link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
+	
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        
+    <script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery-2.1.1.min.js"); ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap.min.js"); ?>"></script>	
 </head>
 <body>
-	<div class="navbar navbar-default" role="navigation">
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button class="navbar-toggle collapsed" data-target=".navbar-collapse" data-toggle="collapse" type="button">
@@ -31,3 +40,6 @@
 			</div>
 		</div>
 	</div>
+	<div class="container">
+        <?php echo "<h1>$header</h1>"; ?>
+    </div>

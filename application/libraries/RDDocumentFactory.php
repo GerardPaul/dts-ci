@@ -13,12 +13,42 @@ class RDDocumentFactory {
         //Include the user_model so we can use it
         $this->_ci->load->model("rdtrack_model");
     }
-
+	
+	public function getEMPDocument($id = 0){
+        if ($id > 0) {
+            $sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
+                        d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
+                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived,
+                        (SELECT CONCAT(u.lastname, ",", u.firstname) 
+                         FROM user u
+                         WHERE u.id = r.ard) AS "ardName",
+                         (SELECT CONCAT(u.lastname, ",", u.firstname) 
+                         FROM user u
+                         WHERE u.id = r.emp) AS "empName",
+                         (SELECT v.name
+                         FROM user u, division v
+                         WHERE u.id = r.ard AND u.division = v.id) AS "division"
+                    FROM document d, rdtrack r
+                    WHERE r.document = d.id AND r.emp = ?';
+            $query = $this->_ci->db->query($sql, array($id));
+            if ($query->num_rows() > 0) {
+                $documents = array();
+                foreach ($query->result() as $row) {
+                    $documents[] = $this->createObjectFromData($row);
+                }
+                return $documents;
+            }
+            return false;
+        }else{
+            return false;
+        }
+    }
+	
     public function getARDDocument($id = 0){
         if ($id > 0) {
             $sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
                         d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, 					r.empDateReceived,
+                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived,
                         (SELECT CONCAT(u.lastname, ",", u.firstname) 
                          FROM user u
                          WHERE u.id = r.ard) AS "ardName",
@@ -48,7 +78,7 @@ class RDDocumentFactory {
         if ($id > 0) {
             $sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
                         d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, 					r.empDateReceived,
+                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived,
                         (SELECT CONCAT(u.lastname, ",", u.firstname) 
                          FROM user u
                          WHERE u.id = r.ard) AS "ardName",
@@ -68,7 +98,7 @@ class RDDocumentFactory {
         } else {
             $sql = 'SELECT r.id AS "rdID", r.action, r.dateReceived AS "markReceived", r.notes,
                         d.subject, d.id AS "docID", d.from, d.dueDate, d.attachment, d.status, 
-                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, 					r.empDateReceived,
+                        d.referenceNumber, d.dateReceived, r.ard, r.emp, r.ardDateReceived, r.empDateReceived,
                         (SELECT CONCAT(u.lastname, ",", u.firstname) 
                          FROM user u
                          WHERE u.id = r.ard) AS "ardName",
@@ -117,8 +147,8 @@ class RDDocumentFactory {
         $document->setNotes($row->notes);
         $document->setArd($row->ard);
         $document->setEmp($row->emp);
-        $document->setArdDateReceived($row->ardDateReceived);
-        $document->setEmpDateReceived($row->empDateReceived);
+        $document->setArdDateReceived($this->formatDate($row->ardDateReceived));
+        $document->setEmpDateReceived($this->formatDate($row->empDateReceived));
 
         $document->setArdName($row->ardName);
         $document->setEmpName($row->empName);
@@ -134,12 +164,43 @@ class RDDocumentFactory {
             return true;
         return false;
     }
+	
+	public function updateArdReceived($id) {
+        $date = date('m/d/Y');
+        $sql = "UPDATE rdtrack SET ardDateReceived = '$date' WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
+	
+	public function updateEmpReceived($id) {
+        $date = date('m/d/Y');
+        $sql = "UPDATE rdtrack SET empDateReceived = '$date' WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
+	
+	public function updateStatus($id,$status) {
+        $sql = "UPDATE document SET status = '$status' WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
 
     public function forwardTo($id, $ardId, $empId, $action, $notes) {
         $sql = "UPDATE rdtrack SET ard = '$ardId', emp = '$empId', notes = '$notes', action = '$action' WHERE id = ?";
         if ($empId == '')
             $sql = "UPDATE rdtrack SET ard = '$ardId', notes = '$notes', action = '$action' WHERE id = ?";
 
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
+	
+	public function forwardToEmp($id, $empId) {
+        $sql = "UPDATE rdtrack SET emp = '$empId' WHERE id = ?";
+        
         if ($this->_ci->db->query($sql, array($id)))
             return true;
         return false;

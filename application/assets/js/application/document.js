@@ -165,6 +165,44 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#ardMarkReceivedForm').bootstrapValidator({
+		container: 'tooltip',
+		message: 'This value is not valid',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			emp: {
+				validators: {
+					notEmpty: {
+						message: 'Select user to assign!'
+					}
+				}
+			}
+		}
+	});
+	
+	$('#changeStatusForm').bootstrapValidator({
+		container: 'tooltip',
+		message: 'This value is not valid',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			status: {
+				validators: {
+					notEmpty: {
+						message: 'Select status!'
+					}
+				}
+			}
+		}
+	});
+	
 	$('#toggleChat').click(function(){
 		$('#toggleChat i').toggle();
 		$('#chatContents').toggle();

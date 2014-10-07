@@ -30,7 +30,8 @@ class Document extends CI_Controller {
         } else {
             $escaped = mysql_real_escape_string($detagged);
         }
-        return $escaped;
+		
+        return addslashes($escaped);
     }
 
     private function error($er) {
@@ -226,7 +227,6 @@ class Document extends CI_Controller {
             $this->load->library("UserFactory");
             
             $division = $documents->getDivision();
-            $users = 'users'.$division;
             
             $usersByDivision = '';
             if($division=='TSSD'){
@@ -242,7 +242,7 @@ class Document extends CI_Controller {
                 "title" => 'Document Details',
                 "header" => $status . $documents->getSubject(),
                 "userType" => $this->userType,
-                $users => $usersByDivision
+                "users" => $usersByDivision
             );
             $this->load->admin_template('ard_view_document', $data);
         }else {
@@ -299,6 +299,51 @@ class Document extends CI_Controller {
                     }
                 }
             }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+	
+	public function ardReceive($documentId = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD') {
+                    $this->error(403);
+                } else {
+                    $documentId = (int) $documentId;
+                    $this->load->library("RDDocumentFactory");
+                    if ($this->rddocumentfactory->updateArdReceived($documentId)) {
+                        redirect('admin/document/details/' . $documentId);
+                    } else {
+                        echo "Failed!";
+                    }
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+	
+	public function statusChange($documentId = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP' || $this->userType == 'ADMIN') {
+                $this->error(403);
+            } else {
+                $documentId = (int) $documentId;
+				$status = $this->cleanString($_POST['status']);
+                $this->load->library("RDDocumentFactory");
+                if ($this->rddocumentfactory->updateStatus($documentId,$status)) {
+                    redirect('admin/document/details/' . $documentId);
+                } else {
+                    echo "Failed!";
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
         }
     }
 
@@ -327,6 +372,33 @@ class Document extends CI_Controller {
                     }
                 }
             }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+	
+	public function forwardToEmp($id = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD') {
+                    $this->error(403);
+                } else {
+                    $id = (int) $id;
+                    $empId = $this->cleanString($_POST['emp']);
+                    
+                    $this->load->library("RDDocumentFactory");
+                    if ($this->rddocumentfactory->forwardToEmp($id, $empId)) {
+                        redirect('admin/document/details/' . $id);
+                    } else {
+                        echo "Failed!";
+                    }
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
         }
     }
 

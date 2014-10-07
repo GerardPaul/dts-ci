@@ -6,7 +6,7 @@ $(document).ready(function() {
         getMessages();
         $('input#chat').val('0');
         chat = $('input#chat').val();
-    }, 2500);
+    }, 5000);
     
     
     function scrollChat(){
@@ -15,8 +15,12 @@ $(document).ready(function() {
     
     setTimeout(function(){
         scrollChat();
-    },3000);
+    },6000);
     
+	$('input#message').focus(function(){
+		$('.chatHeading').css('background', '#428BCA');
+	});
+	
     $('input#message').keypress(function(e){
         if(e.which == 13){
             var message = $('input#message').val();
@@ -48,8 +52,9 @@ $(document).ready(function() {
             } else {
 
             }
-            //if(data.content == '')
-                //clearInterval(loop);
+            if(data.content != ''){
+				$('.chatHeading').css('background', '#F94343');
+			}
         }, "json");
     }
 

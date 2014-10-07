@@ -5,7 +5,7 @@
                 <?php
                 $received = '';
                 if ($documents->getMarkReceived() == '0') {
-                    $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a>';
+                    $received = '<a class="btn btn-primary btn-xs" href="" id="received" data-toggle="modal" data-target="#markReceived" data-backdrop="static" data-keyboard="false">Mark as Received</a> <small>*Mark as received to forward this document to a user.</small>';
                 } else {
                     $received = $documents->getMarkReceived() . ' <a class="btn btn-success btn-xs disabled" href="#"><i class="glyphicon glyphicon-ok"></i> Received</a> ';
                     if ($documents->getArd() == '0') {
@@ -66,7 +66,9 @@ HTML;
                         </div>
                     </div>
                     <div class="col-sm-10">
-
+						<?php if ($documents->getArd() != '0') {
+							echo '<button class="btn btn-sm btn-primary" id="change" data-toggle="modal" data-target="#changeStatus" data-backdrop="static" data-keyboard="false">Change Status</button> <small><strong>*Change status after taking appropriate action.</strong></small>';
+						} ?>
                     </div>
                 </div>
             </div>
@@ -223,6 +225,37 @@ HTML;
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changeStatus" tabindex="-1" role="dialog" aria-labelledby="changeStatusLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="changeStatusLabel">Change Status</h4>
+            </div>
+			<form id="changeStatusForm" class="form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>admin/document/statusChange/<?php echo $documents->getId(); ?>">
+				<div class="modal-body">
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Status</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="status" id="status">
+								<option value="">- Select -</option>
+								<option value="On-Going">On-Going</option>
+								<option value="Compiled">Compiled</option>
+								<option value="Cancelled">Cancelled</option>
+							</select>
+							<span class="help-block">*Change Status only after taking appropriate action.</span>
+                        </div>
+                    </div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-sm btn-primary" type="submit"><i class="glyphicon glyphicon-refresh"></i> Change</button>
                 </div>
             </form>
         </div>
