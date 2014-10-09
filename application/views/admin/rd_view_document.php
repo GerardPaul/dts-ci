@@ -60,11 +60,11 @@ HTML;
 			<div class="alert alert-warning">There are no <strong>Documents</strong> to display.</div>
 HTML;
             }
-            ?>	
+            ?>
+            <hr>
         </div>
         <?php if ($documents->getArd() != '0') {
             $forwarded = TRUE; ?>
-			<hr />
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-sm-2">

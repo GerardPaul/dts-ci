@@ -69,6 +69,33 @@ body{
     font-size: 80px;
     margin-bottom: 20px;
 }
+.login-user{
+    text-align: center;
+}
+@media (min-width: 980px) {
+    .login-box{
+        margin: 0 auto;
+        width: 35%;
+    }
+}
+@media (max-width: 768px) {
+    .login-box{
+        margin: 0 auto;
+        width: 60%;
+    }
+}
+@media (max-width: 640px) {
+    .login-box{
+        margin: 0 auto;
+        width: 80%;
+    }
+}
+@media (max-width: 320px) {
+    .login-box{
+        margin: 0 auto;
+        width: 90%;
+    }
+}
 .status{
     cursor: pointer;
 }

@@ -60,8 +60,8 @@ HTML;
 HTML;
             }
             ?>	
+            <hr>
         </div>
-		<hr />
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-sm-2">

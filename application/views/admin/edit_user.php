@@ -73,7 +73,7 @@
                                 <?php
                                 foreach ($divisions as $division) {
                                     echo <<<HTML
-									<option value="{$division->getId()}">{$division->getDivisionName()}</option>
+					<option value="{$division->getId()}">{$division->getDivisionName()}</option>
 HTML;
                                 }
                                 ?>

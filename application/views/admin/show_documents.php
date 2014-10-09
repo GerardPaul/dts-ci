@@ -4,6 +4,7 @@
             <button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDocumentModal" data-backdrop="static" data-keyboard="false">
                 <i class="glyphicon glyphicon-plus-sign"></i> Add Document
             </button>
+            <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a>
         </div>
     </div>
     <div class="space-10"></div>
@@ -19,6 +20,7 @@
 			<thead>
 				<tr>
 					<th>From</th>
+                                        <th>Status</th>
 					<th>Subject</th>
 					<th>Date Received</th>
 					<th>Due Date</th>
@@ -34,27 +36,28 @@ HTML;
                         $status = '';
                         $stat = $document->getStatus();
                         if ($stat == 'Cancelled')
-                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i> Cancelled</span>';
                         else if ($stat == 'On-Going')
-                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i> On-Going</span>';
                         else if ($stat == 'Compiled')
-                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i> Compiled</span>';
 
                         $viewLink = base_url('admin/document/view/' . $document->getId());
                         $editLink = base_url('admin/document/edit/' . $document->getId());
-                        $deleteLink = base_url('admin/document/delete/' . $document->getId());
+                        $archiveLink = base_url('admin/document/archive/' . $document->getId());
 
                         echo <<<HTML
 
 					<tr>
 						<td>{$document->getFrom()}</td>
-						<td>{$status}&nbsp;{$document->getSubject()}</td>
+                                                <td>{$status}</td>
+						<td>{$document->getSubject()}</td>
 						<td>{$document->getDateReceived()}</td>
 						<td>{$document->getDueDate()}</td>
 						<td>
-							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
-							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>
-							<a href="{$deleteLink}" class="btn btn-danger btn-xs" title="Delete" data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
+							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="{$archiveLink}" class="btn btn-danger btn-xs" title="Archive Document" data-toggle="tooltip"><i class="glyphicon glyphicon-folder-open"></i></a>
 						</td>
 					</tr>
 

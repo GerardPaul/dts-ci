@@ -2,19 +2,14 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-session_start(); //we need to call PHP's session object to access it through CI
 
-class Home extends CI_Controller {
+class Profile extends CI_Controller {
 
-    var $title = 'Home';
+    var $title = 'Profile';
     var $login = FALSE;
     var $userType = '';
     var $userId = '';
     var $username = '';
-
-    function __construct() {
-        parent::__construct();
-    }
 
     private function checkLogin() {
         if ($this->session->userdata('logged_in')) {
@@ -28,8 +23,19 @@ class Home extends CI_Controller {
             $this->userType = 'ARD';
         }
     }
-    
-    private function error($er) {
+
+    function cleanString($string) {
+        $detagged = strip_tags($string);
+        if (get_magic_quotes_gpc()) {
+            $stripped = stripslashes($detagged);
+            $escaped = mysql_real_escape_string($stripped);
+        } else {
+            $escaped = mysql_real_escape_string($detagged);
+        }
+        return $escaped;
+    }
+
+    private function error($er = 0) {
         $header = '';
         $content = '';
         if ($er == 403) {
@@ -52,30 +58,54 @@ class Home extends CI_Controller {
             $this->load->admin_template('error_view', $data);
         }
     }
-    
     public function index() {
+        $this->error(404);
+    }
+    public function edit() {
         $this->checkLogin();
         if ($this->login) {
             if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
                 $this->error(403);
-            }else{
+            } else {
+                $id = $this->userId;
+                $this->load->library("UserFactory");
+                $user = $this->userfactory->getUser($id);
                 $data = array(
+                    "user" => $user,
                     "title" => $this->title,
-                    "header" => 'Home',
+                    "header" => 'Edit Profile',
                     "userType" => $this->userType,
                     "username" => $this->username
                 );
-                $this->load->template('home_view', $data);
+                $this->load->template('edit_profile', $data);
             }
         } else {
             redirect('login', 'refresh');
         }
     }
+    
+    public function update() {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
+                $this->error(403);
+            } else {
+                $this->load->library("UserFactory");
+                $userId = $this->userId;
+                $firstname = $this->cleanString($_POST['firstname']);
+                $lastname = $this->cleanString($_POST['lastname']);
+                $email = $this->cleanString($_POST['email']);
+                $username = $this->cleanString($_POST['username']);
+                $password = $this->cleanString($_POST['password']);
 
-    public function logout() {
-        $this->session->unset_userdata('logged_in');
-        session_destroy();
-        redirect('login', 'refresh');
+                if ($this->userfactory->updateProfile($userId, $firstname, $lastname, $email, $username, $password)) {
+                    redirect('home/logout');
+                } else {
+                    echo "Failed!";
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
     }
-
 }

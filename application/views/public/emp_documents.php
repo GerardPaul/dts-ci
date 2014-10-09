@@ -11,6 +11,7 @@
 			<thead>
 				<tr>
 					<th>From</th>
+                                        <th>Status</th>
 					<th>Subject</th>
 					<th>Date Received</th>
 					<th>Due Date</th>
@@ -26,28 +27,33 @@ HTML;
                         $status = '';
                         $stat = $document->getStatus();
                         if ($stat == 'Cancelled')
-                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i> Cancelled</span>';
                         else if ($stat == 'On-Going')
-                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i> On-Going</span>';
                         else if ($stat == 'Compiled')
-                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></span>';
+                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i> Compiled</span>';
 
                         $viewLink = base_url('document/details/' . $document->getId());
-
+                        
+                        $from = $document->getFrom();
                         $subject = $document->getSubject();
                         $received = $document->getEmpDateReceived();
+                        $due = $document->getDueDate();
                         if ($document->getEmpDateReceived() == '0') {
                             $subject = '<strong>' . $document->getSubject() . '</strong>';
-                            $received = $document->getDateReceived();
+                            $received = '<strong>' . $document->getDateReceived() . '</strong>';
+                            $from = '<strong>' . $document->getFrom() . '</strong>';
+                            $due = '<strong>' . $document->getDueDate() . '</strong>';
                         }
 
                         echo <<<HTML
 
 					<tr>
-						<td>{$document->getFrom()}</td>
-						<td>{$status}&nbsp;{$subject}</td>
+						<td>{$from}</td>
+						<td>{$status}</td>
+                                                <td>{$subject}</td>
 						<td>{$received}</td>
-						<td>{$document->getDueDate()}</td>
+						<td>{$due}</td>
 						<td>
 							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
 						</td>

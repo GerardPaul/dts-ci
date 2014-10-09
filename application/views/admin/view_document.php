@@ -44,6 +44,7 @@ HTML;
 HTML;
             }
             ?>	
+            <hr>
         </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ class Document extends CI_Controller {
             $this->username = $session_data['username'];
         } else {
             $this->login = FALSE;
-            $this->userType = 'EMP';
+            $this->userType = 'ARD';
         }
     }
 

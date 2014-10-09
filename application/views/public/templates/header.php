@@ -37,7 +37,7 @@ $active[$current_controller] = 'class="active"';
                         <li class="dropdown <?php if (isset($active['profile'])) echo $active['profile']; ?>">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $username; ?><span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="<?php echo base_url("profile"); ?>">Profile</a></li>
+                                <li><a href="<?php echo base_url("profile/edit"); ?>">Profile</a></li>
                                 <li class="divider"></li>
                                 <li><a href="<?php echo base_url("home/logout"); ?>">Logout</a></li>
                             </ul>
