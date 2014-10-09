@@ -26,12 +26,9 @@
             </div>
             <?php
             if ($documents !== FALSE) {
-                $download = '';
+                $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
                 if ($documents->getAttachment() != 'No File.') {
-                    $download = '<button class="btn btn-sm btn-success" id="download"><i class="glyphicon glyphicon-download"></i> Download Attachments</button>';
-                    echo '<input type="hidden" id="path" value="' . $documents->getAttachment() . '">';
-                } else {
-                    $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
+                    $download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getDocument().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
                 }
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
@@ -64,7 +61,7 @@ HTML;
             }
             ?>	
         </div>
-
+		<hr />
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-sm-2">
