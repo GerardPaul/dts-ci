@@ -14,8 +14,15 @@
                 if ($documents->getAttachment() != 'No File.') {
                     $download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
                 }
+				$dateReceived = date('M j, Y', strtotime($documents->getDateReceived()));
+				$dueDate = date('M j, Y', strtotime($documents->getDueDate()));
+				
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
+					<tr>
+						<th>Status</th>
+						<td>{$status}</td>
+					</tr>
 					<tr>
 						<th>Ref. #</th>
 						<td>{$documents->getReferenceNumber()}</td>
@@ -26,11 +33,11 @@
 					</tr>
 					<tr>
 						<th>Received</th>
-						<td>{$documents->getDateReceived()}</td>
+						<td>{$dateReceived}</td>
 					</tr>
 					<tr>
 						<th>Due</th>
-						<td>{$documents->getDueDate()}</td>
+						<td>{$dueDate}</td>
 					</tr>
 					<tr>
 						<th>Attachment</th>

@@ -31,8 +31,13 @@
                 if ($documents->getAttachment() != 'No File.') {
                     $download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getDocument().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
                 }
+				
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
+					<tr>
+						<th>Status</th>
+						<td>{$status}</td>
+					</tr>
 					<tr>
 						<th>Ref. #</th>
 						<td>{$documents->getReferenceNumber()}</td>

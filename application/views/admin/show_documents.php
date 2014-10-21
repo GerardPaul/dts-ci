@@ -36,24 +36,26 @@ HTML;
                         $status = '';
                         $stat = $document->getStatus();
                         if ($stat == 'Cancelled')
-                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i> Cancelled</span>';
+                            $status = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i> ' . $stat . '</span>';
                         else if ($stat == 'On-Going')
-                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i> On-Going</span>';
+                            $status = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i> ' . $stat . '</span>';
                         else if ($stat == 'Compiled')
-                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i> Compiled</span>';
+                            $status = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i> ' . $stat . '</span>';
 
                         $viewLink = base_url('admin/document/view/' . $document->getId());
                         $editLink = base_url('admin/document/edit/' . $document->getId());
                         $archiveLink = base_url('admin/document/archive/' . $document->getId());
-
+						$dateReceived = date('M j, Y', strtotime($document->getDateReceived()));
+						$dueDate = date('M j, Y', strtotime($document->getDueDate()));
+						
                         echo <<<HTML
 
 					<tr>
 						<td>{$document->getFrom()}</td>
                                                 <td>{$status}</td>
 						<td>{$document->getSubject()}</td>
-						<td>{$document->getDateReceived()}</td>
-						<td>{$document->getDueDate()}</td>
+						<td>{$dateReceived}</td>
+						<td>{$dueDate}</td>
 						<td>
 							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
 							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>

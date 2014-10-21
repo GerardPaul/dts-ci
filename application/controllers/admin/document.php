@@ -120,22 +120,16 @@ class Document extends CI_Controller {
                     $documentId = (int) $documentId;
                     $this->load->library("DocumentFactory");
                     $documents = $this->documentfactory->getDocument($documentId);
+					
                     if ($documentId > 0 && $documents) {
-                        $status = '';
-                        $stat = $documents->getStatus();
-                        if ($stat == 'Cancelled') {
-                            $status = '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        } else if ($stat == 'On-Going') {
-                            $status = '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        } else if ($stat == 'Compiled') {
-                            $status = '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $stat . '" data-toggle="tooltip"></i></small>&nbsp;';
-                        }
+						$status = $this->status($documents->getStatus());
                         $data = array(
                             "documents" => $documents,
                             "title" => 'Document Details',
-                            "header" => $status . $documents->getSubject(),
+                            "header" => $documents->getSubject(),
                             "userType" => $this->userType,
-                            "username" => $this->username
+                            "username" => $this->username,
+							"status" => $status
                         );
                         $this->load->admin_template('view_document', $data);
                     } else {
@@ -234,7 +228,6 @@ class Document extends CI_Controller {
             $status = $this->status($documents->getStatus());
 
             $this->load->library("UserFactory");
-
             $division = $documents->getDivision();
 
             $usersByDivision = '';
@@ -249,10 +242,11 @@ class Document extends CI_Controller {
             $data = array(
                 "documents" => $documents,
                 "title" => 'Document Details',
-                "header" => $status . $documents->getSubject(),
+                "header" => $documents->getSubject(),
                 "userType" => $this->userType,
                 "users" => $usersByDivision,
-                "username" => $this->username
+                "username" => $this->username,
+				"status" => $status
             );
             $this->load->admin_template('ard_view_document', $data);
         } else {
@@ -263,18 +257,19 @@ class Document extends CI_Controller {
     private function rdDetails($documentId) {
         $documents = $this->rddocumentfactory->getRDDocument($documentId);
         if ($documentId > 0 && $documents) {
-            $status = $this->status($documents->getStatus());
-
+			$status = $this->status($documents->getStatus());
             $this->load->library("UserFactory");
+			
             $data = array(
                 "documents" => $documents,
                 "title" => 'Document Details',
-                "header" => $status . $documents->getSubject(),
+                "header" =>  $documents->getSubject(),
                 "userType" => $this->userType,
                 "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
                 "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
                 "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
-                "username" => $this->username
+                "username" => $this->username,
+				"status" => $status
             );
             $this->load->admin_template('rd_view_document', $data);
         } else {
@@ -284,11 +279,11 @@ class Document extends CI_Controller {
 
     private function status($status) {
         if ($status == 'Cancelled') {
-            return '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
         } else if ($status == 'On-Going') {
-            return '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
         } else if ($status == 'Compiled') {
-            return '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
         }
     }
 
@@ -460,4 +455,35 @@ class Document extends CI_Controller {
         }
     }
 
+	public function edit($id = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'RD' || $this->userType == 'ARD') {
+                    $this->error(403);
+                } else {
+                    $id = (int) $id;
+                    $this->load->library("DocumentFactory");
+                    $document = $this->documentfactory->getDocument($id);
+                    if ($document && $id > 0) {
+                        
+                        $data = array(
+                            "document" => $document,
+                            "title" => $this->title,
+                            "header" => 'Edit Document',
+                            "userType" => $this->userType,
+                            "username" => $this->username
+                        );
+                        $this->load->admin_template('edit_document', $data);
+                    } else {
+                        $this->error(404);
+                    }
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 }

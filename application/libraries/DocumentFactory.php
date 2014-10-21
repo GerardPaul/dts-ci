@@ -57,11 +57,11 @@ class DocumentFactory {
         $document->setId($row->id);
         $document->setSubject($row->subject);
         $document->setFrom($row->from);
-        $document->setDueDate($this->formatDate($row->dueDate));
+        $document->setDueDate($row->dueDate);
         $document->setAttachment($row->attachment);
         $document->setStatus($row->status);
         $document->setReferenceNumber($row->referenceNumber);
-        $document->setDateReceived($this->formatDate($row->dateReceived));
+        $document->setDateReceived($row->dateReceived);
 
         return $document;
     }

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$('#documentsTable').dataTable({
-		"order": [[ 2, "desc" ]]
+		"order": [[ 3, "desc" ]]
 	});
 	
 	$('#dueDate').datepicker();
@@ -226,4 +226,7 @@ $(document).ready(function() {
             }
         }, "json");
 	});
+	
+	var currentStatus = $('#currentStatus').val();
+	$('#editStatus').val(currentStatus);
 });
