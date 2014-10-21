@@ -145,7 +145,7 @@ HTML;
                     <div class="form-group">
                         <label class="col-md-3 control-label">Attachment</label>
                         <div class="col-md-8">
-                            <input type="file" name="attachment" title="Browse" id="attachment" title="Browse for file..."/>
+                            <input type="file" name="attachment" id="attachment" title="Browse for file..."/>
                             <span class="help-block">* Allowed file types (jpeg,png,gif,pdf).</span>
                         </div>
                     </div>
