@@ -126,7 +126,7 @@ class Document extends CI_Controller {
                         $data = array(
                             "documents" => $documents,
                             "title" => 'Document Details',
-                            "header" => $documents->getSubject(),
+                            "header" => 'Document Details',
                             "userType" => $this->userType,
                             "username" => $this->username,
 							"status" => $status
@@ -279,11 +279,11 @@ class Document extends CI_Controller {
 
     private function status($status) {
         if ($status == 'Cancelled') {
-            return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
+            return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'On-Going') {
-            return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
+            return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'Compiled') {
-            return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</small>';
+            return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         }
     }
 

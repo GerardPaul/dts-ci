@@ -22,14 +22,14 @@
     <body>
         <div class="container">
             <div class="login-header">
-                <img src="<?php echo base_url("application/assets/images/dost_logo.png"); ?>" height="100px">
+                <img src="<?php echo base_url("application/assets/images/dost_logo.png"); ?>" height="100" alt="DOST Logo">
                 <p>DOST-XI</p>
                 <p>Document Tracking System</p>
             </div>
             <div class="login-box">
                 <div class="well">
                     <div class="login-user">
-                        <img src="<?php echo base_url("application/assets/images/user.png"); ?>" height="150px">
+                        <img src="<?php echo base_url("application/assets/images/user.png"); ?>" height="150" alt="User Image">
                     </div>
                     <form class="form-signin" role="form" action="<?php echo base_url("login/auth"); ?>" method="post">
 

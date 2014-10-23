@@ -1,6 +1,6 @@
 <?php
 $current_controller = $this->router->fetch_class();
-$active[$current_controller] = 'class="active"';
+$active[$current_controller] = 'active';
 ?>
 <!DOCTYPE html>
 <html lang="en">

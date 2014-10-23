@@ -20,6 +20,10 @@
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
 					<tr>
+						<th>Subject</th>
+						<td><strong>{$documents->getSubject()}</strong></td>
+					</tr>
+					<tr>
 						<th>Status</th>
 						<td>{$status}</td>
 					</tr>
