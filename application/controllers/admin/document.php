@@ -242,7 +242,7 @@ class Document extends CI_Controller {
             $data = array(
                 "documents" => $documents,
                 "title" => 'Document Details',
-                "header" => $documents->getSubject(),
+                "header" => 'Document Details',
                 "userType" => $this->userType,
                 "users" => $usersByDivision,
                 "username" => $this->username,
@@ -257,13 +257,15 @@ class Document extends CI_Controller {
     private function rdDetails($documentId) {
         $documents = $this->rddocumentfactory->getRDDocument($documentId);
         if ($documentId > 0 && $documents) {
+            $this->rddocumentfactory->updateReceived($documentId);
+		
 			$status = $this->status($documents->getStatus());
             $this->load->library("UserFactory");
 			
             $data = array(
                 "documents" => $documents,
                 "title" => 'Document Details',
-                "header" =>  $documents->getSubject(),
+                "header" =>  'Document Details',
                 "userType" => $this->userType,
                 "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
                 "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),

@@ -1,10 +1,12 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
+			<?php if($userType == 'SEC'){ ?>
             <button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDocumentModal" data-backdrop="static" data-keyboard="false">
                 <i class="glyphicon glyphicon-plus-sign"></i> Add Document
             </button>
-            <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a>
+			<?php } ?>
+            <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
         </div>
     </div>
     <div class="space-10"></div>
@@ -44,7 +46,8 @@ HTML;
 
                         $viewLink = base_url('admin/document/view/' . $document->getId());
                         $editLink = base_url('admin/document/edit/' . $document->getId());
-                        $archiveLink = base_url('admin/document/archive/' . $document->getId());
+                        //$archiveLink = base_url('admin/document/archive/' . $document->getId());
+						//<a href="{$archiveLink}" class="btn btn-danger btn-xs" title="Archive Document" data-toggle="tooltip"><i class="glyphicon glyphicon-folder-open"></i></a>
 						$dateReceived = date('M j, Y', strtotime($document->getDateReceived()));
 						$dueDate = date('M j, Y', strtotime($document->getDueDate()));
 						
@@ -59,7 +62,6 @@ HTML;
 						<td>
 							<a href="{$viewLink}" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>
 							<a href="{$editLink}" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>
-							<a href="{$archiveLink}" class="btn btn-danger btn-xs" title="Archive Document" data-toggle="tooltip"><i class="glyphicon glyphicon-folder-open"></i></a>
 						</td>
 					</tr>
 
