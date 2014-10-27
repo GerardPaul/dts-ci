@@ -101,6 +101,11 @@ class Document extends CI_Controller {
         $this->load->admin_template('show_documents', $data);
     }
 
+    public function getAllDocuments(){
+        $this->load->library("DocumentFactory");
+        echo json_encode($this->documentfactory->getDocument());
+    }
+    
     private function ardIndex($data) {
         $this->load->library("RDDocumentFactory");
         $data['documents'] = $this->rddocumentfactory->getARDDocument($this->userId);
