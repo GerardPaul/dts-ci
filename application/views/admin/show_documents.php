@@ -48,8 +48,8 @@ HTML;
                         $editLink = base_url('admin/document/edit/' . $document->getId());
                         //$archiveLink = base_url('admin/document/archive/' . $document->getId());
 						//<a href="{$archiveLink}" class="btn btn-danger btn-xs" title="Archive Document" data-toggle="tooltip"><i class="glyphicon glyphicon-folder-open"></i></a>
-						$dateReceived = date('M j, Y', strtotime($document->getDateReceived()));
-						$dueDate = date('M j, Y', strtotime($document->getDueDate()));
+						$dateReceived = date('j-M-Y', strtotime($document->getDateReceived()));
+						$dueDate = date('j-M-Y', strtotime($document->getDueDate()));
 						
                         echo <<<HTML
 
@@ -116,6 +116,12 @@ HTML;
                             <input type="text" class="form-control" name="subject" />
                         </div>
                     </div>
+					<div class="form-group">
+                        <label class="col-md-3 control-label">Description</label>
+                        <div class="col-md-8">
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">From</label>
                         <div class="col-md-8">
@@ -123,7 +129,7 @@ HTML;
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Due Date</label>
+                        <label class="col-md-3 control-label">Document Due Date</label>
                         <div class="col-md-8">
                             <div class="input-group date">
                                 <input id="dueDate" type="text" class="form-control" name="dueDate" date-format="YYYY/MM/DD" />
@@ -131,17 +137,6 @@ HTML;
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Status</label>
-                        <div class="col-md-8">
-                            <select class="form-control" name="status">
-                                <option value="">- Select -</option>
-                                <option value="On-Going">On-Going</option>
-                                <option value="Compiled">Compiled</option>
-                                <option value="Cancelled">Cancelled</option>
-                            </select>
                         </div>
                     </div>
                     <div class="form-group">

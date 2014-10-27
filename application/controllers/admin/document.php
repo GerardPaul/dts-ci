@@ -176,13 +176,13 @@ class Document extends CI_Controller {
                         $this->load->library("DocumentFactory");
 
                         $subject = $this->cleanString($_POST['subject']);
+						$description = $this->cleanString($_POST['description']);
                         $from = $this->cleanString($_POST['from']);
                         $dueDate = $this->cleanString($_POST['dueDate']);
-                        $status = $this->cleanString($_POST['status']);
                         $refNo = $this->cleanString($_POST['referenceNumber']);
                         $dateReceived = $this->cleanString($_POST['dateReceived']);
 
-                        if ($this->documentfactory->addDocument($subject, $from, $dueDate, $attachment_path, $status, $refNo, $dateReceived)) {
+                        if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                             redirect('admin/document');
                         } else {
                             echo "Failed!";

@@ -38,17 +38,17 @@ $(document).ready(function() {
 					}
 				}
 			},
+			description: {
+				validators: {
+					notEmpty: {
+						message: 'The Description is required!'
+					}
+				}
+			},
 			from: {
 				validators: {
 					notEmpty: {
 						message: 'This field is required!'
-					}
-				}
-			},
-			status: {
-				validators: {
-					notEmpty: {
-						message: 'The Status is required!'
 					}
 				}
 			},

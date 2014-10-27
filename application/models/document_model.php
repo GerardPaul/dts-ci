@@ -2,6 +2,7 @@
 class Document_Model extends CI_Model{
 	private $_id = 0;
 	private $_subject;
+	private $_description;
 	private $_from;
 	private $_dueDate;
 	private $_attachment;
@@ -24,6 +25,12 @@ class Document_Model extends CI_Model{
 	}
 	public function getSubject(){
 		return $this->_subject;
+	}
+	public function setDescription($value){
+		$this->_description = $value;
+	}
+	public function getDescription(){
+		return $this->_description;
 	}
 	public function setFrom($value){
 		$this->_from = $value;
@@ -72,6 +79,7 @@ class Document_Model extends CI_Model{
 	{
 		$data = array(
 			'subject' => $this->_subject,
+			'description' => $this->_description,
 			'from' => $this->_from,
 			'dueDate' => $this->_dueDate,
 			'attachment' => $this->_attachment,
@@ -90,7 +98,7 @@ class Document_Model extends CI_Model{
 			if ($this->db->insert("document", $data)) {
 				//Now we can get the ID and update the newly created object
 				$this->_id = $this->db->insert_id();
-				$this->db->insert("rdtrack", array('document' => $this->_id));
+				$this->db->insert("track", array('document' => $this->_id));
 				return true;
 			}
 		}

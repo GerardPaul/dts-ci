@@ -12,6 +12,15 @@ class DocumentFactory {
         $this->_ci->load->model("document_model");
     }
 
+	public function getStatus($id = 0){
+		$sql = "SELECT status FROM document WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($id));
+		if ($query->num_rows() > 0) {
+            return $query->row('status');
+        }
+        return false;
+	}
+	
     public function getDocument($id = 0) {
         if ($id > 0) {
             $sql = "SELECT * FROM document WHERE id = ?";
@@ -34,13 +43,14 @@ class DocumentFactory {
         }
     }
 
-    public function addDocument($subject, $from, $dueDate, $attachment, $status, $referenceNumber, $dateReceived) {
+    public function addDocument($subject, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
         $document = new Document_Model();
         $document->setSubject($subject);
+		$document->setDescription($description);
         $document->setFrom($from);
         $document->setDueDate($dueDate);
         $document->setAttachment($attachment);
-        $document->setStatus($status);
+        $document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
 
@@ -56,6 +66,7 @@ class DocumentFactory {
 
         $document->setId($row->id);
         $document->setSubject($row->subject);
+		$document->setDescription($row->description);
         $document->setFrom($row->from);
         $document->setDueDate($row->dueDate);
         $document->setAttachment($row->attachment);

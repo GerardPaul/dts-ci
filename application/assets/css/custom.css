@@ -300,3 +300,6 @@ body{
 #documentDetails td{
 	width: 80%;
 }
+#documentsTable{
+	font-size: 11px;
+}

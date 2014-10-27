@@ -24,6 +24,10 @@
 						<td><strong>{$documents->getSubject()}</strong></td>
 					</tr>
 					<tr>
+						<th>Description</th>
+						<td>{$documents->getDescription()}</td>
+					</tr>
+					<tr>
 						<th>Status</th>
 						<td>{$status}</td>
 					</tr>

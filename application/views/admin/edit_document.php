@@ -38,13 +38,19 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label">Description</label>
+								<div class="col-md-8">
+									<textarea class="form-control" name="description"><?php echo $document->getDescription(); ?></textarea>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label">From</label>
 								<div class="col-md-8">
 									<input type="text" class="form-control" name="from" value="<?php echo $document->getFrom(); ?>" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">Due Date</label>
+								<label class="col-md-3 control-label">Document Due Date</label>
 								<div class="col-md-8">
 									<div class="input-group date" id="dueDate">
 										<input id="dateDue" type="text" class="form-control" name="dueDate" date-date-format="YYYY/MM/DD" value="<?php echo $document->getDueDate(); ?>" />
@@ -53,18 +59,6 @@
 										</span>
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label">Status</label>
-								<div class="col-md-8">
-									<select class="form-control" name="status" id="editStatus">
-										<option value="">- Select -</option>
-										<option value="On-Going">On-Going</option>
-										<option value="Compiled">Compiled</option>
-										<option value="Cancelled">Cancelled</option>
-									</select>
-								</div>
-								<input type="hidden" name="currentStatus" id="currentStatus" value="<?php echo $document->getStatus(); ?>" >
 							</div>
 							<div class="form-group">
 							<?php 
