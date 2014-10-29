@@ -51,8 +51,8 @@ $(document).ready(function() {
             attachment: {
                 validators: {
                     file: {
-                        extension: 'jpeg,jpg,png,gif,pdf,txt',
-                        type: 'image/jpeg,image/png,image/gif,application/pdf,text/plain',
+                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
+                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         maxSize: 2048 * 1024, // 2 MB
                         message: 'The selected file is not valid!'
                     }
@@ -226,21 +226,38 @@ $(document).ready(function() {
     var currentStatus = $('#currentStatus').val();
     $('#editStatus').val(currentStatus);
 
-    loadAllDocuments();
+    $('#changeView').on('change', function() {
+        var value = $(this).val();
+        var change = '';
+        if (value === '1') {
+            change = 'All';
+        } else if (value === '2') {
+            change = 'Compiled';
+        } else if (value === '3') {
+            change = 'On-Going';
+        } else if (value === '4') {
+            change = 'Cancelled';
+        }
 
-    function loadAllDocuments() {
+        loadDocuments(change);
+    });
+
+    loadDocuments('All');
+
+    function loadDocuments(change) {
         $('#documentsTable').dataTable().fnDestroy();
-        $.post(base_url + "admin/document/getAllDocuments", function(response, status) {
+
+        $.post(base_url + "admin/document/getAllDocuments", {change: change}, function(response, status) {
             var result = JSON.parse(response);
-			
+
             $.each(result, function(i, field) {
-				var dateReceived = format_mysqldate(field['dateReceived']);
-				var dueDate = format_mysqldate(field['dueDate']);
-				
+                var dateReceived = format_mysqldate(field['dateReceived']);
+                var dueDate = format_mysqldate(field['dueDate']);
+
                 $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['status'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
-                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">'+
-                        '<a href="'+base_url+'admin/document/view/'+field['id']+'" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>'+
-                        '<a href="'+base_url+'admin/document/edit/'+field['id']+'" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>'+
+                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' +
+                        '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>' +
+                        '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>' +
                         '</div></td></tr>');
             });
             $('#documentsTable').dataTable({
@@ -252,8 +269,9 @@ $(document).ready(function() {
                     null,
                     {"bSortable": false}
                 ],
-				"order": [[3, "desc"]]
-			});
+                "order": [[3, "desc"]],
+                "bDestroy": true
+            });
         });
     }
 });

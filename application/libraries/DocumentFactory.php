@@ -12,15 +12,15 @@ class DocumentFactory {
         $this->_ci->load->model("document_model");
     }
 
-	public function getStatus($id = 0){
-		$sql = "SELECT status FROM document WHERE id = ?";
+    public function getStatus($id = 0) {
+        $sql = "SELECT status FROM document WHERE id = ?";
         $query = $this->_ci->db->query($sql, array($id));
-		if ($query->num_rows() > 0) {
+        if ($query->num_rows() > 0) {
             return $query->row('status');
         }
         return false;
-	}
-	
+    }
+
     public function getDocument($id = 0) {
         if ($id > 0) {
             $sql = "SELECT * FROM document WHERE id = ?";
@@ -42,9 +42,12 @@ class DocumentFactory {
             return false;
         }
     }
-	
-	public function ajaxGetDocument() {
+
+    public function ajaxGetDocument($get) {
         $sql = "SELECT * FROM document";
+        if($get!=='All'){
+            $sql = "SELECT * FROM document WHERE status = '$get'";
+        }
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $documents = array();
@@ -59,16 +62,16 @@ class DocumentFactory {
     public function addDocument($subject, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
         $document = new Document_Model();
         $document->setSubject($subject);
-		$document->setDescription($description);
+        $document->setDescription($description);
         $document->setFrom($from);
         $document->setDueDate($dueDate);
         $document->setAttachment($attachment);
         $document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
-		
-		$document->setDue15Days(date('Y-m-d', strtotime($dateReceived. ' + 15 days')));
-		
+
+        $document->setDue15Days(date('Y-m-d', strtotime($dateReceived . ' + 15 days')));
+
         return $document->commit();
     }
 
@@ -81,7 +84,7 @@ class DocumentFactory {
 
         $document->setId($row->id);
         $document->setSubject($row->subject);
-		$document->setDescription($row->description);
+        $document->setDescription($row->description);
         $document->setFrom($row->from);
         $document->setAttachment($row->attachment);
         $document->setStatus($row->status);

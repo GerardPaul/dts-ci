@@ -12,7 +12,11 @@
             if ($documents !== FALSE) {
                 $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
                 if ($documents->getAttachment() != 'No File.') {
-                    $download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
+                    //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
+                    $replace = $_SERVER['DOCUMENT_ROOT'] . 'dts-ci/';
+                    $find = base_url();
+                    $link = str_replace($replace, $find, $documents->getAttachment());
+                    $download = '<a href="'.$link.'" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
                 }
 				$dateReceived = date('M j, Y', strtotime($documents->getDateReceived()));
 				$dueDate = date('M j, Y', strtotime($documents->getDueDate()));

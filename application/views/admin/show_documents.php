@@ -1,21 +1,21 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-			<div class="col-sm-2">
-				<select class="form-control" id="changeView">
-					<option value="1">All</option>
-					<option value="2">Compiled</option>
-					<option value="3">On-Going</option>
-					<option value="4">Cancelled</option>
-				</select>
-				<div class="space-10"></div>
-			</div>
+            <div class="col-sm-2">
+                <select class="form-control" id="changeView">
+                    <option value="1">All</option>
+                    <option value="2">Compiled</option>
+                    <option value="3">On-Going</option>
+                    <option value="4">Cancelled</option>
+                </select>
+                <div class="space-10"></div>
+            </div>
             <?php if ($userType == 'SEC') { ?>
                 <button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDocumentModal" data-backdrop="static" data-keyboard="false">
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Document
                 </button>
             <?php } ?>
-            <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
+        <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
         </div>
     </div>
     <div class="space-10"></div>
@@ -97,7 +97,7 @@
                         <label class="col-md-3 control-label">Attachment</label>
                         <div class="col-md-8">
                             <input type="file" name="attachment" id="attachment" title="Browse for file..."/>
-                            <span class="help-block">* Allowed file types (jpeg,png,gif,pdf).</span>
+                            <span class="help-block">* Allowed file types (jpeg,png,gif,pdf,doc,docx).</span>
                         </div>
                     </div>
                 </div>

@@ -103,7 +103,7 @@ class Document extends CI_Controller {
 
     public function getAllDocuments(){
         $this->load->library("DocumentFactory");
-        echo json_encode($this->documentfactory->ajaxGetDocument());
+        echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
     }
     
     private function ardIndex($data) {
@@ -161,7 +161,7 @@ class Document extends CI_Controller {
                     $config = array(
                         'upload_path' => './upload/',
                         'file_name' => $filename,
-                        'allowed_types' => 'gif|jpg|jpeg|png|pdf|txt',
+                        'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
                         'max_size' => 2048,
                     );
                     $this->load->library('upload', $config);
