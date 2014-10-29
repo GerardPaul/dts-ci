@@ -9,6 +9,10 @@ class Document_Model extends CI_Model{
 	private $_status;
 	private $_referenceNumber;
 	private $_dateReceived;
+	
+	private $_action;
+	private $_due15Days;
+	private $_deadline;
 
 	function __construct(){
 		parent::__construct();
@@ -68,6 +72,12 @@ class Document_Model extends CI_Model{
 	public function getDateReceived(){
 		return $this->_dateReceived;
 	}
+	public function setDue15Days($value){
+		$this->_due15Days = $value;
+	}
+	public function getDue15Days(){
+		return $this->_due15Days;
+	}
 	/*
 	* Class Methods
 	*/
@@ -86,6 +96,7 @@ class Document_Model extends CI_Model{
 			'status' => $this->_status,
 			'referenceNumber' => $this->_referenceNumber,
 			'dateReceived' => $this->_dateReceived,
+			'due15Days' => $this->_due15Days,
 		);
 
 		if ($this->_id > 0) {
@@ -98,7 +109,7 @@ class Document_Model extends CI_Model{
 			if ($this->db->insert("document", $data)) {
 				//Now we can get the ID and update the newly created object
 				$this->_id = $this->db->insert_id();
-				$this->db->insert("track", array('document' => $this->_id));
+				//$this->db->insert("track", array('document' => $this->_id));
 				return true;
 			}
 		}

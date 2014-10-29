@@ -42,6 +42,19 @@ class DocumentFactory {
             return false;
         }
     }
+	
+	public function ajaxGetDocument() {
+        $sql = "SELECT * FROM document";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            $documents = array();
+            foreach ($query->result() as $row) {
+                $documents[] = $row;
+            }
+            return $documents;
+        }
+        return false;
+    }
 
     public function addDocument($subject, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
         $document = new Document_Model();
@@ -53,12 +66,14 @@ class DocumentFactory {
         $document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
-
+		
+		$document->setDue15Days(date('Y-m-d', strtotime($dateReceived. ' + 15 days')));
+		
         return $document->commit();
     }
 
     private function formatDate($date) {
-        return date('M j, Y', strtotime($date));
+        return date('j-M-Y', strtotime($date));
     }
 
     public function createObjectFromData($row) {
@@ -68,10 +83,10 @@ class DocumentFactory {
         $document->setSubject($row->subject);
 		$document->setDescription($row->description);
         $document->setFrom($row->from);
-        $document->setDueDate($row->dueDate);
         $document->setAttachment($row->attachment);
         $document->setStatus($row->status);
         $document->setReferenceNumber($row->referenceNumber);
+        $document->setDueDate($row->dueDate);
         $document->setDateReceived($row->dateReceived);
 
         return $document;

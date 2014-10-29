@@ -1,8 +1,4 @@
 $(document).ready(function() {
-    $('#documentsTable').dataTable({
-        "order": [[3, "desc"]]
-    });
-
     $('#dueDate').datepicker();
     $('#dateReceived').datepicker();
     $('#attachment').bootstrapFileInput();
@@ -231,13 +227,17 @@ $(document).ready(function() {
     $('#editStatus').val(currentStatus);
 
     loadAllDocuments();
-    
+
     function loadAllDocuments() {
         $('#documentsTable').dataTable().fnDestroy();
         $.post(base_url + "admin/document/getAllDocuments", function(response, status) {
             var result = JSON.parse(response);
+			
             $.each(result, function(i, field) {
-                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['status'] + '</td><td>' + field['subject'] + '</td><td>' + field['dateReceived'] + 
+				var dateReceived = format_mysqldate(field['dateReceived']);
+				var dueDate = format_mysqldate(field['dueDate']);
+				
+                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['status'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">'+
                         '<a href="'+base_url+'admin/document/view/'+field['id']+'" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>'+
                         '<a href="'+base_url+'admin/document/edit/'+field['id']+'" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>'+
@@ -251,7 +251,9 @@ $(document).ready(function() {
                     null,
                     null,
                     {"bSortable": false}
-                ]});
+                ],
+				"order": [[3, "desc"]]
+			});
         });
     }
 });

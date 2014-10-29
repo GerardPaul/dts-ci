@@ -103,7 +103,7 @@ class Document extends CI_Controller {
 
     public function getAllDocuments(){
         $this->load->library("DocumentFactory");
-        echo json_encode($this->documentfactory->getDocument());
+        echo json_encode($this->documentfactory->ajaxGetDocument());
     }
     
     private function ardIndex($data) {
@@ -183,9 +183,13 @@ class Document extends CI_Controller {
                         $subject = $this->cleanString($_POST['subject']);
 						$description = $this->cleanString($_POST['description']);
                         $from = $this->cleanString($_POST['from']);
-                        $dueDate = $this->cleanString($_POST['dueDate']);
                         $refNo = $this->cleanString($_POST['referenceNumber']);
-                        $dateReceived = $this->cleanString($_POST['dateReceived']);
+						
+                        $due = $this->cleanString($_POST['dueDate']);
+						$received = $this->cleanString($_POST['dateReceived']);
+						
+						$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+						$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
                         if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                             redirect('admin/document');

@@ -1,6 +1,15 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
+			<div class="col-sm-2">
+				<select class="form-control" id="changeView">
+					<option value="1">All</option>
+					<option value="2">Compiled</option>
+					<option value="3">On-Going</option>
+					<option value="4">Cancelled</option>
+				</select>
+				<div class="space-10"></div>
+			</div>
             <?php if ($userType == 'SEC') { ?>
                 <button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDocumentModal" data-backdrop="static" data-keyboard="false">
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Document
