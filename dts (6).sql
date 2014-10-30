@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `salt` varchar(100) DEFAULT NULL,
-  `userType` enum('RD','SEC','ARD','EMP','ADMIN') NOT NULL,
+  `userType` enum('RD','SEC','ARD','EMP','ADMIN','OIC') NOT NULL,
   `division` int(11) NOT NULL,
   `resetHash` varchar(50) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1'
@@ -207,7 +207,7 @@ ADD CONSTRAINT `user_chat_fk` FOREIGN KEY (`user`) REFERENCES `user` (`id`);
 --
 ALTER TABLE `track`
 ADD CONSTRAINT `document_track_fk` FOREIGN KEY (`document`) REFERENCES `document` (`id`),
-ADD CONSTRAINT `user_track_fk` FOREIGN KEY (`user`) REFERENCES `track` (`id`);
+ADD CONSTRAINT `user_track_fk` FOREIGN KEY (`user`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `user`

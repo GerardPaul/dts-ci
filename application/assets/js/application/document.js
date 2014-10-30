@@ -248,7 +248,9 @@ $(document).ready(function() {
 		$('#documentsTable').dataTable().fnClearTable();
 		$('#documentsTable').dataTable().fnDraw();
 		$('#documentsTable').dataTable().fnDestroy();
-
+		
+		var currentUser = $('#currentUser').val();
+		
         $.post(base_url + "admin/document/getAllDocuments", {change: change}, function(response, status) {
             var result = JSON.parse(response);
 
@@ -262,11 +264,18 @@ $(document).ready(function() {
 					dueDate = format_mysqldate(deadline);
 				}
                 
+				var status = field['status'];
+				
+				var links = '';
+				if(currentUser==='ADMIN' || currentUser==='SEC'){
+					links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+					if(currentUser==='SEC'){
+						links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
+					}
+				}
+				
                 $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
-                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' +
-                        '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>' +
-                        '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>' +
-                        '</div></td></tr>');
+                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             });
             $('#documentsTable').dataTable({
                 "aoColumns": [
@@ -288,4 +297,6 @@ $(document).ready(function() {
             });
         });
     }
+	var status = $('#currentStatus').val();
+    $('#documentStatus').val(status);
 });

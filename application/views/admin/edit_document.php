@@ -13,7 +13,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="well">
-						<form enctype="multipart/form-data" id="editDocumentForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/document/update">
+						<form enctype="multipart/form-data" id="editDocumentForm" method="post" class="form-horizontal" action="<?php echo base_url(); ?>admin/document/update/<?php echo $document->getId(); ?>">
 							<div class="form-group">
 								<label class="col-md-3 control-label">Date Received</label>
 								<div class="col-md-8">
@@ -59,6 +59,16 @@
 										</span>
 									</div>
 								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">Status</label>
+								<div class="col-md-8">
+									<select name="status" class="form-control" id="documentStatus">
+										<option value="On-Going">On-Going</option>
+										<option value="Cancelled">Cancelled</option>
+									</select>
+								</div>
+								<input type="hidden" id="currentStatus" value="<?php echo $document->getStatus(); ?>">
 							</div>
 							<div class="form-group">
 							<?php 

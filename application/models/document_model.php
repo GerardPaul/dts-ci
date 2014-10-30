@@ -116,10 +116,18 @@ class Document_Model extends CI_Model{
 				//Now we can get the ID and update the newly created object
 				$this->_id = $this->db->insert_id();
 				//$this->db->insert("track", array('document' => $this->_id));
+				$this->addDocumentToRD($this->_id);
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private function addDocumentToRD($document){
+		$sql = "SELECT id FROM user WHERE userType = 'RD'";
+		$query = $this->db->query($sql);
+        $rd = intval($query->row('id'));
+		$this->db->insert("track", array('document' => $document, 'user' => $rd));
 	}
 }
 ?>

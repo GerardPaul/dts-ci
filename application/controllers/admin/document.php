@@ -95,15 +95,18 @@ class Document extends CI_Controller {
     }
 
     private function adminIndex($data) {
-        $this->load->library("DocumentFactory");
-        $data['documents'] = $this->documentfactory->getDocument();
-
         $this->load->admin_template('show_documents', $data);
     }
 
     public function getAllDocuments(){
-        $this->load->library("DocumentFactory");
-        echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
+		$userType = $this->userType;
+		if($userType == 'ADMIN' || $userType == 'SEC'){
+			$this->load->library("DocumentFactory");
+			echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
+		}else if($userType == 'RD'){
+			$this->load->library("TrackFactory");
+			echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $this->userId));
+		}
     }
     
     private function ardIndex($data) {
@@ -150,55 +153,47 @@ class Document extends CI_Controller {
     public function add() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            if ($this->userType != 'SEC') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'RD' || $this->userType == 'ARD') {
-                    $this->error(403);
+                $attachment_path = 'No File.';
+                $filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
+                $config = array(
+                    'upload_path' => './upload/',
+                    'file_name' => $filename,
+                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
+                    'max_size' => 2048,
+                );
+                $this->load->library('upload', $config);
+
+                if (!$this->upload->do_upload('attachment')) {
+                    $error = $this->upload->display_errors();
+                    echo $error;
                 } else {
-                    $attachment_path = 'No File.';
-                    $filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
-                    $config = array(
-                        'upload_path' => './upload/',
-                        'file_name' => $filename,
-                        'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
-                        'max_size' => 2048,
-                    );
-                    $this->load->library('upload', $config);
-
-                    if (!$this->upload->do_upload('attachment')) {
-                        $error = $this->upload->display_errors();
-                        echo $error;
+                    $upload_data = $this->upload->data();
+                    if (isset($upload_data['full_path'])) {
+                        $attachment_path = $upload_data['full_path'];
                     } else {
-                        $upload_data = $this->upload->data();
-                        if (isset($upload_data['full_path'])) {
-                            $attachment_path = $upload_data['full_path'];
-                        } else {
-                            $attachment_path = "No File.";
-                        }
+                        $attachment_path = "No File.";
                     }
-                    if ($this->session->userdata('logged_in')) {
-                        $this->load->library("DocumentFactory");
+                }
+                $this->load->library("DocumentFactory");
 
-                        $subject = $this->cleanString($_POST['subject']);
-						$description = $this->cleanString($_POST['description']);
-                        $from = $this->cleanString($_POST['from']);
-                        $refNo = $this->cleanString($_POST['referenceNumber']);
-						
-                        $due = $this->cleanString($_POST['dueDate']);
-						$received = $this->cleanString($_POST['dateReceived']);
-						
-						$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
-						$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
+                $subject = $this->cleanString($_POST['subject']);
+				$description = $this->cleanString($_POST['description']);
+                $from = $this->cleanString($_POST['from']);
+                $refNo = $this->cleanString($_POST['referenceNumber']);
+					
+                $due = $this->cleanString($_POST['dueDate']);
+				$received = $this->cleanString($_POST['dateReceived']);
+					
+				$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+				$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
-                        if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
-                            redirect('admin/document');
-                        } else {
-                            echo "Failed!";
-                        }
-                    } else {
-                        redirect('login', 'refresh');
-                    }
+                if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
+                    redirect('admin/document');
+                } else {
+                    echo "Failed!";
                 }
             }
         } else {
@@ -469,32 +464,79 @@ class Document extends CI_Controller {
 	public function edit($id = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            if ($this->userType != 'SEC') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'RD' || $this->userType == 'ARD') {
-                    $this->error(403);
-                } else {
-                    $id = (int) $id;
-                    $this->load->library("DocumentFactory");
-                    $document = $this->documentfactory->getDocument($id);
-                    if ($document && $id > 0) {
-                        
-                        $data = array(
-                            "document" => $document,
-                            "title" => $this->title,
-                            "header" => 'Edit Document',
-                            "userType" => $this->userType,
-                            "username" => $this->username
-                        );
-                        $this->load->admin_template('edit_document', $data);
-                    } else {
-                        $this->error(404);
-                    }
-                }
+				$id = (int) $id;
+				$this->load->library("DocumentFactory");
+				$document = $this->documentfactory->getDocument($id);
+				if ($document && $id > 0) {
+					$data = array(
+						"document" => $document,
+						"title" => $this->title,
+						"header" => 'Edit Document',
+						"userType" => $this->userType,
+						"username" => $this->username
+					);
+					$this->load->admin_template('edit_document', $data);
+				} else {
+					$this->error(404);
+				}
             }
         } else {
             redirect('login', 'refresh');
         }
     }
+	
+	public function update($id = 0){
+		$this->checkLogin();
+        if ($this->login) {
+            if ($this->userType != 'SEC') {
+                $this->error(403);
+            } else {
+                $attachment_path = 'No File.';
+                $filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
+                $config = array(
+                    'upload_path' => './upload/',
+                    'file_name' => $filename,
+                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
+                    'max_size' => 2048,
+                );
+                $this->load->library('upload', $config);
+
+                if (!$this->upload->do_upload('attachment')) {
+                    $error = $this->upload->display_errors();
+                    echo $error;
+                } else {
+                    $upload_data = $this->upload->data();
+                    if (isset($upload_data['full_path'])) {
+                        $attachment_path = $upload_data['full_path'];
+                    } else {
+                        $attachment_path = "No File.";
+                    }
+                }
+                $this->load->library("DocumentFactory");
+
+                $subject = $this->cleanString($_POST['subject']);
+				$description = $this->cleanString($_POST['description']);
+                $from = $this->cleanString($_POST['from']);
+                $refNo = $this->cleanString($_POST['referenceNumber']);
+				$status = $this->cleanString($_POST['status']);
+					
+                $due = $this->cleanString($_POST['dueDate']);
+				$received = $this->cleanString($_POST['dateReceived']);
+					
+				$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+				$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
+
+                if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
+                    redirect('admin/document');
+                } else {
+                    echo "Failed!";
+                }
+			}
+		}else {
+            redirect('login', 'refresh');
+        }
+	}
 }

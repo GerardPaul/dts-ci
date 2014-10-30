@@ -65,6 +65,7 @@
                                 <option value="ARD">ARD</option>
                                 <option value="EMP">EMP</option>
                                 <option value="ADMIN">ADMIN</option>
+								<option value="OIC">OIC</option>
                             </select>
                         </div>
                         <label class="col-md-1 control-label">Division</label>

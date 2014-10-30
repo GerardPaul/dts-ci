@@ -74,6 +74,23 @@ class DocumentFactory {
 
         return $document->commit();
     }
+	
+	public function updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
+        $document = new Document_Model();
+		$document->setId($id);
+        $document->setSubject($subject);
+        $document->setDescription($description);
+        $document->setFrom($from);
+        $document->setDueDate($dueDate);
+        $document->setAttachment($attachment);
+        $document->setStatus($status);
+        $document->setReferenceNumber($referenceNumber);
+        $document->setDateReceived($dateReceived);
+
+        $document->setDue15Days(date('Y-m-d', strtotime($dateReceived . ' + 15 days')));
+
+        return $document->commit();
+    }
 
     private function formatDate($date) {
         return date('j-M-Y', strtotime($date));

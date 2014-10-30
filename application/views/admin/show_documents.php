@@ -21,6 +21,7 @@
     <div class="space-10"></div>
     <div class="row">
         <div class="col-xs-12">
+			<input type="hidden" name="currentUser" id="currentUser" value="<?php echo $userType; ?>">
             <table class="table table-condensed table-striped table-responsive table-hover display" id="documentsTable">
                 <thead>
                     <tr>
