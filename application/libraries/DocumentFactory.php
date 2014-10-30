@@ -90,7 +90,9 @@ class DocumentFactory {
         $document->setStatus($row->status);
         $document->setReferenceNumber($row->referenceNumber);
         $document->setDueDate($row->dueDate);
-        $document->setDateReceived($row->dateReceived);
+        $document->setDeadline($row->deadline);
+		$document->setDue15Days($row->due15Days);
+		$document->setDateReceived($row->dateReceived);
 
         return $document;
     }

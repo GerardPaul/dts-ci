@@ -78,6 +78,12 @@ class Document_Model extends CI_Model{
 	public function getDue15Days(){
 		return $this->_due15Days;
 	}
+	public function setDeadline($value){
+		$this->_deadline = $value;
+	}
+	public function getDeadline(){
+		return $this->_deadline;
+	}
 	/*
 	* Class Methods
 	*/

@@ -25,10 +25,9 @@
                 <thead>
                     <tr>
                         <th>From</th>
-                        <th>Status</th>
                         <th>Subject</th>
                         <th>Date Received</th>
-                        <th>Due Date</th>
+                        <th>Deadline</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

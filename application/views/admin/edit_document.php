@@ -18,7 +18,7 @@
 								<label class="col-md-3 control-label">Date Received</label>
 								<div class="col-md-8">
 									<div class="input-group date" id="dateReceived">
-										<input id="dateReceived" type="text" class="form-control" name="dateReceived" date-date-format="YYYY/MM/DD" value="<?php echo $document->getDateReceived(); ?>" />
+										<input id="dateReceived" type="text" class="form-control" name="dateReceived" date-date-format="YYYY/MM/DD" value="<?php echo date('m/j/Y', strtotime($document->getDateReceived())); ?>" />
 										<span class="input-group-addon">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
@@ -53,7 +53,7 @@
 								<label class="col-md-3 control-label">Document Due Date</label>
 								<div class="col-md-8">
 									<div class="input-group date" id="dueDate">
-										<input id="dateDue" type="text" class="form-control" name="dueDate" date-date-format="YYYY/MM/DD" value="<?php echo $document->getDueDate(); ?>" />
+										<input id="dateDue" type="text" class="form-control" name="dueDate" date-date-format="YYYY/MM/DD" value="<?php echo date('m/j/Y', strtotime($document->getDueDate())) ?>" />
 										<span class="input-group-addon">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>

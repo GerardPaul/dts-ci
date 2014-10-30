@@ -245,16 +245,24 @@ $(document).ready(function() {
     loadDocuments('All');
 
     function loadDocuments(change) {
-        $('#documentsTable').dataTable().fnDestroy();
+		$('#documentsTable').dataTable().fnClearTable();
+		$('#documentsTable').dataTable().fnDraw();
+		$('#documentsTable').dataTable().fnDestroy();
 
         $.post(base_url + "admin/document/getAllDocuments", {change: change}, function(response, status) {
             var result = JSON.parse(response);
 
             $.each(result, function(i, field) {
                 var dateReceived = format_mysqldate(field['dateReceived']);
-                var dueDate = format_mysqldate(field['dueDate']);
-
-                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['status'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+				var deadline = field['deadline'];
+				var dueDate = '';
+				if(deadline==='0000-00-00'){
+					dueDate = compare_mysqldate(field['due15Days'],field['dueDate']);
+				}else{
+					dueDate = format_mysqldate(deadline);
+				}
+                
+                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' +
                         '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>' +
                         '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>' +
@@ -266,10 +274,16 @@ $(document).ready(function() {
                     null,
                     null,
                     null,
-                    null,
                     {"bSortable": false}
                 ],
-                "order": [[3, "desc"]],
+				"aoColumnDefs": [
+					{ "sWidth": "20%", "aTargets": [ 0 ] },
+					{ "sWidth": "50%", "aTargets": [ 1 ] },
+					{ "sWidth": "10%", "aTargets": [ 2 ] },
+					{ "sWidth": "10%", "aTargets": [ 3 ] },
+					{ "sWidth": "10%", "aTargets": [ 4 ] }
+				],
+                "order": [[2, "desc"]],
                 "bDestroy": true
             });
         });

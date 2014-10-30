@@ -13,13 +13,17 @@
                 $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
                 if ($documents->getAttachment() != 'No File.') {
                     //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
-                    $replace = $_SERVER['DOCUMENT_ROOT'] . 'dts-ci/';
-                    $find = base_url();
-                    $link = str_replace($replace, $find, $documents->getAttachment());
+                    $str = $documents->getAttachment();
+					$link = base_url() . strstr($str, 'upload');
                     $download = '<a href="'.$link.'" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
                 }
-				$dateReceived = date('M j, Y', strtotime($documents->getDateReceived()));
-				$dueDate = date('M j, Y', strtotime($documents->getDueDate()));
+				$dateReceived = date('j-M-Y', strtotime($documents->getDateReceived()));
+				$dueDate = date('j-M-Y', strtotime($documents->getDueDate()));
+				$due15Days = date('j-M-Y', strtotime($documents->getDue15Days()));
+				
+				$deadline = 'Not Set';
+				if($documents->getDeadline()!=='0000-00-00')
+					$deadline = date('j-M-Y', strtotime($documents->getDeadline()));
 				
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
@@ -44,12 +48,20 @@
 						<td>{$documents->getFrom()}</td>
 					</tr>
 					<tr>
-						<th>Received</th>
+						<th>Date Received</th>
 						<td>{$dateReceived}</td>
 					</tr>
 					<tr>
-						<th>Due</th>
+						<th>Document Deadline</th>
 						<td>{$dueDate}</td>
+					</tr>
+					<tr>
+						<th>RD Deadline</th>
+						<td>{$deadline}</td>
+					</tr>
+					<tr>
+						<th>15-Day Deadline</th>
+						<td>{$due15Days}</td>
 					</tr>
 					<tr>
 						<th>Attachment</th>
