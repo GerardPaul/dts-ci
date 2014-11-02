@@ -13,133 +13,73 @@
             </div>
         </div>
         <div class="col-xs-12">
-            <div class="row">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle">
-                                                Assign To
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse">
-                                        <div class="panel-body">
+            <?php
+            if ($document !== FALSE) {
+                $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
+                if ($document->getAttachment() != 'No File.') {
+                    //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
+                    $str = $document->getAttachment();
+                    $link = base_url() . strstr($str, 'upload');
+                    $download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
+                }
+                $dateReceived = date('j-M-Y', strtotime($document->getDateReceived()));
+                $dueDate = date('j-M-Y', strtotime($document->getDueDate()));
+                $due15Days = date('j-M-Y', strtotime($document->getDue15Days()));
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle">
-                                                ChatBox
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            Chat Goes Here
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="space-10"></div>
-                            <div class="col-sm-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle">
-                                                Details
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in">
-                                        <div class="panel-body">
-                                            <?php
-                                            if ($document !== FALSE) {
-                                                $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
-                                                if ($document->getAttachment() != 'No File.') {
-                                                    //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
-                                                    $str = $document->getAttachment();
-                                                    $link = base_url() . strstr($str, 'upload');
-                                                    $download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
-                                                }
-                                                $dateReceived = date('j-M-Y', strtotime($document->getDateReceived()));
-                                                $dueDate = date('j-M-Y', strtotime($document->getDueDate()));
-                                                $due15Days = date('j-M-Y', strtotime($document->getDue15Days()));
+                $deadline = 'Not Set';
+                if ($document->getDeadline() !== '0000-00-00')
+                    $deadline = date('j-M-Y', strtotime($document->getDeadline()));
 
-                                                $deadline = 'Not Set';
-                                                if ($document->getDeadline() !== '0000-00-00')
-                                                    $deadline = date('j-M-Y', strtotime($document->getDeadline()));
-
-                                                echo <<<HTML
-                                                    <table class="table table-condensed table-responsive" id="documentDetails">
-                                                        <tr>
-                                                                <th>Subject</th>
-                                                                <td><strong>{$document->getSubject()}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Description</th>
-                                                                <td>{$document->getDescription()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Status</th>
-                                                                <td>{$status}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Ref. #</th>
-                                                                <td>{$document->getReferenceNumber()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>From</th>
-                                                                <td>{$document->getFrom()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Date Received</th>
-                                                                <td>{$dateReceived}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Document Deadline</th>
-                                                                <td>{$dueDate}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>RD Deadline</th>
-                                                                <td>{$deadline}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>15-Day Deadline</th>
-                                                                <td>{$due15Days}</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <th>Attachment</th>
-                                                                <td>{$download}</td>
-                                                        </tr>
-                                                    </table>
+                echo <<<HTML
+                    <table class="table table-condensed table-responsive" id="documentDetails">
+                        <tr>
+                                <th>Subject</th>
+                                <td><strong>{$document->getSubject()}</strong></td>
+                        </tr>
+                        <tr>
+                                <th>Description</th>
+                                <td>{$document->getDescription()}</td>
+                        </tr>
+                        <tr>
+                                <th>Status</th>
+                                <td>{$status}</td>
+                        </tr>
+                        <tr>
+                                <th>Ref. #</th>
+                                <td>{$document->getReferenceNumber()}</td>
+                        </tr>
+                        <tr>
+                                <th>From</th>
+                                <td>{$document->getFrom()}</td>
+                        </tr>
+                        <tr>
+                                <th>Date Received</th>
+                                <td>{$dateReceived}</td>
+                        </tr>
+                        <tr>
+                                <th>Document Deadline</th>
+                                <td>{$dueDate}</td>
+                        </tr>
+                        <tr>
+                                <th>RD Deadline</th>
+                                <td>{$deadline}</td>
+                        </tr>
+                        <tr>
+                                <th>15-Day Deadline</th>
+                                <td>{$due15Days}</td>
+                        </tr>
+                        <tr>
+                                <th>Attachment</th>
+                                <td>{$download}</td>
+                        </tr>
+                    </table>
 HTML;
-                                            } else {
-                                                echo <<<HTML
-                                                        <div class="alert alert-warning">There are no <strong>Documents</strong> to display.</div>
+            } else {
+                echo <<<HTML
+                        <div class="alert alert-warning">There are no <strong>Documents</strong> to display.</div>
 HTML;
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+            ?>
         </div>
         <!--        <div class="col-xs-12">
                     <div class="row">

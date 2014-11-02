@@ -128,58 +128,6 @@ $(document).ready(function() {
         }
     });
 
-    $('#markReceivedForm').bootstrapValidator({
-        container: 'tooltip',
-        message: 'This value is not valid',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            ard: {
-                validators: {
-                    notEmpty: {
-                        message: 'Select Division to assign!'
-                    }
-                }
-            },
-            action: {
-                validators: {
-                    notEmpty: {
-                        message: 'Select appropriate action!'
-                    }
-                }
-            },
-            note: {
-                validators: {
-                    notEmpty: {
-                        message: 'Fill in notes before forwarding to assigned person!'
-                    }
-                }
-            }
-        }
-    });
-
-    $('#ardMarkReceivedForm').bootstrapValidator({
-        container: 'tooltip',
-        message: 'This value is not valid',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            emp: {
-                validators: {
-                    notEmpty: {
-                        message: 'Select user to assign!'
-                    }
-                }
-            }
-        }
-    });
-
     $('#changeStatusForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -202,7 +150,6 @@ $(document).ready(function() {
     $('#toggleChat').click(function() {
         $('#toggleChat i').toggle();
         $('#chatContents').toggle();
-
 
         if ($('.chatBox').height() === 300) {
             $('.chatBox').height(35);
@@ -241,61 +188,66 @@ $(document).ready(function() {
 
         loadDocuments(change);
     });
-
-    loadDocuments('All');
-
-    function loadDocuments(change) {
-        $('#documentsTable').dataTable().fnClearTable();
-        $('#documentsTable').dataTable().fnDraw();
-        $('#documentsTable').dataTable().fnDestroy();
-
-        var userId = $('#userId').val();
-        $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function(response, status) {
-            var result = JSON.parse(response);
-
-            $.each(result, function(i, field) {
-                var dateReceived = format_mysqldate(field['dateReceived']);
-                var deadline = field['deadline'];
-                var dueDate = '';
-                if (deadline === '0000-00-00') {
-                    dueDate = compare_mysqldate(field['due15Days'], field['dueDate']);
-                } else {
-                    dueDate = format_mysqldate(deadline);
-                }
-
-                var links = '';
-                if (userType === 'ADMIN' || userType === 'SEC') {
-                    links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
-                    if (userType === 'SEC') {
-                        links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
-                    }
-                }else if (userType === 'RD' || userType === 'ARD'){
-                    links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
-                }
-
-                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
-                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
-            });
-            $('#documentsTable').dataTable({
-                "aoColumns": [
-                    null,
-                    null,
-                    null,
-                    null,
-                    {"bSortable": false}
-                ],
-                "aoColumnDefs": [
-                    {"sWidth": "20%", "aTargets": [0]},
-                    {"sWidth": "50%", "aTargets": [1]},
-                    {"sWidth": "10%", "aTargets": [2]},
-                    {"sWidth": "10%", "aTargets": [3]},
-                    {"sWidth": "10%", "aTargets": [4]}
-                ],
-                "order": [[2, "desc"]],
-                "bDestroy": true
-            });
-        });
-    }
+    
+    // set status for dropdown menu in edit document
     var status = $('#currentStatus').val();
     $('#documentStatus').val(status);
+    
+    var load = $('#load').val();
+    if(load === 'documents'){
+        loadDocuments('All');
+    }
 });
+
+function loadDocuments(change) {
+    $('#documentsTable').dataTable().fnClearTable();
+    $('#documentsTable').dataTable().fnDraw();
+    $('#documentsTable').dataTable().fnDestroy();
+
+    var userId = $('#userId').val();
+    $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function(response, status) {
+        var result = JSON.parse(response);
+
+        $.each(result, function(i, field) {
+            var dateReceived = format_mysqldate(field['dateReceived']);
+            var deadline = field['deadline'];
+            var dueDate = '';
+            if (deadline === '0000-00-00') {
+                dueDate = compare_mysqldate(field['due15Days'], field['dueDate']);
+            } else {
+                dueDate = format_mysqldate(deadline);
+            }
+
+            var links = '';
+            if (userType === 'ADMIN' || userType === 'SEC') {
+                links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+                if (userType === 'SEC') {
+                    links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
+                }
+            } else if (userType === 'RD' || userType === 'ARD') {
+                links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+            }
+
+            $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+                    '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
+        });
+        $('#documentsTable').dataTable({
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                {"bSortable": false}
+            ],
+            "aoColumnDefs": [
+                {"sWidth": "20%", "aTargets": [0]},
+                {"sWidth": "50%", "aTargets": [1]},
+                {"sWidth": "10%", "aTargets": [2]},
+                {"sWidth": "10%", "aTargets": [3]},
+                {"sWidth": "10%", "aTargets": [4]}
+            ],
+            "order": [[2, "desc"]],
+            "bDestroy": true
+        });
+    });
+}

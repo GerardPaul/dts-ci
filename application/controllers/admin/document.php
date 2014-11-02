@@ -71,7 +71,8 @@ class Document extends CI_Controller {
                     "header" => 'All Documents',
                     "userType" => $this->userType,
                     "username" => $this->username,
-                    "userId" => $this->userId
+                    "userId" => $this->userId,
+                    "load" => 'documents'
                 );
                 if ($this->userType == 'ADMIN' || $this->userType == 'SEC') {
                     $this->load->admin_template('show_documents', $data);
@@ -220,7 +221,8 @@ class Document extends CI_Controller {
             "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
             "usersORD" => $this->userfactory->getUserByDivision('ORD'),
             "username" => $this->username,
-            "status" => $status
+            "status" => $status,
+            "load" => 'details'
         );
         //$this->view('admin/templates/header');
         //$this->view('admin/rd_view_document', $data);
@@ -249,7 +251,8 @@ class Document extends CI_Controller {
             "userType" => $this->userType,
             "users" => $usersByDivision,
             "username" => $this->username,
-            "status" => $status
+            "status" => $status,
+            "load" => 'details'
         );
         $this->load->admin_template('ard_view_document', $data);
     }

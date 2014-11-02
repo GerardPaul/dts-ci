@@ -1,3 +1,4 @@
+<input type="hidden" name="load" id="load" value="<?php echo $load; ?>">
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
