@@ -106,6 +106,12 @@ class Track_Model extends CI_Model{
 	public function getDeadline(){
 		return $this->_deadline;
 	}
+        public function setAction($value){
+		$this->_action = $value;
+	}
+	public function getAction(){
+		return $this->_action;
+	}
 	
 	public function commit()
 	{

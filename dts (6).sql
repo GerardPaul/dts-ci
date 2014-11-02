@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `track` (
 `id` int(11) NOT NULL,
   `document` int(11) NOT NULL,
   `user` int(11) NOT NULL,
-  `dateReceived` date NOT NULL
+  `received` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

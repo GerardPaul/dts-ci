@@ -8,19 +8,29 @@ class TrackFactory {
     private $_ci;
 
     function __construct() {
-        //When the class is constructed get an instance of codeigniter so we can access it locally
         $this->_ci = & get_instance();
-        //Include the user_model so we can use it
         $this->_ci->load->model("track_model");
     }
-	
-	public function ajaxGetDocument($get, $user) {
-        $sql = "SELECT d.id, d.subject, d.action, d.from, d.dueDate, d.due15Days, d.deadline,
-					d.attachment,
-				FROM document d, track t 
-				WHERE t.document = d.id AND t.user = $user";
-        if($get!=='All'){
-            $sql = "SELECT * FROM document WHERE status = '$get'";
+
+    public function getUserDocument($track) {
+        $sql = "SELECT d.subject, d.description, d.action, d.from, d.dueDate, d.due15Days, d.deadline,
+                        d.attachment, d.status, d.referenceNumber, d.dateReceived,
+                        t.id, t.document, t.user, t.received
+                FROM document d, track t 
+                WHERE t.id = '$track' AND t.document = d.id";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            return $this->createObjectFromData($query->row());
+        }
+        return false;
+    }
+    
+    public function ajaxGetDocument($get, $user) {
+        $sql = "SELECT t.id, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived
+                FROM document d, track t 
+                WHERE t.document = d.id AND t.user = '$user'";
+        if ($get !== 'All') {
+            $sql .= " AND status = '$get'";
         }
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
@@ -32,8 +42,8 @@ class TrackFactory {
         }
         return false;
     }
-	
-	public function createObjectFromData($row) {
+
+    public function createObjectFromData($row) {
         $track = new Track_Model();
 
         $track->setSubject($row->subject);
@@ -44,13 +54,14 @@ class TrackFactory {
         $track->setReferenceNumber($row->referenceNumber);
         $track->setDueDate($row->dueDate);
         $track->setDeadline($row->deadline);
-		$track->setDue15Days($row->due15Days);
-		$track->setDateReceived($row->dateReceived);
-		
-		$track->setId($row->trackId);
-		$track->setDocument($row->document);
-		$track->setUser($row->user);
-		$track->setReceived($row->received);
+        $track->setDue15Days($row->due15Days);
+        $track->setDateReceived($row->dateReceived);
+        $track->setAction($row->action);
+
+        $track->setId($row->id);
+        $track->setDocument($row->document);
+        $track->setUser($row->user);
+        $track->setReceived($row->received);
 
         return $track;
     }

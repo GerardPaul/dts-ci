@@ -245,35 +245,34 @@ $(document).ready(function() {
     loadDocuments('All');
 
     function loadDocuments(change) {
-		$('#documentsTable').dataTable().fnClearTable();
-		$('#documentsTable').dataTable().fnDraw();
-		$('#documentsTable').dataTable().fnDestroy();
-		
-		var currentUser = $('#currentUser').val();
-		
-        $.post(base_url + "admin/document/getAllDocuments", {change: change}, function(response, status) {
+        $('#documentsTable').dataTable().fnClearTable();
+        $('#documentsTable').dataTable().fnDraw();
+        $('#documentsTable').dataTable().fnDestroy();
+
+        var userId = $('#userId').val();
+        $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function(response, status) {
             var result = JSON.parse(response);
 
             $.each(result, function(i, field) {
                 var dateReceived = format_mysqldate(field['dateReceived']);
-				var deadline = field['deadline'];
-				var dueDate = '';
-				if(deadline==='0000-00-00'){
-					dueDate = compare_mysqldate(field['due15Days'],field['dueDate']);
-				}else{
-					dueDate = format_mysqldate(deadline);
-				}
-                
-				var status = field['status'];
-				
-				var links = '';
-				if(currentUser==='ADMIN' || currentUser==='SEC'){
-					links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
-					if(currentUser==='SEC'){
-						links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
-					}
-				}
-				
+                var deadline = field['deadline'];
+                var dueDate = '';
+                if (deadline === '0000-00-00') {
+                    dueDate = compare_mysqldate(field['due15Days'], field['dueDate']);
+                } else {
+                    dueDate = format_mysqldate(deadline);
+                }
+
+                var links = '';
+                if (userType === 'ADMIN' || userType === 'SEC') {
+                    links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+                    if (userType === 'SEC') {
+                        links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
+                    }
+                }else if (userType === 'RD' || userType === 'ARD'){
+                    links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+                }
+
                 $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             });
@@ -285,18 +284,18 @@ $(document).ready(function() {
                     null,
                     {"bSortable": false}
                 ],
-				"aoColumnDefs": [
-					{ "sWidth": "20%", "aTargets": [ 0 ] },
-					{ "sWidth": "50%", "aTargets": [ 1 ] },
-					{ "sWidth": "10%", "aTargets": [ 2 ] },
-					{ "sWidth": "10%", "aTargets": [ 3 ] },
-					{ "sWidth": "10%", "aTargets": [ 4 ] }
-				],
+                "aoColumnDefs": [
+                    {"sWidth": "20%", "aTargets": [0]},
+                    {"sWidth": "50%", "aTargets": [1]},
+                    {"sWidth": "10%", "aTargets": [2]},
+                    {"sWidth": "10%", "aTargets": [3]},
+                    {"sWidth": "10%", "aTargets": [4]}
+                ],
                 "order": [[2, "desc"]],
                 "bDestroy": true
             });
         });
     }
-	var status = $('#currentStatus').val();
+    var status = $('#currentStatus').val();
     $('#documentStatus').val(status);
 });

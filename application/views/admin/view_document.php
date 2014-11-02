@@ -6,7 +6,7 @@
                 <div class="space-10"></div>
             </div>
             <div class="col-sm-6">
-                
+
             </div>
             <?php
             if ($documents !== FALSE) {
@@ -14,17 +14,17 @@
                 if ($documents->getAttachment() != 'No File.') {
                     //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
                     $str = $documents->getAttachment();
-					$link = base_url() . strstr($str, 'upload');
-                    $download = '<a href="'.$link.'" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
+                    $link = base_url() . strstr($str, 'upload');
+                    $download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View File" target="_blank">View File <i class="glyphicon glyphicon-new-window"></i></a>';
                 }
-				$dateReceived = date('j-M-Y', strtotime($documents->getDateReceived()));
-				$dueDate = date('j-M-Y', strtotime($documents->getDueDate()));
-				$due15Days = date('j-M-Y', strtotime($documents->getDue15Days()));
-				
-				$deadline = 'Not Set';
-				if($documents->getDeadline()!=='0000-00-00')
-					$deadline = date('j-M-Y', strtotime($documents->getDeadline()));
-				
+                $dateReceived = date('j-M-Y', strtotime($documents->getDateReceived()));
+                $dueDate = date('j-M-Y', strtotime($documents->getDueDate()));
+                $due15Days = date('j-M-Y', strtotime($documents->getDue15Days()));
+
+                $deadline = 'Not Set';
+                if ($documents->getDeadline() !== '0000-00-00')
+                    $deadline = date('j-M-Y', strtotime($documents->getDeadline()));
+
                 echo <<<HTML
 				<table class="table table-condensed table-responsive" id="documentDetails">
 					<tr>

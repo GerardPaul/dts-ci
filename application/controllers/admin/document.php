@@ -70,16 +70,13 @@ class Document extends CI_Controller {
                     "title" => $this->title,
                     "header" => 'All Documents',
                     "userType" => $this->userType,
-                    "username" => $this->username
+                    "username" => $this->username,
+                    "userId" => $this->userId
                 );
-                if ($this->userType == 'RD') {
-                    $this->rdIndex($data);
-                } else if ($this->userType == 'SEC') {
-                    $this->adminIndex($data);
-                } else if ($this->userType == 'ARD') {
-                    $this->ardIndex($data);
+                if ($this->userType == 'ADMIN' || $this->userType == 'SEC') {
+                    $this->load->admin_template('show_documents', $data);
                 } else {
-                    $this->adminIndex($data);
+                    $this->load->admin_template('user_documents', $data);
                 }
             }
         } else {
@@ -87,33 +84,16 @@ class Document extends CI_Controller {
         }
     }
 
-    private function rdIndex($data) {
-        $this->load->library("RDDocumentFactory");
-        $data['documents'] = $this->rddocumentfactory->getRDDocument();
-
-        $this->load->admin_template('rd_documents', $data);
-    }
-
-    private function adminIndex($data) {
-        $this->load->admin_template('show_documents', $data);
-    }
-
-    public function getAllDocuments(){
-		$userType = $this->userType;
-		if($userType == 'ADMIN' || $userType == 'SEC'){
-			$this->load->library("DocumentFactory");
-			echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
-		}else if($userType == 'RD'){
-			$this->load->library("TrackFactory");
-			echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $this->userId));
-		}
-    }
-    
-    private function ardIndex($data) {
-        $this->load->library("RDDocumentFactory");
-        $data['documents'] = $this->rddocumentfactory->getARDDocument($this->userId);
-
-        $this->load->admin_template('ard_documents', $data);
+    public function getAllDocuments() {
+        $userType = $_POST['userType'];
+        $userId = $_POST['userId'];
+        if ($userType == 'ADMIN' || $userType == 'SEC') {
+            $this->load->library("DocumentFactory");
+            echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
+        } else {
+            $this->load->library("TrackFactory");
+            echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $userId));
+        }
     }
 
     public function view($documentId = 0) {
@@ -128,16 +108,16 @@ class Document extends CI_Controller {
                     $documentId = (int) $documentId;
                     $this->load->library("DocumentFactory");
                     $documents = $this->documentfactory->getDocument($documentId);
-					
+
                     if ($documentId > 0 && $documents) {
-						$status = $this->status($documents->getStatus());
+                        $status = $this->status($documents->getStatus());
                         $data = array(
                             "documents" => $documents,
                             "title" => 'Document Details',
                             "header" => 'Document Details',
                             "userType" => $this->userType,
                             "username" => $this->username,
-							"status" => $status
+                            "status" => $status
                         );
                         $this->load->admin_template('view_document', $data);
                     } else {
@@ -180,15 +160,15 @@ class Document extends CI_Controller {
                 $this->load->library("DocumentFactory");
 
                 $subject = $this->cleanString($_POST['subject']);
-				$description = $this->cleanString($_POST['description']);
+                $description = $this->cleanString($_POST['description']);
                 $from = $this->cleanString($_POST['from']);
                 $refNo = $this->cleanString($_POST['referenceNumber']);
-					
+
                 $due = $this->cleanString($_POST['dueDate']);
-				$received = $this->cleanString($_POST['dateReceived']);
-					
-				$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
-				$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
+                $received = $this->cleanString($_POST['dateReceived']);
+
+                $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+                $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
                 if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     redirect('admin/document');
@@ -201,86 +181,77 @@ class Document extends CI_Controller {
         }
     }
 
-    //edits
-    public function details($documentId = 0) {
+    public function details($track = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            $userType = $this->userType;
+            if ($userType == 'EMP' || $userType == 'ADMIN' || $userType == 'SEC') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC') {
-                    $this->error(403);
-                } else {
-                    $documentId = (int) $documentId;
-                    $this->load->library("RDDocumentFactory");
-
-                    if ($this->userType == 'ARD') {
-                        $this->ardDetails($documentId);
+                $track = (int) $track;
+                $this->load->library("TrackFactory");
+                $document = $this->trackfactory->getUserDocument($track);
+                if ($track > 0 && $document) {
+                    $status = $this->status($document->getStatus());
+                    if ($userType == 'RD') {
+                        $this->rdDetails($document, $status);
                     } else {
-                        $this->rdDetails($documentId);
+                        $this->ardDetails($document, $status);
                     }
+                } else {
+                    $this->error(403);
                 }
             }
         } else {
             redirect('login', 'refresh');
         }
     }
+    
+    private function rdDetails($document, $status) {
+        $this->load->library("UserFactory");
 
-    private function ardDetails($documentId) {
-        $documents = $this->rddocumentfactory->getRDDocument($documentId);
-        if ($documentId > 0 && $documents) {
-            $status = $this->status($documents->getStatus());
-
-            $this->load->library("UserFactory");
-            $division = $documents->getDivision();
-
-            $usersByDivision = '';
-            if ($division == 'TSSD') {
-                $usersByDivision = $this->userfactory->getUserByDivision('TSSD');
-            } else if ($division == 'TSD') {
-                $usersByDivision = $this->userfactory->getUserByDivision('TSD');
-            } else if ($division == 'FASD') {
-                $usersByDivision = $this->userfactory->getUserByDivision('FASD');
-            }
-
-            $data = array(
-                "documents" => $documents,
-                "title" => 'Document Details',
-                "header" => 'Document Details',
-                "userType" => $this->userType,
-                "users" => $usersByDivision,
-                "username" => $this->username,
-				"status" => $status
-            );
-            $this->load->admin_template('ard_view_document', $data);
-        } else {
-            $this->error(404);
-        }
+        $data = array(
+            "document" => $document,
+            "title" => 'Document Details',
+            "header" => 'Document Details',
+            "userType" => $this->userType,
+            "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
+            "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
+            "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
+            "usersORD" => $this->userfactory->getUserByDivision('ORD'),
+            "username" => $this->username,
+            "status" => $status
+        );
+        //$this->view('admin/templates/header');
+        //$this->view('admin/rd_view_document', $data);
+        //$this->view('admin/templates/footer');
+        $this->load->admin_template('rd_view_document', $data);
+        //echo "stupid";
     }
 
-    private function rdDetails($documentId) {
-        $documents = $this->rddocumentfactory->getRDDocument($documentId);
-        if ($documentId > 0 && $documents) {
-            $this->rddocumentfactory->updateReceived($documentId);
-		
-			$status = $this->status($documents->getStatus());
-            $this->load->library("UserFactory");
-			
-            $data = array(
-                "documents" => $documents,
-                "title" => 'Document Details',
-                "header" =>  'Document Details',
-                "userType" => $this->userType,
-                "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
-                "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
-                "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
-                "username" => $this->username,
-				"status" => $status
-            );
-            $this->load->admin_template('rd_view_document', $data);
-        } else {
-            $this->error(404);
+    private function ardDetails($document, $status) {
+        $this->load->library("UserFactory");
+        $division = $document->getDivision();
+
+        $usersByDivision = '';
+        if ($division == 'TSSD') {
+            $usersByDivision = $this->userfactory->getUserByDivision('TSSD');
+        } else if ($division == 'TSD') {
+            $usersByDivision = $this->userfactory->getUserByDivision('TSD');
+        } else if ($division == 'FASD') {
+            $usersByDivision = $this->userfactory->getUserByDivision('FASD');
         }
+
+        $data = array(
+            "documents" => $document,
+            "title" => 'Document Details',
+            "header" => 'Document Details',
+            "userType" => $this->userType,
+            "users" => $usersByDivision,
+            "username" => $this->username,
+            "status" => $status
+        );
+        $this->load->admin_template('ard_view_document', $data);
     }
 
     private function status($status) {
@@ -420,7 +391,7 @@ class Document extends CI_Controller {
             if (isset($_POST['document'])) {
                 $this->load->library("DocumentFactory");
                 $document = $this->documentfactory->getDocument($_POST['document']);
-                
+
                 $path = $document->getAttachment();
                 $name = date('mdYHis');
                 $this->_push_file($path, $name);
@@ -444,7 +415,7 @@ class Document extends CI_Controller {
             $this->load->helper('file');
 
             $mime = get_mime_by_extension($path);
-            
+
             // Build the headers to push out the file properly.
             header('Pragma: public');     // required
             header('Expires: 0');         // no cache
@@ -461,35 +432,35 @@ class Document extends CI_Controller {
         }
     }
 
-	public function edit($id = 0) {
+    public function edit($id = 0) {
         $this->checkLogin();
         if ($this->login) {
             if ($this->userType != 'SEC') {
                 $this->error(403);
             } else {
-				$id = (int) $id;
-				$this->load->library("DocumentFactory");
-				$document = $this->documentfactory->getDocument($id);
-				if ($document && $id > 0) {
-					$data = array(
-						"document" => $document,
-						"title" => $this->title,
-						"header" => 'Edit Document',
-						"userType" => $this->userType,
-						"username" => $this->username
-					);
-					$this->load->admin_template('edit_document', $data);
-				} else {
-					$this->error(404);
-				}
+                $id = (int) $id;
+                $this->load->library("DocumentFactory");
+                $document = $this->documentfactory->getDocument($id);
+                if ($document && $id > 0) {
+                    $data = array(
+                        "document" => $document,
+                        "title" => $this->title,
+                        "header" => 'Edit Document',
+                        "userType" => $this->userType,
+                        "username" => $this->username
+                    );
+                    $this->load->admin_template('edit_document', $data);
+                } else {
+                    $this->error(404);
+                }
             }
         } else {
             redirect('login', 'refresh');
         }
     }
-	
-	public function update($id = 0){
-		$this->checkLogin();
+
+    public function update($id = 0) {
+        $this->checkLogin();
         if ($this->login) {
             if ($this->userType != 'SEC') {
                 $this->error(403);
@@ -518,25 +489,26 @@ class Document extends CI_Controller {
                 $this->load->library("DocumentFactory");
 
                 $subject = $this->cleanString($_POST['subject']);
-				$description = $this->cleanString($_POST['description']);
+                $description = $this->cleanString($_POST['description']);
                 $from = $this->cleanString($_POST['from']);
                 $refNo = $this->cleanString($_POST['referenceNumber']);
-				$status = $this->cleanString($_POST['status']);
-					
+                $status = $this->cleanString($_POST['status']);
+
                 $due = $this->cleanString($_POST['dueDate']);
-				$received = $this->cleanString($_POST['dateReceived']);
-					
-				$dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
-				$dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
+                $received = $this->cleanString($_POST['dateReceived']);
+
+                $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+                $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     redirect('admin/document');
                 } else {
                     echo "Failed!";
                 }
-			}
-		}else {
+            }
+        } else {
             redirect('login', 'refresh');
         }
-	}
+    }
+
 }

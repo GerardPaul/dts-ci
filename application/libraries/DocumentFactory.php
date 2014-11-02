@@ -45,8 +45,8 @@ class DocumentFactory {
 
     public function ajaxGetDocument($get) {
         $sql = "SELECT * FROM document";
-        if($get!=='All'){
-            $sql = "SELECT * FROM document WHERE status = '$get'";
+        if ($get !== 'All') {
+            $sql .= " WHERE status = '$get'";
         }
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
@@ -74,10 +74,10 @@ class DocumentFactory {
 
         return $document->commit();
     }
-	
-	public function updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
+
+    public function updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
         $document = new Document_Model();
-		$document->setId($id);
+        $document->setId($id);
         $document->setSubject($subject);
         $document->setDescription($description);
         $document->setFrom($from);
@@ -108,8 +108,8 @@ class DocumentFactory {
         $document->setReferenceNumber($row->referenceNumber);
         $document->setDueDate($row->dueDate);
         $document->setDeadline($row->deadline);
-		$document->setDue15Days($row->due15Days);
-		$document->setDateReceived($row->dateReceived);
+        $document->setDue15Days($row->due15Days);
+        $document->setDateReceived($row->dateReceived);
 
         return $document;
     }
