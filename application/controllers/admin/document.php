@@ -193,6 +193,8 @@ class Document extends CI_Controller {
                 $this->load->library("TrackFactory");
                 $document = $this->trackfactory->getUserDocument($track);
                 if ($track > 0 && $document) {
+					$this->receive($this->userId, $track);
+					
                     $status = $this->status($document->getStatus());
                     if ($userType == 'RD') {
                         $this->rdDetails($document, $status);
@@ -210,7 +212,9 @@ class Document extends CI_Controller {
     
     private function rdDetails($document, $status) {
         $this->load->library("UserFactory");
-
+		
+		$users = $this->trackfactory->getCountUserDocuments($document->getDocument());
+		
         $data = array(
             "document" => $document,
             "title" => 'Document Details',
@@ -222,13 +226,10 @@ class Document extends CI_Controller {
             "usersORD" => $this->userfactory->getUserByDivision('ORD'),
             "username" => $this->username,
             "status" => $status,
-            "load" => 'details'
+			"users" => $users,
+            "load" => 'rddetails'
         );
-        //$this->view('admin/templates/header');
-        //$this->view('admin/rd_view_document', $data);
-        //$this->view('admin/templates/footer');
         $this->load->admin_template('rd_view_document', $data);
-        //echo "stupid";
     }
 
     private function ardDetails($document, $status) {
@@ -267,27 +268,12 @@ class Document extends CI_Controller {
         }
     }
 
-    public function receive($documentId = 0) {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'EMP') {
-                $this->error(403);
-            } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'ARD') {
-                    $this->error(403);
-                } else {
-                    $documentId = (int) $documentId;
-                    $this->load->library("RDDocumentFactory");
-                    if ($this->rddocumentfactory->updateReceived($documentId)) {
-                        redirect('admin/document/details/' . $documentId);
-                    } else {
-                        echo "Failed!";
-                    }
-                }
-            }
-        } else {
-            redirect('login', 'refresh');
+    private function receive($user, $track) {
+        $this->load->library("TrackFactory");
+        if ($this->trackfactory->updateReceived($user, $track)) {
+            return true;
         }
+		return false;
     }
 
     public function ardReceive($documentId = 0) {
@@ -313,17 +299,18 @@ class Document extends CI_Controller {
         }
     }
 
-    public function statusChange($documentId = 0) {
+    public function statusChange($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP' || $this->userType == 'ADMIN') {
+            if ($this->userType != 'RD') {
                 $this->error(403);
             } else {
-                $documentId = (int) $documentId;
+                $document = (int) $document;
                 $status = $this->cleanString($_POST['status']);
-                $this->load->library("RDDocumentFactory");
-                if ($this->rddocumentfactory->updateStatus($documentId, $status)) {
-                    redirect('admin/document/details/' . $documentId);
+				$track = $this->cleanString($_POST['trackId']);
+                $this->load->library("TrackFactory");
+                if ($this->trackfactory->updateStatus($document, $status)) {
+                    redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
                 }

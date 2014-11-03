@@ -318,3 +318,7 @@ body{
     font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
     content: "\e114";    /* adjust as needed, taken from bootstrap.css */
 }
+table thead{
+	background-color: #3071A9;
+	color: #fff;
+}

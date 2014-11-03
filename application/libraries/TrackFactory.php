@@ -24,9 +24,15 @@ class TrackFactory {
         }
         return false;
     }
+	public function updateStatus($id,$status) {
+        $sql = "UPDATE document SET status = '$status' WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
     
     public function ajaxGetDocument($get, $user) {
-        $sql = "SELECT t.id, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived
+        $sql = "SELECT t.id, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received
                 FROM document d, track t 
                 WHERE t.document = d.id AND t.user = '$user'";
         if ($get !== 'All') {
@@ -43,6 +49,13 @@ class TrackFactory {
         return false;
     }
 
+	public function getCountUserDocuments($document){
+		$sql = "SELECT COUNT(*) FROM track WHERE document = $document";
+		$query = $this->_ci->db->query($sql);
+		
+		return $query->num_rows();
+	}
+	
     public function createObjectFromData($row) {
         $track = new Track_Model();
 
@@ -64,5 +77,13 @@ class TrackFactory {
         $track->setReceived($row->received);
 
         return $track;
+    }
+	
+	public function updateReceived($user, $track) {
+        $date = date('Y-m-d');
+        $sql = "UPDATE track SET received = '$date' WHERE id = $track AND user = $user";
+        if ($this->_ci->db->query($sql))
+            return true;
+        return false;
     }
 }

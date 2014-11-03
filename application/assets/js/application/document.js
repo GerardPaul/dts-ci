@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('#dueDate').datepicker();
     $('#dateReceived').datepicker();
+	$('#deadline').datepicker();
     $('#attachment').bootstrapFileInput();
 
     function clearDocumentForm() {
@@ -196,8 +197,25 @@ $(document).ready(function() {
     var load = $('#load').val();
     if(load === 'documents'){
         loadDocuments('All');
-    }
+    }else if(load === 'rddetails'){
+		loadRDButtons();
+	}
 });
+
+function loadRDButtons(){
+	var users = $('#getUserCount').val();
+	
+}
+
+function moveItem(){
+    var selected = $('.possible option:selected');
+    selected.appendTo('.wishlist');
+}
+
+function removeItem(){
+    var selected = $('.wishlist option:selected');
+    selected.appendTo('.possible');
+}
 
 function loadDocuments(change) {
     $('#documentsTable').dataTable().fnClearTable();
@@ -209,6 +227,8 @@ function loadDocuments(change) {
         var result = JSON.parse(response);
 
         $.each(result, function(i, field) {
+			var received = field['received'];
+			
             var dateReceived = format_mysqldate(field['dateReceived']);
             var deadline = field['deadline'];
             var dueDate = '';
@@ -228,8 +248,13 @@ function loadDocuments(change) {
                 links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
             }
 
-            $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+			if(received === '0000-00-00' || received === null){
+				$('#documentsTable tbody').append('<tr><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
+                    '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
+			}else{
+				$('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                     '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
+			}
         });
         $('#documentsTable').dataTable({
             "aoColumns": [
@@ -246,8 +271,9 @@ function loadDocuments(change) {
                 {"sWidth": "10%", "aTargets": [3]},
                 {"sWidth": "10%", "aTargets": [4]}
             ],
-            "order": [[2, "desc"]],
-            "bDestroy": true
+            "order": [[2, "asc"]],
+            "bDestroy": true,
+			"iDisplayLength" : 50
         });
     });
 }
