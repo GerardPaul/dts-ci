@@ -77,58 +77,6 @@ $(document).ready(function() {
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
     });
 
-    $('#empTSD').change(function() {
-        var value = $(this).val();
-        $('#empId').val(value);
-    });
-
-    $('#empTSSD').change(function() {
-        var value = $(this).val();
-        $('#empId').val(value);
-    });
-
-    $('#empFASD').change(function() {
-        var value = $(this).val();
-        $('#empId').val(value);
-    });
-
-    $('#ard').change(function() {
-        var value = $(this).val();
-        if (value === '1') {
-            $('#empTSSD').val($('#empTSSD option:first').val()); //set values back to ''
-            $('#empFASD').val($('#empFASD option:first').val()); //set values back to ''
-
-            $('#tsd_emp').removeClass('hide');
-            $('#tssd_emp').addClass('hide');
-            $('#fasd_emp').addClass('hide');
-
-            $('#ardId').val($('#ardTSD').val());
-            $('#empId').val($('#empTSD').val());
-        }
-        else if (value === '2') {
-            $('#empTSD').val($('#empTSD option:first').val()); //set values back to ''
-            $('#empFASD').val($('#empFASD option:first').val()); //set values back to ''
-
-            $('#tssd_emp').removeClass('hide');
-            $('#tsd_emp').addClass('hide');
-            $('#fasd_emp').addClass('hide');
-
-            $('#ardId').val($('#ardTSSD').val());
-            $('#empId').val($('#empTSSD').val());
-        }
-        else {
-            $('#empTSSD').val($('#empTSSD option:first').val()); //set values back to ''
-            $('#empTSD').val($('#empTSD option:first').val()); //set values back to ''
-
-            $('#fasd_emp').removeClass('hide');
-            $('#tsd_emp').addClass('hide');
-            $('#tssd_emp').addClass('hide');
-
-            $('#ardId').val($('#ardFASD').val());
-            $('#empId').val($('#empFASD').val());
-        }
-    });
-
     $('#changeStatusForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -142,6 +90,49 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'Select status!'
+                    }
+                }
+            }
+        }
+    });
+    
+    $('#assignForm').bootstrapValidator({
+        container: 'tooltip',
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            'selectedList[]': {
+                validators: {
+                    choice: {
+                        min: 1,
+                        max: 10,
+                        message: 'Please select at least 1 user to assign to!'
+                    }
+                }
+            },
+            birthday: {
+                validators: {
+                    deadline: {
+                        format: 'MM/DD/YYYY',
+                        message: 'The value is not a valid date!'
+                    }
+                }
+            },
+            status: {
+                validators: {
+                    notEmpty: {
+                        message: 'Select status!'
+                    }
+                }
+            },
+            note: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in note!'
                     }
                 }
             }
@@ -203,18 +194,17 @@ $(document).ready(function() {
 });
 
 function loadRDButtons(){
-	var users = $('#getUserCount').val();
-	
+    var users = $('#getUserCount').val();
 }
 
 function moveItem(){
-    var selected = $('.possible option:selected');
-    selected.appendTo('.wishlist');
+    var selected = $('#list option:selected');
+    selected.appendTo('#selectedList');
 }
 
 function removeItem(){
-    var selected = $('.wishlist option:selected');
-    selected.appendTo('.possible');
+    var selected = $('#selectedList option:selected');
+    selected.appendTo('#list');
 }
 
 function loadDocuments(change) {

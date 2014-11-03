@@ -38,6 +38,22 @@ class UserFactory {
         return false;
     }
 
+    public function getAllUsers() {
+        $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
+                    d.id AS 'divisionID', d.name, d.description
+                FROM user u, division d 
+                WHERE u.division = d.id AND u.status = '1' ORDER BY d.id ASC";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            $users = array();
+            foreach ($query->result() as $row) {
+                $users[] = $this->createObjectFromData($row);
+            }
+            return $users;
+        }
+        return false;
+    }
+
     public function getUser($id = 0) {
         if ($id > 0) {
             $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
@@ -105,7 +121,7 @@ class UserFactory {
 
         return $user->commit();
     }
-    
+
     public function updateProfile($userId, $firstname, $lastname, $email, $username, $password) {
         $sql = "UPDATE user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username' WHERE id = ?";
         if ($password != 'password') {

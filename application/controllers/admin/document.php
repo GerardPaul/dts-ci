@@ -193,8 +193,8 @@ class Document extends CI_Controller {
                 $this->load->library("TrackFactory");
                 $document = $this->trackfactory->getUserDocument($track);
                 if ($track > 0 && $document) {
-					$this->receive($this->userId, $track);
-					
+                    $this->receive($this->userId, $track);
+
                     $status = $this->status($document->getStatus());
                     if ($userType == 'RD') {
                         $this->rdDetails($document, $status);
@@ -209,24 +209,21 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-    
+
     private function rdDetails($document, $status) {
         $this->load->library("UserFactory");
-		
-		$users = $this->trackfactory->getCountUserDocuments($document->getDocument());
-		
+
+        $users = $this->trackfactory->getCountUserDocuments($document->getDocument());
+
         $data = array(
             "document" => $document,
             "title" => 'Document Details',
             "header" => 'Document Details',
             "userType" => $this->userType,
-            "usersTSD" => $this->userfactory->getUserByDivision('TSD'),
-            "usersTSSD" => $this->userfactory->getUserByDivision('TSSD'),
-            "usersFASD" => $this->userfactory->getUserByDivision('FASD'),
-            "usersORD" => $this->userfactory->getUserByDivision('ORD'),
+            "allUsers" => $this->userfactory->getAllUsers(),
             "username" => $this->username,
             "status" => $status,
-			"users" => $users,
+            "users" => $users,
             "load" => 'rddetails'
         );
         $this->load->admin_template('rd_view_document', $data);
@@ -273,7 +270,7 @@ class Document extends CI_Controller {
         if ($this->trackfactory->updateReceived($user, $track)) {
             return true;
         }
-		return false;
+        return false;
     }
 
     public function ardReceive($documentId = 0) {
@@ -307,7 +304,7 @@ class Document extends CI_Controller {
             } else {
                 $document = (int) $document;
                 $status = $this->cleanString($_POST['status']);
-				$track = $this->cleanString($_POST['trackId']);
+                $track = $this->cleanString($_POST['trackId']);
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->updateStatus($document, $status)) {
                     redirect('admin/document/details/' . $track);

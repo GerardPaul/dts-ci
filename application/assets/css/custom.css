@@ -322,3 +322,13 @@ table thead{
 	background-color: #3071A9;
 	color: #fff;
 }
+.selectList{
+    width: 100%;
+    height: 200px !important;
+}
+#move{
+    text-align: center;
+}
+#move button{
+    display: block;
+}
