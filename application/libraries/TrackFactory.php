@@ -86,4 +86,15 @@ class TrackFactory {
             return true;
         return false;
     }
+	
+	public function forward($document, $notes, $action, $deadline, $users) {
+		
+        $sql = "UPDATE rdtrack SET ard = '$ardId', emp = '$empId', notes = '$notes', action = '$action' WHERE id = ?";
+        if ($empId == '')
+            $sql = "UPDATE rdtrack SET ard = '$ardId', notes = '$notes', action = '$action' WHERE id = ?";
+
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
+    }
 }

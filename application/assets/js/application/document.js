@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    $('#dueDate').datepicker();
-    $('#dateReceived').datepicker();
-	$('#deadline').datepicker();
+    $('#dueDate').datetimepicker({ pickTime: false });
+    $('#dateReceived').datetimepicker({ pickTime: false });
+	$('#deadline').datetimepicker({ pickTime: false });
     $('#attachment').bootstrapFileInput();
 
     function clearDocumentForm() {
@@ -58,23 +58,38 @@ $(document).ready(function() {
                         message: 'The selected file is not valid!'
                     }
                 }
+            },
+			dueDate: {
+				validators: {
+					notEmpty: {
+                        message: 'Please set due date for document!'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY'
+                    }
+				}
+            },
+			dateReceived: {
+				validators: {
+					notEmpty: {
+                        message: 'Please set receive date for document!'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY'
+                    }
+				}
             }
-            /*
-             ,dueDate: {
-             validators: {
-             date: {
-             format: 'MM/DD/YYYY h:m A',
-             message: 'The value is not a valid date'
-             }
-             }
-             }
-             */
         }
     });
 
     $('#dueDate').on('dp.change dp.show', function(e) {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
+    });
+	
+	$('#dateReceived').on('dp.change dp.show', function(e) {
+        // Validate the date when user change it
+        $('#addDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
     });
 
     $('#changeStatusForm').bootstrapValidator({
@@ -105,22 +120,15 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            'selectedList[]': {
-                validators: {
-                    choice: {
-                        min: 1,
-                        max: 10,
-                        message: 'Please select at least 1 user to assign to!'
+            deadline: {
+				validators: {
+					notEmpty: {
+                        message: 'Please set deadline for document!'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY'
                     }
-                }
-            },
-            birthday: {
-                validators: {
-                    deadline: {
-                        format: 'MM/DD/YYYY',
-                        message: 'The value is not a valid date!'
-                    }
-                }
+				}
             },
             status: {
                 validators: {
@@ -137,6 +145,11 @@ $(document).ready(function() {
                 }
             }
         }
+    });
+	
+	$('#deadline').on('dp.change dp.show', function(e) {
+        // Validate the date when user change it
+        $('#assignForm').bootstrapValidator('revalidateField', 'deadline');
     });
 
     $('#toggleChat').click(function() {
@@ -185,6 +198,7 @@ $(document).ready(function() {
     var status = $('#currentStatus').val();
     $('#documentStatus').val(status);
     
+	//load function depending on need on page
     var load = $('#load').val();
     if(load === 'documents'){
         loadDocuments('All');
@@ -200,11 +214,18 @@ function loadRDButtons(){
 function moveItem(){
     var selected = $('#list option:selected');
     selected.appendTo('#selectedList');
+	
+	$('#assign').removeClass('disabled');
 }
 
 function removeItem(){
     var selected = $('#selectedList option:selected');
     selected.appendTo('#list');
+	
+	var num = $('#selectedList option').length;
+	if(num === 0){
+		$('#assign').addClass('disabled');
+	}
 }
 
 function loadDocuments(change) {
@@ -266,4 +287,13 @@ function loadDocuments(change) {
 			"iDisplayLength" : 50
         });
     });
+}
+
+function checkUsers(){
+	var num = $('#selectedList option').length;
+	if(num >= 1){
+		return true;
+	}else{
+		$('#assign').addClass('disabled');
+	}
 }

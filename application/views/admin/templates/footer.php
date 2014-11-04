@@ -11,10 +11,10 @@
         <script type="text/javascript">
             var base_url = "<?php echo base_url(); ?>";
         </script>
-	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrapValidator.min.js"); ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap-datetimepicker.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery.dataTables.min.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap-datepicker.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap.file-input.js"); ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrapValidator.min.js"); ?>"></script>
 	
         <?php $javascript = $this->router->fetch_class(); ?>
 	<script type="text/javascript" src="<?php echo base_url()."application/assets/js/application/".$javascript.".js"; ?>"></script>

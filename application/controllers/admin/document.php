@@ -316,6 +316,36 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
+	
+	public function assign($document = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+			$userType = $this->userType;
+            if ($userType == 'EMP' || $userType == 'ADMIN' || $userType == 'SEC') {
+                $this->error(403);
+            } else {
+                $document = (int) $document;
+                $notes = $this->cleanString($_POST['note']);
+                $action = $this->cleanString($_POST['action']);
+                $deadline = $this->cleanString($_POST['deadline']);
+				$users = array();
+				foreach($_POST['selectedList'] as $user){
+					$users[] = $user;
+				}
+				
+				$track = $this->cleanString($_POST['trackId']);
+				
+                $this->load->library("TrackFactory");
+                if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users)) {
+                    redirect('admin/document/details/' . $track);
+                } else {
+                    echo "Failed!";
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 
     public function forward($id = 0) {
         $this->checkLogin();
