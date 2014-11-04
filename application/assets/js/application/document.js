@@ -130,10 +130,10 @@ $(document).ready(function() {
                     }
 				}
             },
-            status: {
+            action: {
                 validators: {
                     notEmpty: {
-                        message: 'Select status!'
+                        message: 'Select action!'
                     }
                 }
             },
@@ -292,8 +292,10 @@ function loadDocuments(change) {
 function checkUsers(){
 	var num = $('#selectedList option').length;
 	if(num >= 1){
+		$('#selectedList option').prop('selected', true);
 		return true;
 	}else{
 		$('#assign').addClass('disabled');
+		return false;
 	}
 }

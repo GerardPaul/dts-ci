@@ -159,7 +159,7 @@ HTML;
                                 <button class="btn btn-xs btn-primary" type="button" onclick="removeItem();"><i class="glyphicon glyphicon-chevron-left"></i></button>
                             </div>
                             <div class="col-xs-5">
-                                <select name="selectedList" id="selectedList" class="selectList form-control" multiple="multiple">
+                                <select name="selectedList[]" id="selectedList" class="selectList form-control" multiple="multiple">
                                 </select>
                             </div>
                         </div>
@@ -178,7 +178,7 @@ HTML;
                     <div class="form-group">
                         <label class="col-md-3 control-label">Action</label>
                         <div class="col-md-8">
-                            <select class="form-control" name="status" id="status">
+                            <select class="form-control" name="action" id="action">
                                 <option value="">- Select -</option>
                                 <option value="Handle">Handle</option>
                                 <option value="Comment">Comment</option>

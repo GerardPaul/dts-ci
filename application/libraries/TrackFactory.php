@@ -88,13 +88,24 @@ class TrackFactory {
     }
 	
 	public function forward($document, $notes, $action, $deadline, $users) {
-		
-        $sql = "UPDATE rdtrack SET ard = '$ardId', emp = '$empId', notes = '$notes', action = '$action' WHERE id = ?";
-        if ($empId == '')
-            $sql = "UPDATE rdtrack SET ard = '$ardId', notes = '$notes', action = '$action' WHERE id = ?";
-
-        if ($this->_ci->db->query($sql, array($id)))
-            return true;
-        return false;
+		$sql = "UPDATE document SET action = '$action', deadline = '$deadline' WHERE id = ?";
+		if ($this->_ci->db->query($sql, array($document))){
+			foreach($users as $user){
+				if($this->addUserToTrack($user, $document))
+					echo "Added" . $user . '\n';
+				else
+					echo "Failed" . $user . '\n';
+			}
+			return true;
+		}
+		return false;
     }
+	
+	private function addUserToTrack($user, $document){
+		$track = new Track_Model();
+		$track->setDocument($document);
+        $track->setUser($user);
+		
+		return $track->commit();
+	}
 }

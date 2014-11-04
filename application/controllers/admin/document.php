@@ -327,7 +327,10 @@ class Document extends CI_Controller {
                 $document = (int) $document;
                 $notes = $this->cleanString($_POST['note']);
                 $action = $this->cleanString($_POST['action']);
+				
                 $deadline = $this->cleanString($_POST['deadline']);
+				$deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
+				
 				$users = array();
 				foreach($_POST['selectedList'] as $user){
 					$users[] = $user;

@@ -118,7 +118,6 @@ class Track_Model extends CI_Model{
 		$data = array(
 			'document' => $this->_document,
 			'user' => $this->_user,
-			'received' => $this->_received,
 		);
 
 		if ($this->_id > 0) {
