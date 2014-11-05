@@ -91,10 +91,21 @@ class TrackFactory {
 		$sql = "UPDATE document SET action = '$action', deadline = '$deadline' WHERE id = ?";
 		if ($this->_ci->db->query($sql, array($document))){
 			foreach($users as $user){
+				$ard = $this->getARD($user);
+				
+				if($ard){
+					if(!$this->checkARD($ard,$document)){
+						if($this->addUserToTrack($ard, $document))
+							echo "{Added ARD " . $ard . '}';
+						else
+							echo "{Failed ARD " . $ard . '}';
+					}
+				}
+				
 				if($this->addUserToTrack($user, $document))
-					echo "Added" . $user . '\n';
+					echo "{Added " . $user . '}';
 				else
-					echo "Failed" . $user . '\n';
+					echo "{Failed " . $user . '}';
 			}
 			return true;
 		}
@@ -107,5 +118,36 @@ class TrackFactory {
         $track->setUser($user);
 		
 		return $track->commit();
+	}
+	
+	private function checkARD($user, $document){
+		$sql = "SELECT * FROM track WHERE user = '$user' AND document = '$document'";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	private function getARD($user){
+		$sql = "SELECT userType, division FROM user WHERE id = ?";
+		$query = $this->_ci->db->query($sql, array($user));
+        if ($query->num_rows() > 0) {
+            $userType = $query->row('userType');
+			$division = $query->row('division');
+			if($userType != 'ARD'){
+				$sql1 = "SELECT id FROM user WHERE division = '$division' AND userType = 'ARD'";
+				$query1 = $this->_ci->db->query($sql1);
+				if ($query1->num_rows() > 0) {
+					return $query1->row('id');
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+        }else{
+			return false;
+		}
 	}
 }
