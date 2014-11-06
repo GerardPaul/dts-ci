@@ -111,7 +111,21 @@ HTML;
                 </div>
                 <div id="chatContents">
                     <div class="chatBody" id="chatBody">
-
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span>Name</span>
+                                <div class="message other">
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <p>Message</p>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <time>Time</time>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="chatFooter">
                         <input type="hidden" name="document" id="document" value="<?php echo $document->getDocument(); ?>">
