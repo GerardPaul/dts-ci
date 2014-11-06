@@ -100,9 +100,9 @@ HTML;
 		?>
         <div class="chatBox">
             <div class="chatContainer">
-                <div class="chatHeading">
+                <div class="chatHeading toggleChat">
                     <div class="pull-right">
-                        <span id="toggleChat">
+                        <span>
                             <i class="glyphicon glyphicon-chevron-down" id="open"></i>
                             <i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
                         </span>

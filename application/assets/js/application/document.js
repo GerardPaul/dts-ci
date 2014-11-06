@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    $('#dueDate').datetimepicker({ pickTime: false });
-    $('#dateReceived').datetimepicker({ pickTime: false });
-	$('#deadline').datetimepicker({ pickTime: false });
+    $('#dueDate').datetimepicker({pickTime: false});
+    $('#dateReceived').datetimepicker({pickTime: false});
+    $('#deadline').datetimepicker({pickTime: false});
     $('#attachment').bootstrapFileInput();
 
     function clearDocumentForm() {
@@ -59,25 +59,25 @@ $(document).ready(function() {
                     }
                 }
             },
-			dueDate: {
-				validators: {
-					notEmpty: {
+            dueDate: {
+                validators: {
+                    notEmpty: {
                         message: 'Please set due date for document!'
                     },
                     date: {
                         format: 'MM/DD/YYYY'
                     }
-				}
+                }
             },
-			dateReceived: {
-				validators: {
-					notEmpty: {
+            dateReceived: {
+                validators: {
+                    notEmpty: {
                         message: 'Please set receive date for document!'
                     },
                     date: {
                         format: 'MM/DD/YYYY'
                     }
-				}
+                }
             }
         }
     });
@@ -86,8 +86,8 @@ $(document).ready(function() {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
     });
-	
-	$('#dateReceived').on('dp.change dp.show', function(e) {
+
+    $('#dateReceived').on('dp.change dp.show', function(e) {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
     });
@@ -110,7 +110,7 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     $('#assignForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -121,14 +121,14 @@ $(document).ready(function() {
         },
         fields: {
             deadline: {
-				validators: {
-					notEmpty: {
+                validators: {
+                    notEmpty: {
                         message: 'Please set deadline for document!'
                     },
                     date: {
                         format: 'MM/DD/YYYY'
                     }
-				}
+                }
             },
             action: {
                 validators: {
@@ -146,23 +146,23 @@ $(document).ready(function() {
             }
         }
     });
-	
-	$('#deadline').on('dp.change dp.show', function(e) {
+
+    $('#deadline').on('dp.change dp.show', function(e) {
         // Validate the date when user change it
         $('#assignForm').bootstrapValidator('revalidateField', 'deadline');
     });
 
-    $('#toggleChat').click(function() {
-        $('#toggleChat i').toggle();
+    $('.toggleChat').click(function() {
+        $('.toggleChat i').toggle();
         $('#chatContents').toggle();
 
         if ($('.chatBox').height() === 400) {
             $('.chatBox').height(35);
-        }else if($('.chatBox').height() === 35){
+        } else if ($('.chatBox').height() === 35) {
             $('.chatBox').height(400);
-        }else if($('.chatBox').height() === 300){
+        } else if ($('.chatBox').height() === 300) {
             $('.chatBox').height(34);
-        }else if($('.chatBox').height() === 34){
+        } else if ($('.chatBox').height() === 34) {
             $('.chatBox').height(300);
         }
     });
@@ -196,39 +196,39 @@ $(document).ready(function() {
 
         loadDocuments(change);
     });
-    
+
     // set status for dropdown menu in edit document
     var status = $('#currentStatus').val();
     $('#documentStatus').val(status);
-    
-	//load function depending on need on page
+
+    //load function depending on need on page
     var load = $('#load').val();
-    if(load === 'documents'){
+    if (load === 'documents') {
         loadDocuments('All');
-    }else if(load === 'rddetails'){
-		loadRDButtons();
-	}
+    } else if (load === 'rddetails') {
+        loadRDButtons();
+    }
 });
 
-function loadRDButtons(){
+function loadRDButtons() {
     var users = $('#getUserCount').val();
 }
 
-function moveItem(){
+function moveItem() {
     var selected = $('#list option:selected');
     selected.appendTo('#selectedList');
-	
-	$('#assign').removeClass('disabled');
+
+    $('#assign').removeClass('disabled');
 }
 
-function removeItem(){
+function removeItem() {
     var selected = $('#selectedList option:selected');
     selected.appendTo('#list');
-	
-	var num = $('#selectedList option').length;
-	if(num === 0){
-		$('#assign').addClass('disabled');
-	}
+
+    var num = $('#selectedList option').length;
+    if (num === 0) {
+        $('#assign').addClass('disabled');
+    }
 }
 
 function loadDocuments(change) {
@@ -241,8 +241,8 @@ function loadDocuments(change) {
         var result = JSON.parse(response);
 
         $.each(result, function(i, field) {
-			var received = field['received'];
-			
+            var received = field['received'];
+
             var dateReceived = format_mysqldate(field['dateReceived']);
             var deadline = field['deadline'];
             var dueDate = '';
@@ -262,13 +262,13 @@ function loadDocuments(change) {
                 links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
             }
 
-			if(received === '0000-00-00' || received === null){
-				$('#documentsTable tbody').append('<tr><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
-                    '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
-			}else{
-				$('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
-                    '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
-			}
+            if (received === '0000-00-00' || received === null) {
+                $('#documentsTable tbody').append('<tr><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
+                        '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
+            } else {
+                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+                        '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
+            }
         });
         $('#documentsTable').dataTable({
             "aoColumns": [
@@ -287,18 +287,18 @@ function loadDocuments(change) {
             ],
             "order": [[2, "asc"]],
             "bDestroy": true,
-			"iDisplayLength" : 50
+            "iDisplayLength": 50
         });
     });
 }
 
-function checkUsers(){
-	var num = $('#selectedList option').length;
-	if(num >= 1){
-		$('#selectedList option').prop('selected', true);
-		return true;
-	}else{
-		$('#assign').addClass('disabled');
-		return false;
-	}
+function checkUsers() {
+    var num = $('#selectedList option').length;
+    if (num >= 1) {
+        $('#selectedList option').prop('selected', true);
+        return true;
+    } else {
+        $('#assign').addClass('disabled');
+        return false;
+    }
 }

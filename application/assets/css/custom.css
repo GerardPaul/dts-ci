@@ -99,11 +99,49 @@ body{
 .status{
     cursor: pointer;
 }
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px){
+    .chatBox {
+        width:300px; /* Chatbox width */
+        height: 300px;
+    }
+    .chatContainer{
+        height:300px;
+    }
+    .chatBody {
+        height: 210px;
+    }
+}
+@media (max-width: 900px) {
+    .chatBox {
+        width: 300px; /* Chatbox width */
+        height: 300px;
+    }
+    .chatContainer{
+        height:300px;
+    }
+    .chatBody {
+        height: 210px;
+    }
+}
+@media (min-width: 900px)  {
+    .chatBox {
+        width: 850px; /* Chatbox width */
+        height: 400px;
+    }
+    .chatContainer{
+        height:400px;
+    }
+    .chatBody {
+        height: 310px;
+    }
+}
 .chatBox {
     font-size: 12px;
     color:#333;
-    width:850px; /* Chatbox width */
-    height: 400px;
+    /*width:850px; /* Chatbox width */
+    /*height: 400px;*/
     background-color: #fff;
     position:fixed;
     right:15px;
@@ -115,7 +153,7 @@ body{
 }
 .chatContainer{
     position:relative;
-    height:400px;
+    /*height:400px;*/
 }
 .chatHeading {
     height: 35px;
@@ -135,7 +173,7 @@ body{
     font-weight: bolder;
 }
 .chatBody {
-    height: 310px;
+    /*height: 310px;*/
     background: #fff;
     padding: 15px;
     width:100%;
@@ -163,7 +201,7 @@ body{
     font-size: 10px;
     font-weight: bold;
 }
-#toggleChat{
+.toggleChat{
     cursor: pointer;
 }
 
