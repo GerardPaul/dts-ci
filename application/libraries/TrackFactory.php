@@ -50,10 +50,12 @@ class TrackFactory {
     }
 
 	public function getCountUserDocuments($document){
-		$sql = "SELECT COUNT(*) FROM track WHERE document = $document";
+		$sql = "SELECT COUNT(*) AS 'count' FROM track WHERE document = $document";
 		$query = $this->_ci->db->query($sql);
-		
-		return $query->num_rows();
+		if ($query->num_rows() > 0) {
+            return $query->row('count');
+        }
+        return false;
 	}
 	
     public function createObjectFromData($row) {

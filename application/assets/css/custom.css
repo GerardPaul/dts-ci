@@ -102,8 +102,8 @@ body{
 .chatBox {
     font-size: 12px;
     color:#333;
-    width:300px; /* Chatbox width */
-    height: 300px;
+    width:850px; /* Chatbox width */
+    height: 400px;
     background-color: #fff;
     position:fixed;
     right:15px;
@@ -115,7 +115,7 @@ body{
 }
 .chatContainer{
     position:relative;
-    height:300px;
+    height:400px;
 }
 .chatHeading {
     height: 35px;
@@ -135,7 +135,7 @@ body{
     font-weight: bolder;
 }
 .chatBody {
-    height: 210px;
+    height: 310px;
     background: #fff;
     padding: 15px;
     width:100%;

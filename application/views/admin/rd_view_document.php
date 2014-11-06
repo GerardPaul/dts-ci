@@ -90,23 +90,14 @@ HTML;
             }
             ?>
         </div>
-        <!--        <div class="col-xs-12">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <button class="btn btn-sm btn-primary" type="button">
-                                Assign To Person
-                            </button>
-                            <div class="space-10"></div>
-                            <div class="well well-sm">
-        
-                            </div>
-                        </div>
-                        <div class="col-sm-10">
-                            Chat Goes Here
-                        </div>
-                    </div>
-                </div>-->
-        <!-- 
+		<?php
+		$users = (int) $users;
+		if($users > 1) { 
+			$action = $document->getAction();
+			if($action == null){
+				$action = 'Chat';
+			}
+		?>
         <div class="chatBox">
             <div class="chatContainer">
                 <div class="chatHeading">
@@ -116,7 +107,7 @@ HTML;
                             <i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
                         </span>
                     </div>
-                    <h3 class="chatTitle">Chat</h3>
+                    <h3 class="chatTitle"><?php echo $action; ?></h3>
                 </div>
                 <div id="chatContents">
                     <div class="chatBody" id="chatBody">
@@ -129,7 +120,9 @@ HTML;
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
+		<?php
+		} ?>
     </div>
 </div>
 

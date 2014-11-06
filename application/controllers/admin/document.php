@@ -213,8 +213,6 @@ class Document extends CI_Controller {
     private function rdDetails($document, $status) {
         $this->load->library("UserFactory");
 
-        $users = $this->trackfactory->getCountUserDocuments($document->getDocument());
-
         $data = array(
             "document" => $document,
             "title" => 'Document Details',
@@ -223,7 +221,7 @@ class Document extends CI_Controller {
             "allUsers" => $this->userfactory->getAllUsers(),
             "username" => $this->username,
             "status" => $status,
-            "users" => $users,
+            "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'rddetails'
         );
         $this->load->admin_template('rd_view_document', $data);

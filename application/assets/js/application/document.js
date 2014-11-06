@@ -156,10 +156,13 @@ $(document).ready(function() {
         $('#toggleChat i').toggle();
         $('#chatContents').toggle();
 
-        if ($('.chatBox').height() === 300) {
+        if ($('.chatBox').height() === 400) {
             $('.chatBox').height(35);
-        }
-        else {
+        }else if($('.chatBox').height() === 35){
+            $('.chatBox').height(400);
+        }else if($('.chatBox').height() === 300){
+            $('.chatBox').height(34);
+        }else if($('.chatBox').height() === 34){
             $('.chatBox').height(300);
         }
     });
