@@ -97,22 +97,23 @@ class TrackFactory {
 				
 				if($ard){
 					if(!$this->checkARD($ard,$document)){
-						if($this->addUserToTrack($ard, $document))
-							echo "{Added ARD " . $ard . '}';
-						else
-							echo "{Failed ARD " . $ard . '}';
+						$this->addUserToTrack($ard, $document);
 					}
 				}
 				
-				if($this->addUserToTrack($user, $document))
-					echo "{Added " . $user . '}';
-				else
-					echo "{Failed " . $user . '}';
+				$this->addUserToTrack($user, $document);
 			}
 			$this->setStatusOnGoing($document);
 			return true;
 		}
 		return false;
+    }
+	
+	public function ardForward($document, $users) {
+		foreach($users as $user){
+			$this->addUserToTrack($user, $document);
+		}
+		return true;
     }
 	
 	private function setStatusOnGoing($document){
@@ -127,11 +128,23 @@ class TrackFactory {
 	}
 	
 	private function addUserToTrack($user, $document){
-		$track = new Track_Model();
-		$track->setDocument($document);
-        $track->setUser($user);
-		
-		return $track->commit();
+		if($this->checkUser($user,$document)==0){
+			$track = new Track_Model();
+			$track->setDocument($document);
+			$track->setUser($user);
+			
+			return $track->commit();
+		}
+	}
+	
+	private function checkUser($user, $document){
+		$sql = "SELECT COUNT(*) AS 'count' FROM track WHERE user = '$user' AND document = '$document'";
+		$query = $this->_ci->db->query($sql);
+		if ($query->num_rows() > 0) {
+            $count = (int) $query->row('count');
+			return $count;
+        }
+        return 0;
 	}
 	
 	private function checkARD($user, $document){

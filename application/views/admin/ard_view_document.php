@@ -172,7 +172,7 @@ HTML;
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="forwardLabel">Assign To Person/s Responsible</h4>
             </div>
-            <form id="assignForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/assign/<?php echo $document->getDocument(); ?>" onsubmit="return checkUsers();">
+            <form id="ardAssignForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/ardAssign/<?php echo $document->getDocument(); ?>" onsubmit="return checkUsers();">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Assign To</label>
@@ -194,40 +194,6 @@ HTML;
                                 <select name="selectedList[]" id="selectedList" class="selectList form-control" multiple="multiple">
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Deadline</label>
-                        <div class="col-md-8">
-                            <div class="input-group date">
-                                <input id="deadline" type="text" class="form-control" name="deadline" date-format="YYYY/MM/DD" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Action</label>
-                        <div class="col-md-8">
-                            <select class="form-control" name="action" id="action">
-                                <option value="">- Select -</option>
-                                <option value="Handle">Handle</option>
-                                <option value="Comment">Comment</option>
-                                <option value="Information">Information</option>
-                                <option value="Prepare Draft">Prepare Draft</option>
-                                <option value="Reply">Reply</option>
-                                <option value="Discuss with Me">Discuss w/ Me</option>
-                                <option value="Note and File">Note & File</option>
-                                <option value="Note and Return">Note & Return</option>
-                                <option value="Give Status">Give Status</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Note</label>
-                        <div class="col-md-8">
-                            <textarea class="form-control" name="note" rows="3"></textarea>
                         </div>
                     </div>
 					<input type="hidden" name="trackId" id="trackId" value="<?php echo $document->getId(); ?>">
@@ -256,7 +222,7 @@ HTML;
                             <select class="form-control" name="status" id="status">
                                 <option value="">- Select -</option>
                                 <option value="On-Going">On-Going</option>
-                                <option value="Cancelled">Cancelled</option>
+                                <option value="Compiled">Compiled</option>
                             </select>
                         </div>
                     </div>

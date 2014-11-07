@@ -316,11 +316,37 @@ class Document extends CI_Controller {
         }
     }
 	
+	public function ardAssign($document = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+			$userType = $this->userType;
+            if ($userType != 'ARD') {
+                $this->error(403);
+            } else {
+                $document = (int) $document;
+				$users = array();
+				foreach($_POST['selectedList'] as $user){
+					$users[] = $user;
+				}
+				
+				$track = $this->cleanString($_POST['trackId']);
+				
+                $this->load->library("TrackFactory");
+                if ($this->trackfactory->ardForward($document, $users)) {
+                    redirect('admin/document/details/' . $track);
+                } else {
+                    echo "Failed!";
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 	public function assign($document = 0) {
         $this->checkLogin();
         if ($this->login) {
 			$userType = $this->userType;
-            if ($userType == 'EMP' || $userType == 'ADMIN' || $userType == 'SEC') {
+            if ($userType != 'RD') {
                 $this->error(403);
             } else {
                 $document = (int) $document;
