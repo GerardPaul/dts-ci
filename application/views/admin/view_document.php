@@ -74,8 +74,7 @@ HTML;
 			<div class="alert alert-warning">There are no <strong>Documents</strong> to display.</div>
 HTML;
             }
-            ?>	
-            <hr>
+            ?>
         </div>
     </div>
 </div>

@@ -66,7 +66,7 @@ class DocumentFactory {
         $document->setFrom($from);
         $document->setDueDate($dueDate);
         $document->setAttachment($attachment);
-        $document->setStatus('On-Going');
+        //$document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
 

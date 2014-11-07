@@ -125,6 +125,31 @@ HTML;
                                     </div>
                                 </div>
                             </div>
+							<div class="col-xs-12">
+                                <div class="message self">
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <p>Message</p>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <time>Time</time>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<div class="col-xs-12">
+                                <span>Name</span>
+                                <div class="message other">
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <p>Message</p>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <time>Time</time>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="chatFooter">
@@ -245,3 +270,11 @@ HTML;
         </div>
     </div>
 </div>
+
+<?php
+$current_method = $this->router->fetch_method();
+if (isset($current_method) && $current_method == 'details' && $users > 1) {
+    ?>
+    <script type="text/javascript" src="<?php echo base_url("application/assets/js/application/chat.js"); ?>"></script>
+<?php
+}?>

@@ -193,7 +193,7 @@ class Document extends CI_Controller {
                 $this->load->library("TrackFactory");
                 $document = $this->trackfactory->getUserDocument($track);
                 if ($track > 0 && $document) {
-                    $this->receive($this->userId, $track);
+                    $this->receive($this->userId, $track);//automatically receive upon viewing document
 
                     $status = $this->status($document->getStatus());
                     if ($userType == 'RD') {
@@ -229,7 +229,7 @@ class Document extends CI_Controller {
 
     private function ardDetails($document, $status) {
         $this->load->library("UserFactory");
-        $division = $document->getDivision();
+        $division = $this->userfactory->getDivision($this->userId);
 
         $usersByDivision = '';
         if ($division == 'TSSD') {
@@ -241,14 +241,15 @@ class Document extends CI_Controller {
         }
 
         $data = array(
-            "documents" => $document,
+            "document" => $document,
             "title" => 'Document Details',
             "header" => 'Document Details',
             "userType" => $this->userType,
-            "users" => $usersByDivision,
+            "allUsers" => $usersByDivision,
             "username" => $this->username,
             "status" => $status,
-            "load" => 'details'
+			"users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
+            "load" => 'arddetails'
         );
         $this->load->admin_template('ard_view_document', $data);
     }
@@ -511,13 +512,17 @@ class Document extends CI_Controller {
                 $from = $this->cleanString($_POST['from']);
                 $refNo = $this->cleanString($_POST['referenceNumber']);
                 $status = $this->cleanString($_POST['status']);
-
+				
                 $due = $this->cleanString($_POST['dueDate']);
                 $received = $this->cleanString($_POST['dateReceived']);
 
                 $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
+				if($attachment_path == 'No File.'){
+					$attachment_path = $_POST['originalAttachment'];
+				}
+				
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     redirect('admin/document');
                 } else {

@@ -154,4 +154,12 @@ class UserFactory {
         return $user;
     }
 
+	public function getDivision($user) {
+        $sql = "SELECT d.name FROM user u, division d WHERE u.division = d.id AND u.id = ?";
+        $query = $this->_ci->db->query($sql, array($user));
+        if ($query->num_rows() > 0) {
+            return $query->row('name');
+        }
+        return false;
+    }
 }

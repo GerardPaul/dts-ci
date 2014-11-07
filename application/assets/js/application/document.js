@@ -12,6 +12,7 @@ $(document).ready(function() {
         clearDocumentForm();
     });
 
+	// Validation for adding document
     $('#addDocumentForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -90,6 +91,87 @@ $(document).ready(function() {
     $('#dateReceived').on('dp.change dp.show', function(e) {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
+    });
+	
+	// Validation for editing document
+    $('#editDocumentForm').bootstrapValidator({
+        container: 'tooltip',
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            referenceNumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'The Reference number is required!'
+                    }
+                }
+            },
+            subject: {
+                validators: {
+                    notEmpty: {
+                        message: 'The Subject is required!'
+                    }
+                }
+            },
+            description: {
+                validators: {
+                    notEmpty: {
+                        message: 'The Description is required!'
+                    }
+                }
+            },
+            from: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required!'
+                    }
+                }
+            },
+            attachment: {
+                validators: {
+                    file: {
+                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
+                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        maxSize: 2048 * 1024, // 2 MB
+                        message: 'The selected file is not valid!'
+                    }
+                }
+            },
+            dueDate: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please set due date for document!'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY'
+                    }
+                }
+            },
+            dateReceived: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please set receive date for document!'
+                    },
+                    date: {
+                        format: 'MM/DD/YYYY'
+                    }
+                }
+            }
+        }
+    });
+
+    $('#dueDate').on('dp.change dp.show', function(e) {
+        // Validate the date when user change it
+        $('#editDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
+    });
+
+    $('#dateReceived').on('dp.change dp.show', function(e) {
+        // Validate the date when user change it
+        $('#editDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
     });
 
     $('#changeStatusForm').bootstrapValidator({
@@ -206,8 +288,13 @@ $(document).ready(function() {
     if (load === 'documents') {
         loadDocuments('All');
     } else if (load === 'rddetails') {
-        loadRDButtons();
+        //loadRDButtons();
     }
+	
+	$('#changeAttachmentButton').click(function(){
+		$('.attachments').toggle();
+		$('#changeAttachmentButton span').toggle();
+	});
 });
 
 function loadRDButtons() {

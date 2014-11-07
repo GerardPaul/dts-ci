@@ -109,10 +109,22 @@ class TrackFactory {
 				else
 					echo "{Failed " . $user . '}';
 			}
+			$this->setStatusOnGoing($document);
 			return true;
 		}
 		return false;
     }
+	
+	private function setStatusOnGoing($document){
+		$sql = "SELECT status FROM document WHERE id = '$document'";
+		$query = $this->_ci->db->query($sql);
+		if ($query->num_rows() > 0) {
+            if($query->row('status')==''){
+				$sql1 = "UPDATE document SET status = 'On-Going' WHERE id = '$document'";
+				$this->_ci->db->query($sql1);
+			}
+        }
+	}
 	
 	private function addUserToTrack($user, $document){
 		$track = new Track_Model();
