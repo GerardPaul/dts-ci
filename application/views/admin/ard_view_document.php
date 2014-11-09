@@ -111,6 +111,7 @@ HTML;
                     </div>
                     <div id="chatContents">
                         <div class="chatBody">
+                            <input type="hidden" name="numMessages" value="0" id="numMessages">
                             <div class="row" id="chatBody">
 
                             </div>

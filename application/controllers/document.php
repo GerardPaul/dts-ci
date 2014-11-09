@@ -63,44 +63,53 @@ class Document extends CI_Controller {
     public function index() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
+            if ($this->userType != 'EMP') {
                 $this->error(403);
             } else {
                 $data = array(
                     "title" => $this->title,
                     "header" => 'All Documents',
                     "userType" => $this->userType,
-                    "username" => $this->username
+                    "username" => $this->username,
+                    "userId" => $this->userId,
+                    "load" => 'documents'
                 );
-                $this->load->library("RDDocumentFactory");
-                $data['documents'] = $this->rddocumentfactory->getEMPDocument($this->userId);
-
-                $this->load->template('emp_documents', $data);
+                $this->load->template('user_documents', $data);
             }
         } else {
             redirect('login', 'refresh');
         }
     }
 
-    public function details($documentId = 0) {
+    public function getAllDocuments() {
+        $userId = $_POST['userId'];
+
+        $this->load->library("TrackFactory");
+        echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $userId));
+    }
+
+    public function details($track = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
+            if ($this->userType != 'EMP') {
                 $this->error(403);
             } else {
-                $documentId = (int) $documentId;
-                $this->load->library("RDDocumentFactory");
-
-                $documents = $this->rddocumentfactory->getRDDocument($documentId);
-                if ($documentId > 0 && $documents) {
-                    $status = $this->status($documents->getStatus());
-
+                $track = (int) $track;
+                $this->load->library("TrackFactory");
+                $document = $this->trackfactory->getUserDocument($track);
+                if ($track > 0 && $document) {
+                    $this->receive($this->userId, $track); //automatically receive upon viewing document
+                    $status = $this->status($document->getStatus());
+                    
                     $data = array(
-                        "documents" => $documents,
+                        "document" => $document,
                         "title" => 'Document Details',
-                        "header" => $status . $documents->getSubject(),
+                        "header" => 'Document Details',
                         "userType" => $this->userType,
-                        "username" => $this->username
+                        "username" => $this->username,
+                        "status" => $status,
+                        "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
+                        "load" => 'empdetails'
                     );
                     $this->load->template('emp_view_document', $data);
                 } else {
@@ -112,46 +121,36 @@ class Document extends CI_Controller {
         }
     }
 
+    private function receive($user, $track) {
+        $this->load->library("TrackFactory");
+        if ($this->trackfactory->updateReceived($user, $track)) {
+            return true;
+        }
+        return false;
+    }
+    
     private function status($status) {
         if ($status == 'Cancelled') {
-            return '<small class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'On-Going') {
-            return '<small class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'Compiled') {
-            return '<small class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i></small>&nbsp;';
+            return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         }
     }
 
-    public function receive($documentId = 0) {
+    public function statusChange($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
+            if ($this->userType != 'EMP') {
                 $this->error(403);
             } else {
-                $documentId = (int) $documentId;
-                $this->load->library("RDDocumentFactory");
-                if ($this->rddocumentfactory->updateEmpReceived($documentId)) {
-                    redirect('document/details/' . $documentId);
-                } else {
-                    echo "Failed!";
-                }
-            }
-        } else {
-            redirect('login', 'refresh');
-        }
-    }
-
-    public function statusChange($documentId = 0) {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
-                $this->error(403);
-            } else {
-                $documentId = (int) $documentId;
+                $document = (int) $document;
                 $status = $this->cleanString($_POST['status']);
-                $this->load->library("RDDocumentFactory");
-                if ($this->rddocumentfactory->updateStatus($documentId, $status)) {
-                    redirect('document/details/' . $documentId);
+                $track = $this->cleanString($_POST['trackId']);
+                $this->load->library("TrackFactory");
+                if ($this->trackfactory->updateStatus($document, $status)) {
+                    redirect('document/details/' . $track);
                 } else {
                     echo "Failed!";
                 }

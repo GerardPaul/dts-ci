@@ -9,7 +9,7 @@ $active[$current_controller] = 'active';
         <title><?php echo $title; ?> | Document Tracking System</title>
         <link rel="shortcut icon" href="<?php echo base_url("application/assets/images/favicon.ico"); ?>" type="image/x-icon"/>
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap-datetimepicker.min.css"); ?>">
-		<link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
+        <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrapValidator.min.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/jquery.dataTables.min.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
@@ -17,9 +17,13 @@ $active[$current_controller] = 'active';
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery-2.1.1.min.js"); ?>"></script>
-		<script type="text/javascript" src="<?php echo base_url("application/assets/js/moment.min.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url("application/assets/js/moment.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap.min.js"); ?>"></script>
-		<script type="text/javascript" src="<?php echo base_url("application/assets/js/functions.js"); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url("application/assets/js/functions.js"); ?>"></script>
+        
+        <script type="text/javascript">
+            var userType = "<?php echo $userType; ?>";
+        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

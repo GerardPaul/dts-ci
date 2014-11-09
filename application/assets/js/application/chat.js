@@ -41,6 +41,7 @@ $(document).ready(function() {
     });
 
     function getMessages() {
+        var previousLength = $('#numMessages').val();
         $.post(base_url + "chat/ajaxGetMessages", {document: document, chat: chat}, function(data) {
             if (data.status === 'ok') {
                 var current = $('#chatBody').html();
@@ -50,6 +51,10 @@ $(document).ready(function() {
             }
             if (data.content != '') {
                 $('.chatHeading').css('background', '#F94343');
+            }
+            var currentLength = $('#chatBody > div.col-xs-12').length;
+            if(currentLength > previousLength){
+                scrollChat();
             }
         }, "json");
     }

@@ -100,30 +100,26 @@ class Document extends CI_Controller {
     public function view($documentId = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            if ($this->userType == 'EMP' || $this->userType == 'RD' || $this->userType == 'ARD') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'RD' || $this->userType == 'ARD') {
-                    $this->error(403);
-                } else {
-                    $documentId = (int) $documentId;
-                    $this->load->library("DocumentFactory");
-                    $documents = $this->documentfactory->getDocument($documentId);
+                $documentId = (int) $documentId;
+                $this->load->library("DocumentFactory");
+                $documents = $this->documentfactory->getDocument($documentId);
 
-                    if ($documentId > 0 && $documents) {
-                        $status = $this->status($documents->getStatus());
-                        $data = array(
-                            "documents" => $documents,
-                            "title" => 'Document Details',
-                            "header" => 'Document Details',
-                            "userType" => $this->userType,
-                            "username" => $this->username,
-                            "status" => $status
-                        );
-                        $this->load->admin_template('view_document', $data);
-                    } else {
-                        $this->error(404);
-                    }
+                if ($documentId > 0 && $documents) {
+                    $status = $this->status($documents->getStatus());
+                    $data = array(
+                        "documents" => $documents,
+                        "title" => 'Document Details',
+                        "header" => 'Document Details',
+                        "userType" => $this->userType,
+                        "username" => $this->username,
+                        "status" => $status
+                    );
+                    $this->load->admin_template('view_document', $data);
+                } else {
+                    $this->error(404);
                 }
             }
         } else {
@@ -194,8 +190,8 @@ class Document extends CI_Controller {
                 $document = $this->trackfactory->getUserDocument($track);
                 if ($track > 0 && $document) {
                     $this->receive($this->userId, $track); //automatically receive upon viewing document
-
                     $status = $this->status($document->getStatus());
+                    
                     if ($userType == 'RD') {
                         $this->rdDetails($document, $status);
                     } else {
@@ -272,33 +268,10 @@ class Document extends CI_Controller {
         return false;
     }
 
-    public function ardReceive($documentId = 0) {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'EMP') {
-                $this->error(403);
-            } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD') {
-                    $this->error(403);
-                } else {
-                    $documentId = (int) $documentId;
-                    $this->load->library("RDDocumentFactory");
-                    if ($this->rddocumentfactory->updateArdReceived($documentId)) {
-                        redirect('admin/document/details/' . $documentId);
-                    } else {
-                        echo "Failed!";
-                    }
-                }
-            }
-        } else {
-            redirect('login', 'refresh');
-        }
-    }
-
     public function statusChange($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType != 'RD') {
+            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'EMP') {
                 $this->error(403);
             } else {
                 $document = (int) $document;

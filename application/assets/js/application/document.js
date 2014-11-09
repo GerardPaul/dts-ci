@@ -347,6 +347,8 @@ function loadDocuments(change) {
                 }
             } else if (userType === 'RD' || userType === 'ARD') {
                 links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+            } else{
+                links = '<a href="' + base_url + 'document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
             }
 
             if (received === '0000-00-00' || received === null) {
