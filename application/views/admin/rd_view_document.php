@@ -90,78 +90,41 @@ HTML;
             }
             ?>
         </div>
-		<?php
-		$users = (int) $users;
-		if($users > 1) { 
-			$action = $document->getAction();
-			if($action == null){
-				$action = 'Chat';
-			}
-		?>
-        <div class="chatBox">
-            <div class="chatContainer">
-                <div class="chatHeading toggleChat">
-                    <div class="pull-right">
-                        <span>
-                            <i class="glyphicon glyphicon-chevron-down" id="open"></i>
-                            <i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
-                        </span>
+        <?php
+        $users = (int) $users;
+        if ($users > 1) {
+            $action = $document->getAction();
+            if ($action == null) {
+                $action = 'Chat';
+            }
+            ?>
+            <div class="chatBox">
+                <div class="chatContainer">
+                    <div class="chatHeading toggleChat">
+                        <div class="pull-right">
+                            <span>
+                                <i class="glyphicon glyphicon-chevron-down" id="open"></i>
+                                <i class="glyphicon glyphicon-chevron-up" id="close" style="display: none"></i>
+                            </span>
+                        </div>
+                        <h3 class="chatTitle"><?php echo $action; ?></h3>
                     </div>
-                    <h3 class="chatTitle"><?php echo $action; ?></h3>
-                </div>
-                <div id="chatContents">
-                    <div class="chatBody" id="chatBody">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <span>Name</span>
-                                <div class="message other">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <p>Message</p>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <time>Time</time>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<div class="col-xs-12">
-                                <div class="message self">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <p>Message</p>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <time>Time</time>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-							<div class="col-xs-12">
-                                <span>Name</span>
-                                <div class="message other">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <p>Message</p>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <time>Time</time>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div id="chatContents">
+                        <div class="chatBody">
+                            <div class="row" id="chatBody">
+                                
                             </div>
                         </div>
-                    </div>
-                    <div class="chatFooter">
-                        <input type="hidden" name="document" id="document" value="<?php echo $document->getDocument(); ?>">
-                        <input type="hidden" name="chat" id="chat" value="1">
-                        <input class="form-control" type="text" name="message" id="message">
+                        <div class="chatFooter">
+                            <input type="hidden" name="document" id="document" value="<?php echo $document->getDocument(); ?>">
+                            <input type="hidden" name="chat" id="chat" value="1">
+                            <input class="form-control" type="text" name="message" id="message">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-		<?php
-		} ?>
+            <?php }
+        ?>
     </div>
 </div>
 
@@ -179,11 +142,13 @@ HTML;
                         <div class="col-md-12">
                             <div class="col-xs-5">
                                 <select name="list" id="list" class="selectList form-control" multiple="multiple">
-                                    <?php foreach ($allUsers as $user) {
-                                        if($user->getUserType() !== 'ADMIN' && $user->getUserType() !== 'RD'){
-                                            echo '<option value="'.$user->getId().'">'.$user->getLastName().','.$user->getFirstName().'</option>';
+                                    <?php
+                                    foreach ($allUsers as $user) {
+                                        if ($user->getUserType() !== 'ADMIN' && $user->getUserType() !== 'RD') {
+                                            echo '<option value="' . $user->getId() . '">' . $user->getLastName() . ',' . $user->getFirstName() . '</option>';
                                         }
-                                    } ?>
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-xs-1" id="move">
@@ -230,7 +195,7 @@ HTML;
                             <textarea class="form-control" name="note" rows="3"></textarea>
                         </div>
                     </div>
-					<input type="hidden" name="trackId" id="trackId" value="<?php echo $document->getId(); ?>">
+                    <input type="hidden" name="trackId" id="trackId" value="<?php echo $document->getId(); ?>">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -276,5 +241,5 @@ $current_method = $this->router->fetch_method();
 if (isset($current_method) && $current_method == 'details' && $users > 1) {
     ?>
     <script type="text/javascript" src="<?php echo base_url("application/assets/js/application/chat.js"); ?>"></script>
-<?php
+    <?php
 }?>

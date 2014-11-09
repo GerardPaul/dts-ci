@@ -193,7 +193,7 @@ class Document extends CI_Controller {
                 $this->load->library("TrackFactory");
                 $document = $this->trackfactory->getUserDocument($track);
                 if ($track > 0 && $document) {
-                    $this->receive($this->userId, $track);//automatically receive upon viewing document
+                    $this->receive($this->userId, $track); //automatically receive upon viewing document
 
                     $status = $this->status($document->getStatus());
                     if ($userType == 'RD') {
@@ -248,7 +248,7 @@ class Document extends CI_Controller {
             "allUsers" => $usersByDivision,
             "username" => $this->username,
             "status" => $status,
-			"users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
+            "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'arddetails'
         );
         $this->load->admin_template('ard_view_document', $data);
@@ -315,22 +315,22 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	
-	public function ardAssign($document = 0) {
+
+    public function ardAssign($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-			$userType = $this->userType;
+            $userType = $this->userType;
             if ($userType != 'ARD') {
                 $this->error(403);
             } else {
                 $document = (int) $document;
-				$users = array();
-				foreach($_POST['selectedList'] as $user){
-					$users[] = $user;
-				}
-				
-				$track = $this->cleanString($_POST['trackId']);
-				
+                $users = array();
+                foreach ($_POST['selectedList'] as $user) {
+                    $users[] = $user;
+                }
+
+                $track = $this->cleanString($_POST['trackId']);
+
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->ardForward($document, $users)) {
                     redirect('admin/document/details/' . $track);
@@ -342,29 +342,30 @@ class Document extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-	public function assign($document = 0) {
+
+    public function assign($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-			$userType = $this->userType;
+            $userType = $this->userType;
             if ($userType != 'RD') {
                 $this->error(403);
             } else {
                 $document = (int) $document;
                 $notes = $this->cleanString($_POST['note']);
                 $action = $this->cleanString($_POST['action']);
-				
+
                 $deadline = $this->cleanString($_POST['deadline']);
-				$deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
-				
-				$users = array();
-				foreach($_POST['selectedList'] as $user){
-					$users[] = $user;
-				}
-				
-				$track = $this->cleanString($_POST['trackId']);
-				
+                $deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
+
+                $users = array();
+                foreach ($_POST['selectedList'] as $user) {
+                    $users[] = $user;
+                }
+
+                $track = $this->cleanString($_POST['trackId']);
+
                 $this->load->library("TrackFactory");
-                if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users)) {
+                if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users, $this->userId)) {
                     redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
@@ -538,17 +539,17 @@ class Document extends CI_Controller {
                 $from = $this->cleanString($_POST['from']);
                 $refNo = $this->cleanString($_POST['referenceNumber']);
                 $status = $this->cleanString($_POST['status']);
-				
+
                 $due = $this->cleanString($_POST['dueDate']);
                 $received = $this->cleanString($_POST['dateReceived']);
 
                 $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
-				if($attachment_path == 'No File.'){
-					$attachment_path = $_POST['originalAttachment'];
-				}
-				
+                if ($attachment_path == 'No File.') {
+                    $attachment_path = $_POST['originalAttachment'];
+                }
+
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     redirect('admin/document');
                 } else {

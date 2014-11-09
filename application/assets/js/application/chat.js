@@ -8,11 +8,6 @@ $(document).ready(function() {
         chat = $('input#chat').val();
     }, 5000);
 
-
-    function scrollChat() {
-        $("#chatBody").animate({scrollTop: $('#chatBody')[0].scrollHeight}, 900);
-    }
-
     setTimeout(function() {
         scrollChat();
     }, 6000);
@@ -22,7 +17,8 @@ $(document).ready(function() {
     });
 
     $('input#message').keypress(function(e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
+            scrollChat();
             var message = $('input#message').val();
             if (message === '') {
                 return false;
@@ -58,4 +54,7 @@ $(document).ready(function() {
         }, "json");
     }
 
+    function scrollChat() {
+        $(".chatBody").animate({scrollTop: $('#chatBody')[0].scrollHeight}, 900);
+    }
 });

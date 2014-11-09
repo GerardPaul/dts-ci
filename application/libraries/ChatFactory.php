@@ -14,7 +14,7 @@ class ChatFactory {
 
     public function getChat($id = 0, $lastID = 0) {
         if ($id > 0) {
-            $sql = 'SELECT c.id, c.document, c.user, c.message, DATE_FORMAT(c.created, "%M %d, %Y at %H:%i:%s") AS "created", CONCAT(u.lastname, ",", u.firstname) AS "fullname"
+            $sql = 'SELECT c.id, c.document, c.user, c.message, DATE_FORMAT(c.created, "%b %d, %h:%i %p") AS "created", CONCAT(u.lastname, ",", u.firstname) AS "fullname"
                     FROM chat c, user u
                     WHERE c.user = u.id AND c.document = ? AND c.id > ? ORDER BY c.id ASC';
             $query = $this->_ci->db->query($sql, array($id, $lastID));
