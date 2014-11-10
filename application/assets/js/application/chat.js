@@ -6,6 +6,7 @@ $(document).ready(function() {
         getMessages();
         $('input#chat').val('0');
         chat = $('input#chat').val();
+		$('#loadingConversation').hide();
     }, 5000);
 
     setTimeout(function() {
@@ -56,6 +57,7 @@ $(document).ready(function() {
             if(currentLength > previousLength){
                 scrollChat();
             }
+			$('#numMessages').val(currentLength);
         }, "json");
     }
 

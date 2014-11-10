@@ -352,15 +352,16 @@ function loadDocuments(change) {
             }
 
             if (received === '0000-00-00' || received === null) {
-                $('#documentsTable tbody').append('<tr><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
                         '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             } else {
-                $('#documentsTable tbody').append('<tr><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             }
         });
         $('#documentsTable').dataTable({
             "aoColumns": [
+				{"bVisible":false},
                 null,
                 null,
                 null,
@@ -368,13 +369,14 @@ function loadDocuments(change) {
                 {"bSortable": false}
             ],
             "aoColumnDefs": [
-                {"sWidth": "20%", "aTargets": [0]},
-                {"sWidth": "50%", "aTargets": [1]},
-                {"sWidth": "10%", "aTargets": [2]},
+				{"iDataSort": 1, "aTargets": [0]},
+                {"sWidth": "20%", "aTargets": [1]},
+                {"sWidth": "50%", "aTargets": [2]},
                 {"sWidth": "10%", "aTargets": [3]},
-                {"sWidth": "10%", "aTargets": [4]}
+                {"sWidth": "10%", "aTargets": [4]},
+                {"sWidth": "10%", "aTargets": [5]}
             ],
-            "order": [[2, "asc"]],
+            "order": [[0, "desc"]],
             "bDestroy": true,
             "iDisplayLength": 50
         });

@@ -113,7 +113,7 @@ HTML;
                         <div class="chatBody">
                             <input type="hidden" name="numMessages" value="0" id="numMessages">
                             <div class="row" id="chatBody">
-                                
+								<span id="loadingConversation" style="margin-left: 10px;">Loading conversation...</span>
                             </div>
                         </div>
                         <div class="chatFooter">

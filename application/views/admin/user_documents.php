@@ -20,6 +20,7 @@
             <table class="table table-condensed table-striped table-responsive table-hover display" id="documentsTable">
                 <thead>
                     <tr>
+						<th>ID</th>
                         <th>From</th>
                         <th>Subject</th>
                         <th>Date Received</th>
