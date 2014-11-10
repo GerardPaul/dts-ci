@@ -111,7 +111,7 @@ body{
         height: 210px;
     }
 }
-@media (min-width: 900px)  {
+@media (min-width: 900px) and (max-width : 1280px) {
     .chatBox {
         width: 850px; /* Chatbox width */
         height: 400px;
@@ -121,6 +121,18 @@ body{
     }
     .chatBody {
         height: 310px;
+    }
+}
+@media (min-width : 1280px) {
+    .chatBox {
+        width: 1000px; /* Chatbox width */
+        height: 600px;
+    }
+    .chatContainer{
+        height:600px;
+    }
+    .chatBody {
+        height: 510px;
     }
 }
 .chatBox {
