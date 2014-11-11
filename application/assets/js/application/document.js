@@ -238,19 +238,17 @@ $(document).ready(function() {
         $('.toggleChat i').toggle();
         $('#chatContents').toggle();
 
-        if ($('.chatBox').height() === 400 && $('.chatBox').width() === 850) {
+		var height = $('.chatBox').height();
+		
+        if (height === 300) {
             $('.chatBox').height(35);
-        } else if ($('.chatBox').height() === 35) {
-            $('.chatBox').height(400);
-        } else if ($('.chatBox').height() === 300 && $('.chatBox').width() === 300) {
-            $('.chatBox').height(34);
-        } else if ($('.chatBox').height() === 34) {
+        } else if (height === 35) {
             $('.chatBox').height(300);
-        } else if ($('.chatBox').height() === 600 && $('.chatBox').width() === 1000) {
-            $('.chatBox').height(36);
-        } else if ($('.chatBox').height() === 36) {
-            $('.chatBox').height(600);
-        }
+        } else if (height === 500) {
+            $('.chatBox').height(34);
+        } else if (height === 34) {
+            $('.chatBox').height(500);
+        } 
     });
 
     $('#download').click(function() {
