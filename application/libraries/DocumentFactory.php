@@ -48,6 +48,7 @@ class DocumentFactory {
         if ($get !== 'All') {
             $sql .= " WHERE status = '$get'";
         }
+		$sql .= " ORDER BY id ASC";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $documents = array();

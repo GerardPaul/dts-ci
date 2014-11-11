@@ -362,8 +362,9 @@ function loadDocuments(change) {
             }
         });
         $('#documentsTable').dataTable({
-            "aoColumns": [
-				{"bVisible":false},
+            "order": [[0, "desc"]],
+			"aoColumns": [
+				{"bVisible":false, "iDataSort": 1},
                 null,
                 null,
                 null,
@@ -371,14 +372,12 @@ function loadDocuments(change) {
                 {"bSortable": false}
             ],
             "aoColumnDefs": [
-				{"iDataSort": 1, "aTargets": [0]},
                 {"sWidth": "20%", "aTargets": [1]},
                 {"sWidth": "50%", "aTargets": [2]},
                 {"sWidth": "10%", "aTargets": [3]},
                 {"sWidth": "10%", "aTargets": [4]},
                 {"sWidth": "10%", "aTargets": [5]}
             ],
-            "order": [[0, "desc"]],
             "bDestroy": true,
             "iDisplayLength": 50
         });

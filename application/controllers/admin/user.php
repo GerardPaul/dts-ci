@@ -105,7 +105,12 @@ class User extends CI_Controller {
                     $division = $this->cleanString($_POST['division']);
 
                     if ($this->userfactory->addUser($firstname, $lastname, $email, $username, $password, $type, $division)) {
-                        redirect('admin/user');
+                        $this->load->library("LogsFactory");
+						$user = $this->username;
+						$action = "User '$user' has added '$firstname $lastname' to USERS.";
+						$this->logsfactory->logAction($action);
+						
+						redirect('admin/user');
                     } else {
                         echo "Failed!";
                     }
@@ -170,7 +175,12 @@ class User extends CI_Controller {
                     $division = $this->cleanString($_POST['division']);
 
                     if ($this->userfactory->updateUser($status, $userId, $firstname, $lastname, $email, $username, $password, $type, $division)) {
-                        redirect('admin/user');
+                        $this->load->library("LogsFactory");
+						$user = $this->username;
+						$action = "User '$user' has updated '$firstname $lastname' in USERS.";
+						$this->logsfactory->logAction($action);
+						
+						redirect('admin/user');
                     } else {
                         echo "Failed!";
                     }

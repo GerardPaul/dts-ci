@@ -98,7 +98,7 @@ class UserFactory {
 
         return $user->commit();
     }
-
+	
     public function updateUser($status, $id, $firstname, $lastname, $email, $username, $password, $userType, $division) {
         $user = new User_Model();
         $user->setId($id);

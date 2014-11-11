@@ -98,7 +98,12 @@ class Division extends CI_Controller {
                     $desc = $this->cleanString($_POST['description']);
 
                     if ($this->divisionfactory->addDivision($divisionName, $desc)) {
-                        redirect('admin/division');
+                        $this->load->library("LogsFactory");
+						$user = $this->username;
+						$action = "User '$user' has added '$divisionName' in DIVISIONS.";
+						$this->logsfactory->logAction($action);
+						
+						redirect('admin/division');
                     } else {
                         echo "Failed!";
                     }

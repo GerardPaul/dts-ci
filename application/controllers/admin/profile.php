@@ -99,7 +99,12 @@ class Profile extends CI_Controller {
                 $password = $this->cleanString($_POST['password']);
 
                 if ($this->userfactory->updateProfile($userId, $firstname, $lastname, $email, $username, $password)) {
-                    if($password === 'password')
+                    $this->load->library("LogsFactory");
+					$user = $this->username;
+					$action = "User '$user' has updated his profile.";
+					$this->logsfactory->logAction($action);
+						
+					if($password === 'password')
 						redirect('admin/home/');
 					else
 						redirect('admin/home/logout');

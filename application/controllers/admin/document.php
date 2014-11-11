@@ -168,7 +168,12 @@ class Document extends CI_Controller {
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
                 if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
-                    redirect('admin/document');
+                    $this->load->library("LogsFactory");
+					$user = $this->username;
+					$action = "User '$user' has added a document with ref no. '$refNo' to DOCUMENTS.";
+					$this->logsfactory->logAction($action);
+						
+					redirect('admin/document');
                 } else {
                     echo "Failed!";
                 }
@@ -524,7 +529,12 @@ class Document extends CI_Controller {
                 }
 
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
-                    redirect('admin/document');
+                    $this->load->library("LogsFactory");
+					$user = $this->username;
+					$action = "User '$user' has updated document with ref no. '$refNo' in DOCUMENTS.";
+					$this->logsfactory->logAction($action);
+						
+					redirect('admin/document');
                 } else {
                     echo "Failed!";
                 }
