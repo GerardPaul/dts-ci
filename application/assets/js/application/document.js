@@ -371,7 +371,7 @@ function loadDocuments(change) {
                 null,
                 {"bSortable": false}
             ],
-            "aoColumnDefs": [
+            "aoColumnDefs": [ 
                 {"sWidth": "20%", "aTargets": [1]},
                 {"sWidth": "50%", "aTargets": [2]},
                 {"sWidth": "10%", "aTargets": [3]},
