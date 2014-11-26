@@ -13,6 +13,10 @@ $(document).ready(function() {
         scrollChat();
     }, 6000);
 
+    $('.chatBox').click(function() {
+        $('.chatHeading').css('background', '#428BCA');
+    });
+    
     $('input#message').focus(function() {
         $('.chatHeading').css('background', '#428BCA');
     });

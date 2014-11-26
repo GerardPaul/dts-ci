@@ -42,12 +42,12 @@ class Division_Model extends CI_Model {
 
         if ($this->_id > 0) {
             //We have an ID so we need to update this object because it is not new
-            if ($this->db->update("division", $data, array("id" => $this->_id))) {
+            if ($this->db->update("dts_division", $data, array("id" => $this->_id))) {
                 return true;
             }
         } else {
             //We dont have an ID meaning it is new and not yet in the database so we need to do an insert
-            if ($this->db->insert("division", $data)) {
+            if ($this->db->insert("dts_division", $data)) {
                 //Now we can get the ID and update the newly created object
                 $this->_id = $this->db->insert_id();
                 return true;

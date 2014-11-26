@@ -14,8 +14,8 @@ class UserFactory {
 
     public function getUserLogin($username = '') {
         $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
-					d.id AS 'divisionID', d.name, d.description
-				FROM user u, division d WHERE u.division = d.id AND u.username = ?";
+                        d.id AS 'divisionID', d.name, d.description
+                FROM dts_user u, dts_division d WHERE u.division = d.id AND u.username = ?";
         $query = $this->_ci->db->query($sql, array($username));
         if ($query->num_rows() > 0) {
             return $this->createObjectFromData($query->row());
@@ -25,8 +25,8 @@ class UserFactory {
 
     public function getUserByDivision($division) {
         $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
-						d.id AS 'divisionID', d.name, d.description
-					FROM user u, division d WHERE u.division = d.id AND d.name = ? ORDER BY u.userType ASC";
+                        d.id AS 'divisionID', d.name, d.description
+                FROM dts_user u, dts_division d WHERE u.division = d.id AND d.name = ? ORDER BY u.userType ASC";
         $query = $this->_ci->db->query($sql, array($division));
         if ($query->num_rows() > 0) {
             $users = array();
@@ -41,7 +41,7 @@ class UserFactory {
     public function getAllUsers() {
         $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
                     d.id AS 'divisionID', d.name, d.description
-                FROM user u, division d 
+                FROM dts_user u, dts_division d 
                 WHERE u.division = d.id AND u.status = '1' ORDER BY d.id ASC";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
@@ -57,8 +57,8 @@ class UserFactory {
     public function getUser($id = 0) {
         if ($id > 0) {
             $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
-						d.id AS 'divisionID', d.name, d.description
-					FROM user u, division d WHERE u.division = d.id AND u.id = ?";
+                            d.id AS 'divisionID', d.name, d.description
+                    FROM dts_user u, dts_division d WHERE u.division = d.id AND u.id = ?";
             $query = $this->_ci->db->query($sql, array($id));
             if ($query->num_rows() > 0) {
                 return $this->createObjectFromData($query->row());
@@ -66,8 +66,8 @@ class UserFactory {
             return false;
         } else {
             $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
-						d.id AS 'divisionID', d.name, d.description
-					FROM user u, division d WHERE u.division = d.id";
+                            d.id AS 'divisionID', d.name, d.description
+                    FROM dts_user u, dts_division d WHERE u.division = d.id";
             $query = $this->_ci->db->query($sql);
             if ($query->num_rows() > 0) {
                 $users = array();
@@ -98,7 +98,7 @@ class UserFactory {
 
         return $user->commit();
     }
-	
+
     public function updateUser($status, $id, $firstname, $lastname, $email, $username, $password, $userType, $division) {
         $user = new User_Model();
         $user->setId($id);
@@ -123,12 +123,12 @@ class UserFactory {
     }
 
     public function updateProfile($userId, $firstname, $lastname, $email, $username, $password) {
-        $sql = "UPDATE user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username' WHERE id = ?";
+        $sql = "UPDATE dts_user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username' WHERE id = ?";
         if ($password != 'password') {
             $salt1 = md5(uniqid(rand(), true));
             $salt = substr($salt1, 0, 50);
             $hashPassword = hash('sha256', $salt . $password . $salt);
-            $sql = "UPDATE user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username', password = '$hashPassword', salt = '$salt' WHERE id = ?";
+            $sql = "UPDATE dts_user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username', password = '$hashPassword', salt = '$salt' WHERE id = ?";
         }
         if ($this->_ci->db->query($sql, array($userId)))
             return true;
@@ -154,12 +154,13 @@ class UserFactory {
         return $user;
     }
 
-	public function getDivision($user) {
-        $sql = "SELECT d.name FROM user u, division d WHERE u.division = d.id AND u.id = ?";
+    public function getDivision($user) {
+        $sql = "SELECT d.name FROM dts_user u, dts_division d WHERE u.division = d.id AND u.id = ?";
         $query = $this->_ci->db->query($sql, array($user));
         if ($query->num_rows() > 0) {
             return $query->row('name');
         }
         return false;
     }
+
 }

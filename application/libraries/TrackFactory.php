@@ -16,7 +16,7 @@ class TrackFactory {
         $sql = "SELECT d.subject, d.description, d.action, d.from, d.dueDate, d.due15Days, d.deadline,
                         d.attachment, d.status, d.referenceNumber, d.dateReceived,
                         t.id, t.document, t.user, t.received
-                FROM document d, track t 
+                FROM dts_document d, dts_track t 
                 WHERE t.id = '$track' AND t.document = d.id";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
@@ -26,7 +26,7 @@ class TrackFactory {
     }
 
     public function updateStatus($id, $status) {
-        $sql = "UPDATE document SET status = '$status' WHERE id = ?";
+        $sql = "UPDATE dts_document SET status = '$status' WHERE id = ?";
         if ($this->_ci->db->query($sql, array($id)))
             return true;
         return false;
@@ -34,7 +34,7 @@ class TrackFactory {
 
     public function ajaxGetDocument($get, $user) {
         $sql = "SELECT t.id, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received
-                FROM document d, track t 
+                FROM dts_document d, dts_track t 
                 WHERE t.document = d.id AND t.user = '$user'";
         if ($get !== 'All') {
             $sql .= " AND status = '$get'";
@@ -51,7 +51,7 @@ class TrackFactory {
     }
 
     public function getCountUserDocuments($document) {
-        $sql = "SELECT COUNT(*) AS 'count' FROM track WHERE document = $document";
+        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE document = $document";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             return $query->row('count');
@@ -84,14 +84,14 @@ class TrackFactory {
 
     public function updateReceived($user, $track) {
         $date = date('Y-m-d');
-        $sql = "UPDATE track SET received = '$date' WHERE id = $track AND user = $user";
+        $sql = "UPDATE dts_track SET received = '$date' WHERE id = $track AND user = $user";
         if ($this->_ci->db->query($sql))
             return true;
         return false;
     }
 
     public function forward($document, $notes, $action, $deadline, $users, $userId) {
-        $sql = "UPDATE document SET action = '$action', deadline = '$deadline' WHERE id = ?";
+        $sql = "UPDATE dts_document SET action = '$action', deadline = '$deadline' WHERE id = ?";
         if ($this->_ci->db->query($sql, array($document))) {
             foreach ($users as $user) {
                 $ard = $this->getARD($user);
@@ -118,21 +118,21 @@ class TrackFactory {
         return true;
     }
 
-    private function addNoteToChat($document, $notes, $userId){
+    private function addNoteToChat($document, $notes, $userId) {
         $data = array(
             'document' => $document,
             'user' => $userId,
             'message' => $notes
         );
-        $this->_ci->db->insert("chat", $data);
+        $this->_ci->db->insert("dts_chat", $data);
     }
 
     private function setStatusOnGoing($document) {
-        $sql = "SELECT status FROM document WHERE id = '$document'";
+        $sql = "SELECT status FROM dts_document WHERE id = '$document'";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             if ($query->row('status') == '') {
-                $sql1 = "UPDATE document SET status = 'On-Going' WHERE id = '$document'";
+                $sql1 = "UPDATE dts_document SET status = 'On-Going' WHERE id = '$document'";
                 $this->_ci->db->query($sql1);
             }
         }
@@ -149,7 +149,7 @@ class TrackFactory {
     }
 
     private function checkUser($user, $document) {
-        $sql = "SELECT COUNT(*) AS 'count' FROM track WHERE user = '$user' AND document = '$document'";
+        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE user = '$user' AND document = '$document'";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $count = (int) $query->row('count');
@@ -159,7 +159,7 @@ class TrackFactory {
     }
 
     private function checkARD($user, $document) {
-        $sql = "SELECT * FROM track WHERE user = '$user' AND document = '$document'";
+        $sql = "SELECT * FROM dts_track WHERE user = '$user' AND document = '$document'";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             return true;
@@ -168,13 +168,13 @@ class TrackFactory {
     }
 
     private function getARD($user) {
-        $sql = "SELECT userType, division FROM user WHERE id = ?";
+        $sql = "SELECT userType, division FROM dts_user WHERE id = ?";
         $query = $this->_ci->db->query($sql, array($user));
         if ($query->num_rows() > 0) {
             $userType = $query->row('userType');
             $division = $query->row('division');
             if ($userType != 'ARD') {
-                $sql1 = "SELECT id FROM user WHERE division = '$division' AND userType = 'ARD'";
+                $sql1 = "SELECT id FROM dts_user WHERE division = '$division' AND userType = 'ARD'";
                 $query1 = $this->_ci->db->query($sql1);
                 if ($query1->num_rows() > 0) {
                     return $query1->row('id');

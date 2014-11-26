@@ -7,7 +7,6 @@ class Chat_Model extends CI_Model {
     private $_user;
     private $_message;
     private $_created;
-    
     private $_fullname;
 
     function __construct() {
@@ -21,7 +20,7 @@ class Chat_Model extends CI_Model {
     public function getId() {
         return $this->_id;
     }
-    
+
     public function setDocument($value) {
         $this->_document = $value;
     }
@@ -29,7 +28,7 @@ class Chat_Model extends CI_Model {
     public function getDocument() {
         return $this->_document;
     }
-    
+
     public function setUser($value) {
         $this->_user = $value;
     }
@@ -37,7 +36,7 @@ class Chat_Model extends CI_Model {
     public function getUser() {
         return $this->_user;
     }
-    
+
     public function setMessage($value) {
         $this->_message = $value;
     }
@@ -45,7 +44,7 @@ class Chat_Model extends CI_Model {
     public function getMessage() {
         return $this->_message;
     }
-    
+
     public function setCreated($value) {
         $this->_created = $value;
     }
@@ -53,7 +52,7 @@ class Chat_Model extends CI_Model {
     public function getCreated() {
         return $this->_created;
     }
-    
+
     public function setFullname($value) {
         $this->_fullname = $value;
     }
@@ -61,7 +60,7 @@ class Chat_Model extends CI_Model {
     public function getFullname() {
         return $this->_fullname;
     }
-    
+
     public function commit() {
         $data = array(
             'document' => $this->_document,
@@ -71,12 +70,12 @@ class Chat_Model extends CI_Model {
 
         if ($this->_id > 0) {
             //We have an ID so we need to update this object because it is not new
-            if ($this->db->update("chat", $data, array("id" => $this->_id))) {
+            if ($this->db->update("dts_chat", $data, array("id" => $this->_id))) {
                 return true;
             }
         } else {
             //We dont have an ID meaning it is new and not yet in the database so we need to do an insert
-            if ($this->db->insert("chat", $data)) {
+            if ($this->db->insert("dts_chat", $data)) {
                 //Now we can get the ID and update the newly created object
                 $this->_id = $this->db->insert_id();
                 return true;
@@ -84,4 +83,5 @@ class Chat_Model extends CI_Model {
         }
         return false;
     }
+
 }

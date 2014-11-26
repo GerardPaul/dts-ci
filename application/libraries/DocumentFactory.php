@@ -13,7 +13,7 @@ class DocumentFactory {
     }
 
     public function getStatus($id = 0) {
-        $sql = "SELECT status FROM document WHERE id = ?";
+        $sql = "SELECT status FROM dts_document WHERE id = ?";
         $query = $this->_ci->db->query($sql, array($id));
         if ($query->num_rows() > 0) {
             return $query->row('status');
@@ -23,14 +23,14 @@ class DocumentFactory {
 
     public function getDocument($id = 0) {
         if ($id > 0) {
-            $sql = "SELECT * FROM document WHERE id = ?";
+            $sql = "SELECT * FROM dts_document WHERE id = ?";
             $query = $this->_ci->db->query($sql, array($id));
             if ($query->num_rows() > 0) {
                 return $this->createObjectFromData($query->row());
             }
             return false;
         } else {
-            $sql = "SELECT * FROM document";
+            $sql = "SELECT * FROM dts_document";
             $query = $this->_ci->db->query($sql);
             if ($query->num_rows() > 0) {
                 $documents = array();
@@ -44,11 +44,11 @@ class DocumentFactory {
     }
 
     public function ajaxGetDocument($get) {
-        $sql = "SELECT * FROM document";
+        $sql = "SELECT * FROM dts_document";
         if ($get !== 'All') {
             $sql .= " WHERE status = '$get'";
         }
-		$sql .= " ORDER BY id ASC";
+        $sql .= " ORDER BY id ASC";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $documents = array();
@@ -116,5 +116,3 @@ class DocumentFactory {
     }
 
 }
-
-?>

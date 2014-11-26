@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `chat`
 --
 
-CREATE TABLE IF NOT EXISTS `chat` (
+CREATE TABLE IF NOT EXISTS `dts_chat` (
 `id` int(11) NOT NULL,
   `document` int(11) NOT NULL,
   `user` int(11) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `chat` (
 -- Table structure for table `division`
 --
 
-CREATE TABLE IF NOT EXISTS `division` (
+CREATE TABLE IF NOT EXISTS `dts_division` (
 `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `description` varchar(250) NOT NULL
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `division` (
 -- Dumping data for table `division`
 --
 
-INSERT INTO `division` (`id`, `name`, `description`) VALUES
+INSERT INTO `dts_division` (`id`, `name`, `description`) VALUES
 (1, 'ORD', 'Office of the Regional Director'),
 (2, 'FASD', 'Finance and Administration Services Division'),
 (3, 'TSD', 'Technical Services Division'),
@@ -62,7 +62,7 @@ INSERT INTO `division` (`id`, `name`, `description`) VALUES
 -- Table structure for table `document`
 --
 
-CREATE TABLE IF NOT EXISTS `document` (
+CREATE TABLE IF NOT EXISTS `dts_document` (
 `id` int(11) NOT NULL,
   `subject` varchar(100) NOT NULL,
   `description` text,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `document` (
 -- Table structure for table `logs`
 --
 
-CREATE TABLE IF NOT EXISTS `logs` (
+CREATE TABLE IF NOT EXISTS `dts_logs` (
 `id` int(11) NOT NULL,
   `actionTaken` varchar(250) NOT NULL,
   `timeOccured` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
 -- Table structure for table `track`
 --
 
-CREATE TABLE IF NOT EXISTS `track` (
+CREATE TABLE IF NOT EXISTS `dts_track` (
 `id` int(11) NOT NULL,
   `document` int(11) NOT NULL,
   `user` int(11) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `track` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `dts_user` (
 `id` int(11) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `salt`, `userType`, `division`, `resetHash`, `status`) VALUES
+INSERT INTO `dts_user` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `salt`, `userType`, `division`, `resetHash`, `status`) VALUES
 (1, 'Administrator', 'Administrator', 'admin@mail.com', 'administrator', 'ac1c6ced3e6960af91fee76c4f96887ac5c2df1cbbf760c9a2658fc8579ab773', '0c4fe3094e35e0fc770796c7c28a7828', 'ADMIN', 4, NULL, 1);
 
 --
@@ -136,37 +136,37 @@ INSERT INTO `user` (`id`, `firstname`, `lastname`, `email`, `username`, `passwor
 --
 -- Indexes for table `chat`
 --
-ALTER TABLE `chat`
+ALTER TABLE `dts_chat`
  ADD PRIMARY KEY (`id`), ADD KEY `document` (`document`,`user`), ADD KEY `user` (`user`);
 
 --
 -- Indexes for table `division`
 --
-ALTER TABLE `division`
+ALTER TABLE `dts_division`
  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `document`
 --
-ALTER TABLE `document`
+ALTER TABLE `dts_document`
  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `logs`
 --
-ALTER TABLE `logs`
+ALTER TABLE `dts_logs`
  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `track`
 --
-ALTER TABLE `track`
+ALTER TABLE `dts_track`
  ADD PRIMARY KEY (`id`), ADD KEY `document` (`document`,`user`), ADD KEY `user` (`user`);
 
 --
 -- Indexes for table `user`
 --
-ALTER TABLE `user`
+ALTER TABLE `dts_user`
  ADD PRIMARY KEY (`id`), ADD KEY `division` (`division`);
 
 --
@@ -176,32 +176,32 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for table `chat`
 --
-ALTER TABLE `chat`
+ALTER TABLE `dts_chat`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `division`
 --
-ALTER TABLE `division`
+ALTER TABLE `dts_division`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `document`
 --
-ALTER TABLE `document`
+ALTER TABLE `dts_document`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `logs`
 --
-ALTER TABLE `logs`
+ALTER TABLE `dts_logs`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `track`
 --
-ALTER TABLE `track`
+ALTER TABLE `dts_track`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT for table `user`
 --
-ALTER TABLE `user`
+ALTER TABLE `dts_user`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- Constraints for dumped tables
@@ -210,22 +210,22 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- Constraints for table `chat`
 --
-ALTER TABLE `chat`
-ADD CONSTRAINT `document_chat_fk` FOREIGN KEY (`document`) REFERENCES `document` (`id`),
-ADD CONSTRAINT `user_chat_fk` FOREIGN KEY (`user`) REFERENCES `user` (`id`);
+ALTER TABLE `dts_chat`
+ADD CONSTRAINT `document_chat_fk` FOREIGN KEY (`document`) REFERENCES `dts_document` (`id`),
+ADD CONSTRAINT `user_chat_fk` FOREIGN KEY (`user`) REFERENCES `dts_user` (`id`);
 
 --
 -- Constraints for table `track`
 --
-ALTER TABLE `track`
-ADD CONSTRAINT `document_track_fk` FOREIGN KEY (`document`) REFERENCES `document` (`id`),
-ADD CONSTRAINT `user_track_fk` FOREIGN KEY (`user`) REFERENCES `user` (`id`);
+ALTER TABLE `dts_track`
+ADD CONSTRAINT `document_track_fk` FOREIGN KEY (`document`) REFERENCES `dts_document` (`id`),
+ADD CONSTRAINT `user_track_fk` FOREIGN KEY (`user`) REFERENCES `dts_user` (`id`);
 
 --
 -- Constraints for table `user`
 --
-ALTER TABLE `user`
-ADD CONSTRAINT `division_fk` FOREIGN KEY (`division`) REFERENCES `division` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `dts_user`
+ADD CONSTRAINT `division_fk` FOREIGN KEY (`division`) REFERENCES `dts_division` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
