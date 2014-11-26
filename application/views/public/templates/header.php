@@ -53,5 +53,5 @@ $active[$current_controller] = 'active';
             </div>
         </div>
         <div class="container">
-            <?php echo "<h1>$header</h1>"; ?>
+            <h1><?php echo "$header"; ?></h1>
         </div>
