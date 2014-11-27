@@ -106,11 +106,11 @@ class User extends CI_Controller {
 
                     if ($this->userfactory->addUser($firstname, $lastname, $email, $username, $password, $type, $division)) {
                         $this->load->library("LogsFactory");
-						$user = $this->username;
-						$action = "User '$user' has added '$firstname $lastname' to USERS.";
-						$this->logsfactory->logAction($action);
-						
-						redirect('admin/user');
+                        $user = $this->username;
+                        $action = "User '$user' has added '$firstname $lastname' to USERS.";
+                        $this->logsfactory->logAction($action);
+
+                        redirect('admin/user');
                     } else {
                         echo "Failed!";
                     }
@@ -176,11 +176,11 @@ class User extends CI_Controller {
 
                     if ($this->userfactory->updateUser($status, $userId, $firstname, $lastname, $email, $username, $password, $type, $division)) {
                         $this->load->library("LogsFactory");
-						$user = $this->username;
-						$action = "User '$user' has updated '$firstname $lastname' in USERS.";
-						$this->logsfactory->logAction($action);
-						
-						redirect('admin/user');
+                        $user = $this->username;
+                        $action = "User '$user' has updated '$firstname $lastname' in USERS.";
+                        $this->logsfactory->logAction($action);
+
+                        redirect('admin/user');
                     } else {
                         echo "Failed!";
                     }
@@ -191,4 +191,60 @@ class User extends CI_Controller {
         }
     }
 
+    public function checkUsername() {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'RD' || $this->userType == 'ARD' || $this->userType == 'SEC') {
+                    $this->error(403);
+                } else {
+                    $this->load->library("UserFactory");
+                    $username = $this->cleanString($_GET['username']);
+                    echo json_encode(array('valid' => $this->userfactory->checkUsername($username)));
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+
+    public function checkEmail() {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'RD' || $this->userType == 'ARD' || $this->userType == 'SEC') {
+                    $this->error(403);
+                } else {
+                    $this->load->library("UserFactory");
+                    $email = $this->cleanString($_GET['email']);
+                    echo json_encode(array('valid' => $this->userfactory->checkEmail($email)));
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+
+    public function checkUserType() {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                if ($this->userType == 'RD' || $this->userType == 'ARD' || $this->userType == 'SEC') {
+                    $this->error(403);
+                } else {
+                    $this->load->library("UserFactory");
+                    $userType = $this->cleanString($_GET['userType']);
+                    echo json_encode(array('valid' => $this->userfactory->checkUserType($userType)));
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 }

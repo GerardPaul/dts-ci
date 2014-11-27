@@ -58,9 +58,11 @@ class Profile extends CI_Controller {
             $this->load->admin_template('error_view', $data);
         }
     }
+
     public function index() {
         $this->error(404);
     }
+
     public function edit() {
         $this->checkLogin();
         if ($this->login) {
@@ -83,7 +85,7 @@ class Profile extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
-    
+
     public function update() {
         $this->checkLogin();
         if ($this->login) {
@@ -108,4 +110,27 @@ class Profile extends CI_Controller {
             redirect('login', 'refresh');
         }
     }
+
+    public function checkUsername() {
+        $this->checkLogin();
+        if ($this->login) {
+            $this->load->library("UserFactory");
+            $username = $this->cleanString($_GET['username']);
+            echo json_encode(array('valid' => $this->userfactory->checkUsername($username)));
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+
+    public function checkEmail() {
+        $this->checkLogin();
+        if ($this->login) {
+            $this->load->library("UserFactory");
+            $email = $this->cleanString($_GET['email']);
+            echo json_encode(array('valid' => $this->userfactory->checkEmail($email)));
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+
 }

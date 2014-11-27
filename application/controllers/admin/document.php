@@ -489,6 +489,8 @@ class Document extends CI_Controller {
             if ($this->userType != 'SEC') {
                 $this->error(403);
             } else {
+                $originalPath = $_POST['originalAttachment'];
+                
                 $attachment_path = 'No File.';
                 $filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
                 $config = array(
@@ -506,6 +508,10 @@ class Document extends CI_Controller {
                     $upload_data = $this->upload->data();
                     if (isset($upload_data['full_path'])) {
                         $attachment_path = $upload_data['full_path'];
+                        //delete old file
+                        if(is_file($originalPath)){
+                            unlink($originalPath);
+                        }
                     } else {
                         $attachment_path = "No File.";
                     }
@@ -525,7 +531,7 @@ class Document extends CI_Controller {
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
                 if ($attachment_path == 'No File.') {
-                    $attachment_path = $_POST['originalAttachment'];
+                    $attachment_path = $originalPath;
                 }
 
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {

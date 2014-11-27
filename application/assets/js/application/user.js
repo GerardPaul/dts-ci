@@ -39,6 +39,10 @@ $(document).ready(function() {
                     },
                     emailAddress: {
                         message: 'The value is not a valid E-mail address!'
+                    },
+                    remote: {
+                        message: 'This e-mail has already registered!',
+                        url: base_url + 'admin/user/checkEmail'
                     }
                 }
             },
@@ -46,6 +50,10 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'The Username is required!'
+                    },
+                    remote: {
+                        message: 'This username has already in use!',
+                        url: base_url + 'admin/user/checkUsername'
                     }
                 }
             },
@@ -91,6 +99,10 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'The User Type is required!'
+                    },
+                    remote: {
+                        message: 'There can only be one account of this type!',
+                        url: base_url + 'admin/user/checkUserType'
                     }
                 }
             },

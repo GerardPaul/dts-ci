@@ -3,9 +3,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Profile extends CI_Controller {
+class Log extends CI_Controller {
 
-    var $title = 'Profile';
+    var $title = 'Logs';
     var $login = FALSE;
     var $userType = '';
     var $userId = '';
@@ -60,59 +60,20 @@ class Profile extends CI_Controller {
     }
 
     public function index() {
-        $this->error(404);
-    }
-
-    public function edit() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            if ($this->userType != 'ADMIN') {
                 $this->error(403);
             } else {
-                $id = $this->userId;
-                $this->load->library("UserFactory");
-                $user = $this->userfactory->getUser($id);
+                $this->load->library("LogFactory");
                 $data = array(
-                    "user" => $user,
+                    "logs" => $this->logfactory->getLogs(),
                     "title" => $this->title,
-                    "header" => 'Edit Profile',
+                    "header" => 'All Logs',
                     "userType" => $this->userType,
                     "username" => $this->username
                 );
-                $this->load->admin_template('edit_profile', $data);
-            }
-        } else {
-            redirect('login', 'refresh');
-        }
-    }
-
-    public function update() {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'EMP') {
-                $this->error(403);
-            } else {
-                $this->load->library("UserFactory");
-                $userId = $this->userId;
-                $firstname = $this->cleanString($_POST['firstname']);
-                $lastname = $this->cleanString($_POST['lastname']);
-                $email = $this->cleanString($_POST['email']);
-                $username = $this->cleanString($_POST['username']);
-                $password = $this->cleanString($_POST['password']);
-
-                if ($this->userfactory->updateProfile($userId, $firstname, $lastname, $email, $username, $password)) {
-                    $this->load->library("LogsFactory");
-                    $user = $this->username;
-                    $action = "User '$user' has updated his profile.";
-                    $this->logsfactory->logAction($action);
-
-                    if ($password === 'password')
-                        redirect('admin/home/');
-                    else
-                        redirect('admin/home/logout');
-                } else {
-                    echo "Failed!";
-                }
+                $this->load->admin_template('show_logs', $data);
             }
         } else {
             redirect('login', 'refresh');

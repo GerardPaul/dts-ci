@@ -163,4 +163,34 @@ class UserFactory {
         return false;
     }
 
+    public function checkUsername($username){
+        $sql = "SELECT * FROM dts_user WHERE username = ?";
+        $query = $this->_ci->db->query($sql, array($username));
+        if ($query->num_rows() > 0) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+    
+    public function checkEmail($email){
+        $sql = "SELECT * FROM dts_user WHERE email = ?";
+        $query = $this->_ci->db->query($sql, array($email));
+        if ($query->num_rows() > 0) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+    
+    public function checkUserType($userType){
+        $sql = "SELECT * FROM dts_user WHERE userType = ?";
+        $query = $this->_ci->db->query($sql, array($userType));
+        $num = $query->num_rows();
+        if (($userType == 'ADMIN' || $userType == 'RD' || $userType == 'SEC') && $num == 1) {
+            return false;
+        }else {
+            return true;
+        }
+    }
 }

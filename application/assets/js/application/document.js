@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $('#dueDate').datetimepicker({pickTime: false});
     $('#dateReceived').datetimepicker({pickTime: false});
     $('#deadline').datetimepicker({pickTime: false});
@@ -8,11 +8,11 @@ $(document).ready(function() {
         $('#addDocumentForm').data('bootstrapValidator').resetForm('resetFormData');
     }
 
-    $('.cancelDocumentForm').on('click', function() {
+    $('.cancelDocumentForm').on('click', function () {
         clearDocumentForm();
     });
 
-	// Validation for adding document
+    // Validation for adding document
     $('#addDocumentForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -83,17 +83,17 @@ $(document).ready(function() {
         }
     });
 
-    $('#dueDate').on('dp.change dp.show', function(e) {
+    $('#dueDate').on('dp.change dp.show', function (e) {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
     });
 
-    $('#dateReceived').on('dp.change dp.show', function(e) {
+    $('#dateReceived').on('dp.change dp.show', function (e) {
         // Validate the date when user change it
         $('#addDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
     });
-	
-	// Validation for editing document
+
+    // Validation for editing document
     $('#editDocumentForm').bootstrapValidator({
         container: 'tooltip',
         message: 'This value is not valid',
@@ -164,12 +164,12 @@ $(document).ready(function() {
         }
     });
 
-    $('#dueDate').on('dp.change dp.show', function(e) {
+    $('#dueDate').on('dp.change dp.show', function (e) {
         // Validate the date when user change it
         $('#editDocumentForm').bootstrapValidator('revalidateField', 'dueDate');
     });
 
-    $('#dateReceived').on('dp.change dp.show', function(e) {
+    $('#dateReceived').on('dp.change dp.show', function (e) {
         // Validate the date when user change it
         $('#editDocumentForm').bootstrapValidator('revalidateField', 'dateReceived');
     });
@@ -229,17 +229,17 @@ $(document).ready(function() {
         }
     });
 
-    $('#deadline').on('dp.change dp.show', function(e) {
+    $('#deadline').on('dp.change dp.show', function (e) {
         // Validate the date when user change it
         $('#assignForm').bootstrapValidator('revalidateField', 'deadline');
     });
 
-    $('.toggleChat').click(function() {
+    $('.toggleChat').click(function () {
         $('.toggleChat i').toggle();
         $('#chatContents').toggle();
 
-		var height = $('.chatBox').height();
-		
+        var height = $('.chatBox').height();
+
         if (height === 300) {
             $('.chatBox').height(35);
         } else if (height === 35) {
@@ -248,12 +248,12 @@ $(document).ready(function() {
             $('.chatBox').height(34);
         } else if (height === 34) {
             $('.chatBox').height(500);
-        } 
+        }
     });
 
-    $('#download').click(function() {
+    $('#download').click(function () {
         var path = $('#path').val();
-        $.post(base_url + "admin/document/download", {path: path}, function(data) {
+        $.post(base_url + "admin/document/download", {path: path}, function (data) {
             if (data.status == 'ok') {
 
             } else {
@@ -265,7 +265,7 @@ $(document).ready(function() {
     var currentStatus = $('#currentStatus').val();
     $('#editStatus').val(currentStatus);
 
-    $('#changeView').on('change', function() {
+    $('#changeView').on('change', function () {
         var value = $(this).val();
         var change = '';
         if (value === '1') {
@@ -292,11 +292,11 @@ $(document).ready(function() {
     } else if (load === 'rddetails') {
         //loadRDButtons();
     }
-	
-	$('#changeAttachmentButton').click(function(){
-		$('.attachments').toggle();
-		$('#changeAttachmentButton span').toggle();
-	});
+
+    $('#changeAttachmentButton').click(function () {
+        $('.attachments').toggle();
+        $('#changeAttachmentButton span').toggle();
+    });
 });
 
 function loadRDButtons() {
@@ -326,10 +326,10 @@ function loadDocuments(change) {
     $('#documentsTable').dataTable().fnDestroy();
 
     var userId = $('#userId').val();
-    $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function(response, status) {
+    $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function (response, status) {
         var result = JSON.parse(response);
 
-        $.each(result, function(i, field) {
+        $.each(result, function (i, field) {
             var received = field['received'];
 
             var dateReceived = format_mysqldate(field['dateReceived']);
@@ -349,7 +349,7 @@ function loadDocuments(change) {
                 }
             } else if (userType === 'RD' || userType === 'ARD') {
                 links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
-            } else{
+            } else {
                 links = '<a href="' + base_url + 'document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
             }
 
@@ -363,15 +363,15 @@ function loadDocuments(change) {
         });
         $('#documentsTable').dataTable({
             "order": [[0, "desc"]],
-			"aoColumns": [
-				{"bVisible":false, "iDataSort": 1},
+            "aoColumns": [
+                {"bVisible": false, "iDataSort": 1},
                 null,
                 null,
                 null,
                 null,
                 {"bSortable": false}
             ],
-            "aoColumnDefs": [ 
+            "aoColumnDefs": [
                 {"sWidth": "20%", "aTargets": [1]},
                 {"sWidth": "50%", "aTargets": [2]},
                 {"sWidth": "10%", "aTargets": [3]},

@@ -11,6 +11,11 @@ class Chat extends CI_Controller {
 //    public function Chat() {
 //        parent::_construct();
 //    }
+    
+    public function index() {
+        $this->error(404);
+    }
+    
     private function checkLogin() {
         if ($this->session->userdata('logged_in')) {
             $this->login = TRUE;

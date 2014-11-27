@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="well">
-                <form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url('admin/profile/update'); ?>">							
+                <form id="profileForm" method="post" class="form-horizontal" action="<?php echo base_url('admin/profile/update'); ?>">							
                     <div class="form-group">
                         <label class="col-md-2 control-label">Full Name</label>
                         <div class="col-md-4">
