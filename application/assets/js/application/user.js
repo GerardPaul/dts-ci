@@ -1,6 +1,8 @@
 $(document).ready(function() {
     $('#usersTable').dataTable();
-
+    
+    var userId = $('#userId').val();
+    
     function clearUserForm() {
         $('#addUserForm').data('bootstrapValidator').resetForm('resetFormData');
     }
@@ -42,7 +44,10 @@ $(document).ready(function() {
                     },
                     remote: {
                         message: 'This e-mail has already registered!',
-                        url: base_url + 'admin/user/checkEmail'
+                        url: base_url + 'admin/user/checkEmail',
+                        data: {
+                            type: userId
+                        }
                     }
                 }
             },
@@ -53,7 +58,10 @@ $(document).ready(function() {
                     },
                     remote: {
                         message: 'This username has already in use!',
-                        url: base_url + 'admin/user/checkUsername'
+                        url: base_url + 'admin/user/checkUsername',
+                        data: {
+                            type: userId
+                        }
                     }
                 }
             },
@@ -102,7 +110,10 @@ $(document).ready(function() {
                     },
                     remote: {
                         message: 'There can only be one account of this type!',
-                        url: base_url + 'admin/user/checkUserType'
+                        url: base_url + 'admin/user/checkUserType',
+                        data: {
+                            type: userId
+                        }
                     }
                 }
             },

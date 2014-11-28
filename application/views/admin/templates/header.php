@@ -42,8 +42,8 @@ $active[$current_controller] = 'active';
                     <ul class="nav navbar-nav navbar-right">
                         <li class="<?php if (isset($active['document'])) echo $active['document']; ?>"><a href="<?php echo base_url("admin/document"); ?>">Documents</a></li>
                         <?php if ($userType == 'ADMIN') { ?>
-                            <li class="<?php if (isset($active['user'])) echo $active['user']; ?>"><a href="<?php echo base_url("admin/user"); ?>">User</a></li>
-                            <li class="<?php if (isset($active['division'])) echo $active['division']; ?>"><a href="<?php echo base_url("admin/division"); ?>">Division</a></li>
+                            <li class="<?php if (isset($active['user'])) echo $active['user']; ?>"><a href="<?php echo base_url("admin/user"); ?>">Users</a></li>
+                            <li class="<?php if (isset($active['division'])) echo $active['division']; ?>"><a href="<?php echo base_url("admin/division"); ?>">Divisions</a></li>
                             <li class="<?php if (isset($active['log'])) echo $active['log']; ?>"><a href="<?php echo base_url("admin/log"); ?>">Logs</a></li>
                         <?php } ?>
                         <li class="dropdown <?php if (isset($active['profile'])) echo $active['profile']; ?>">

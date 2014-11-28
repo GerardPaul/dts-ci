@@ -77,7 +77,8 @@ class Profile extends CI_Controller {
                     "title" => $this->title,
                     "header" => 'Edit Profile',
                     "userType" => $this->userType,
-                    "username" => $this->username
+                    "username" => $this->username,
+                    "userId" => $this->userId
                 );
                 $this->load->template('edit_profile', $data);
             }
@@ -89,7 +90,7 @@ class Profile extends CI_Controller {
     public function update() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD' || $this->userType == 'ARD') {
+            if ($this->userType != 'EMP') {
                 $this->error(403);
             } else {
                 $this->load->library("UserFactory");
@@ -101,7 +102,15 @@ class Profile extends CI_Controller {
                 $password = $this->cleanString($_POST['password']);
 
                 if ($this->userfactory->updateProfile($userId, $firstname, $lastname, $email, $username, $password)) {
-                    redirect('home/logout');
+                    $this->load->library("LogsFactory");
+                    $user = $this->username;
+                    $action = "User '$user' has updated his profile.";
+                    $this->logsfactory->logAction($action);
+
+                    if ($password === 'password')
+                        redirect('home/');
+                    else
+                        redirect('home/logout');
                 } else {
                     echo "Failed!";
                 }
@@ -116,7 +125,8 @@ class Profile extends CI_Controller {
         if ($this->login) {
             $this->load->library("UserFactory");
             $username = $this->cleanString($_GET['username']);
-            echo json_encode(array('valid' => $this->userfactory->checkUsername($username)));
+            $userId = $this->cleanString($_GET['type']);
+            echo json_encode(array('valid' => $this->userfactory->checkUsername($username, $userId)));
         } else {
             redirect('login', 'refresh');
         }
@@ -127,7 +137,8 @@ class Profile extends CI_Controller {
         if ($this->login) {
             $this->load->library("UserFactory");
             $email = $this->cleanString($_GET['email']);
-            echo json_encode(array('valid' => $this->userfactory->checkEmail($email)));
+            $userId = $this->cleanString($_GET['type']);
+            echo json_encode(array('valid' => $this->userfactory->checkEmail($email, $userId)));
         } else {
             redirect('login', 'refresh');
         }

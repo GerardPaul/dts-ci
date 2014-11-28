@@ -77,7 +77,8 @@ class Profile extends CI_Controller {
                     "title" => $this->title,
                     "header" => 'Edit Profile',
                     "userType" => $this->userType,
-                    "username" => $this->username
+                    "username" => $this->username,
+                    "userId" => $this->userId
                 );
                 $this->load->admin_template('edit_profile', $data);
             }

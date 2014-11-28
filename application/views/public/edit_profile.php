@@ -1,8 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
+            <input type="hidden" name="userId" id="userId" value="<?php echo $userId; ?>" >
             <div class="well">
-                <form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url('profile/update'); ?>">							
+                <form id="profileForm" method="post" class="form-horizontal" action="<?php echo base_url('profile/update'); ?>">							
                     <div class="form-group">
                         <label class="col-md-2 control-label">Full Name</label>
                         <div class="col-md-4">

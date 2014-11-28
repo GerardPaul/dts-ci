@@ -6,6 +6,7 @@
             </a>
         </div>
     </div>
+    <input type="hidden" name="userId" id="userId" value="<?php echo $userId; ?>" >
     <div class="space-10"></div>
     <div class="row">
         <div class="col-xs-12">

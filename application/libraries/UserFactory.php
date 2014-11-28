@@ -163,32 +163,57 @@ class UserFactory {
         return false;
     }
 
-    public function checkUsername($username){
+    private function checkId($userId, $item, $value){
+        $sql = "SELECT $item FROM dts_user WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($userId));
+        if ($query->num_rows() > 0) {
+            $value1 = $query->row($item);
+            if($value1 == $value){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    
+    public function checkUsername($username,$userId){
         $sql = "SELECT * FROM dts_user WHERE username = ?";
         $query = $this->_ci->db->query($sql, array($username));
         if ($query->num_rows() > 0) {
-            return false;
+            if($this->checkId($userId, 'username', $username)){
+                return true;
+            }else{
+                return false;
+            }
         }else {
             return true;
         }
     }
     
-    public function checkEmail($email){
+    public function checkEmail($email,$userId){
         $sql = "SELECT * FROM dts_user WHERE email = ?";
         $query = $this->_ci->db->query($sql, array($email));
         if ($query->num_rows() > 0) {
-            return false;
+            if($this->checkId($userId, 'email', $email)){
+                return true;
+            }else{
+                return false;
+            }
         }else {
             return true;
         }
     }
     
-    public function checkUserType($userType){
+    public function checkUserType($userType,$userId){
         $sql = "SELECT * FROM dts_user WHERE userType = ?";
         $query = $this->_ci->db->query($sql, array($userType));
         $num = $query->num_rows();
         if (($userType == 'ADMIN' || $userType == 'RD' || $userType == 'SEC') && $num == 1) {
-            return false;
+            if($this->checkId($userId, 'userType', $userType)){
+                return true;
+            }else{
+                return false;
+            }
         }else {
             return true;
         }

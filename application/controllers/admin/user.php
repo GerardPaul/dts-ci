@@ -62,24 +62,21 @@ class User extends CI_Controller {
     public function index() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'EMP') {
+            if ($this->userType != 'ADMIN') {
                 $this->error(403);
             } else {
-                if ($this->userType == 'RD' || $this->userType == 'ARD') {
-                    $this->error(403);
-                } else {
-                    $this->load->library("UserFactory");
-                    $this->load->library("DivisionFactory");
-                    $data = array(
-                        "users" => $this->userfactory->getUser(),
-                        "divisions" => $this->divisionfactory->getDivision(),
-                        "title" => $this->title,
-                        "header" => 'All Users',
-                        "userType" => $this->userType,
-                        "username" => $this->username
-                    );
-                    $this->load->admin_template('show_users', $data);
-                }
+                $this->load->library("UserFactory");
+                $this->load->library("DivisionFactory");
+                $data = array(
+                    "users" => $this->userfactory->getUser(),
+                    "divisions" => $this->divisionfactory->getDivision(),
+                    "title" => $this->title,
+                    "header" => 'All Users',
+                    "userType" => $this->userType,
+                    "username" => $this->username,
+                    "userId" => 0
+                );
+                $this->load->admin_template('show_users', $data);
             }
         } else {
             redirect('login', 'refresh');
@@ -141,7 +138,8 @@ class User extends CI_Controller {
                             "title" => $this->title,
                             "header" => 'Edit User',
                             "userType" => $this->userType,
-                            "username" => $this->username
+                            "username" => $this->username,
+                            "userId" => $this->userId
                         );
                         $this->load->admin_template('edit_user', $data);
                     } else {
@@ -202,7 +200,8 @@ class User extends CI_Controller {
                 } else {
                     $this->load->library("UserFactory");
                     $username = $this->cleanString($_GET['username']);
-                    echo json_encode(array('valid' => $this->userfactory->checkUsername($username)));
+                    $userId = $this->cleanString($_GET['type']);
+                    echo json_encode(array('valid' => $this->userfactory->checkUsername($username,$userId)));
                 }
             }
         } else {
@@ -221,7 +220,8 @@ class User extends CI_Controller {
                 } else {
                     $this->load->library("UserFactory");
                     $email = $this->cleanString($_GET['email']);
-                    echo json_encode(array('valid' => $this->userfactory->checkEmail($email)));
+                    $userId = $this->cleanString($_GET['type']);
+                    echo json_encode(array('valid' => $this->userfactory->checkEmail($email,$userId)));
                 }
             }
         } else {
@@ -240,11 +240,13 @@ class User extends CI_Controller {
                 } else {
                     $this->load->library("UserFactory");
                     $userType = $this->cleanString($_GET['userType']);
-                    echo json_encode(array('valid' => $this->userfactory->checkUserType($userType)));
+                    $userId = $this->cleanString($_GET['type']);
+                    echo json_encode(array('valid' => $this->userfactory->checkUserType($userType,$userId)));
                 }
             }
         } else {
             redirect('login', 'refresh');
         }
     }
+
 }

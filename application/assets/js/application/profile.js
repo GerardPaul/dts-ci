@@ -3,6 +3,8 @@ $(document).ready(function () {
         $('#profileForm').data('bootstrapValidator').resetForm('resetFormData');
     }
 
+    var userId = $('#userId').val();
+
     $('.cancelUserForm').on('click', function () {
         clearUserForm();
     });
@@ -40,7 +42,10 @@ $(document).ready(function () {
                     },
                     remote: {
                         message: 'This e-mail has already registered!',
-                        url: base_url + 'profile/checkEmail'
+                        url: base_url + 'profile/checkEmail',
+                        data: {
+                            type: userId
+                        }
                     }
                 }
             },
@@ -51,7 +56,10 @@ $(document).ready(function () {
                     },
                     remote: {
                         message: 'This username has already in use!',
-                        url: base_url + 'profile/checkUsername'
+                        url: base_url + 'profile/checkUsername',
+                        data: {
+                            type: userId
+                        }
                     }
                 }
             },
