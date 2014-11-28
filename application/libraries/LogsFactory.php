@@ -13,7 +13,7 @@ class LogsFactory {
     }
 
     public function getLogs() {
-        $sql = "SELECT * FROM dts_logs";
+        $sql = 'SELECT * FROM dts_logs ORDER BY timeOccured DESC';
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $logs = array();
@@ -33,13 +33,17 @@ class LogsFactory {
     }
 
     public function createObjectFromData($row) {
-        $log = new Division_Model();
+        $log = new Logs_Model();
 
         $log->setId($row->id);
+        $log->setTimeOccured($this->formatDate($row->timeOccured));
         $log->setActionTaken($row->actionTaken);
-        $log->setTimeOccured($row->timeOccured);
 
         return $log;
+    }
+
+    private function formatDate($date) {
+        return date('Y-m-j @ H:i:s', strtotime($date));
     }
 
 }

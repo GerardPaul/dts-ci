@@ -65,9 +65,9 @@ class Log extends CI_Controller {
             if ($this->userType != 'ADMIN') {
                 $this->error(403);
             } else {
-                $this->load->library("LogFactory");
+                $this->load->library("LogsFactory");
                 $data = array(
-                    "logs" => $this->logfactory->getLogs(),
+                    "logs" => $this->logsfactory->getLogs(),
                     "title" => $this->title,
                     "header" => 'All Logs',
                     "userType" => $this->userType,

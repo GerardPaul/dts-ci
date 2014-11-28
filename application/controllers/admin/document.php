@@ -169,11 +169,11 @@ class Document extends CI_Controller {
 
                 if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
-					$user = $this->username;
-					$action = "User '$user' has added a document with ref no. '$refNo' to DOCUMENTS.";
-					$this->logsfactory->logAction($action);
-						
-					redirect('admin/document');
+                    $user = $this->username;
+                    $action = "User '$user' has added a document with ref no. '$refNo' to DOCUMENTS.";
+                    $this->logsfactory->logAction($action);
+
+                    redirect('admin/document');
                 } else {
                     echo "Failed!";
                 }
@@ -196,7 +196,7 @@ class Document extends CI_Controller {
                 if ($track > 0 && $document) {
                     $this->receive($this->userId, $track); //automatically receive upon viewing document
                     $status = $this->status($document->getStatus());
-                    
+
                     if ($userType == 'RD') {
                         $this->rdDetails($document, $status);
                     } else {
@@ -490,7 +490,7 @@ class Document extends CI_Controller {
                 $this->error(403);
             } else {
                 $originalPath = $_POST['originalAttachment'];
-                
+
                 $attachment_path = 'No File.';
                 $filename = date('ymds') . '-' . $_POST['referenceNumber'] . '-' . $_FILES['attachment']['name'];
                 $config = array(
@@ -509,7 +509,7 @@ class Document extends CI_Controller {
                     if (isset($upload_data['full_path'])) {
                         $attachment_path = $upload_data['full_path'];
                         //delete old file
-                        if(is_file($originalPath)){
+                        if (is_file($originalPath)) {
                             unlink($originalPath);
                         }
                     } else {
@@ -536,11 +536,11 @@ class Document extends CI_Controller {
 
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
-					$user = $this->username;
-					$action = "User '$user' has updated document with ref no. '$refNo' in DOCUMENTS.";
-					$this->logsfactory->logAction($action);
-						
-					redirect('admin/document');
+                    $user = $this->username;
+                    $action = "User '$user' has updated document with ref no. '$refNo' in DOCUMENTS.";
+                    $this->logsfactory->logAction($action);
+
+                    redirect('admin/document');
                 } else {
                     echo "Failed!";
                 }
