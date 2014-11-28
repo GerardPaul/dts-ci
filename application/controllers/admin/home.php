@@ -28,7 +28,7 @@ class Home extends CI_Controller {
             $this->userType = 'EMP';
         }
     }
-    
+
     private function error($er = 0) {
         $header = '';
         $content = '';
@@ -52,7 +52,7 @@ class Home extends CI_Controller {
             $this->load->admin_template('error_view', $data);
         }
     }
-    
+
     public function index() {
         $this->checkLogin();
         if ($this->login) {
@@ -79,5 +79,3 @@ class Home extends CI_Controller {
     }
 
 }
-
-?>

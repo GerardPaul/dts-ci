@@ -7,10 +7,6 @@ class Chat extends CI_Controller {
 
     var $login = FALSE;
     var $id = '';
-
-//    public function Chat() {
-//        parent::_construct();
-//    }
     
     public function index() {
         $this->error(404);

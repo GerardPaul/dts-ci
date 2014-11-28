@@ -104,7 +104,7 @@ class Profile extends CI_Controller {
                 if ($this->userfactory->updateProfile($userId, $firstname, $lastname, $email, $username, $password)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "User '$user' has updated his profile.";
+                    $action = "$user has updated his profile.";
                     $this->logsfactory->logAction($action);
 
                     if ($password === 'password')

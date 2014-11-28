@@ -104,7 +104,7 @@ class User extends CI_Controller {
                     if ($this->userfactory->addUser($firstname, $lastname, $email, $username, $password, $type, $division)) {
                         $this->load->library("LogsFactory");
                         $user = $this->username;
-                        $action = "User '$user' has added '$firstname $lastname' to USERS.";
+                        $action = "$user has added '$firstname $lastname' to USERS.";
                         $this->logsfactory->logAction($action);
 
                         redirect('admin/user');
@@ -175,7 +175,7 @@ class User extends CI_Controller {
                     if ($this->userfactory->updateUser($status, $userId, $firstname, $lastname, $email, $username, $password, $type, $division)) {
                         $this->load->library("LogsFactory");
                         $user = $this->username;
-                        $action = "User '$user' has updated '$firstname $lastname' in USERS.";
+                        $action = "$user has updated '$firstname $lastname' in USERS.";
                         $this->logsfactory->logAction($action);
 
                         redirect('admin/user');

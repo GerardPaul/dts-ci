@@ -100,7 +100,7 @@ class Division extends CI_Controller {
                     if ($this->divisionfactory->addDivision($divisionName, $desc)) {
                         $this->load->library("LogsFactory");
                         $user = $this->username;
-                        $action = "User '$user' has added '$divisionName' in DIVISIONS.";
+                        $action = "$user has added '$divisionName' in DIVISIONS.";
                         $this->logsfactory->logAction($action);
 
                         redirect('admin/division');

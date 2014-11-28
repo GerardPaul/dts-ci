@@ -170,7 +170,7 @@ class Document extends CI_Controller {
                 if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "User '$user' has added a document with ref no. '$refNo' to DOCUMENTS.";
+                    $action = "$user has added a document, ref no. $refNo to DOCUMENTS.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');
@@ -284,6 +284,12 @@ class Document extends CI_Controller {
                 $track = $this->cleanString($_POST['trackId']);
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->updateStatus($document, $status)) {
+                    $this->load->library("LogsFactory");
+                    $user = $this->username;
+                    
+                    $action = "$user has added a document, ref no. $refNo to DOCUMENTS.";
+                    $this->logsfactory->logAction($action);
+                    
                     redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
@@ -347,61 +353,6 @@ class Document extends CI_Controller {
                     redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
-                }
-            }
-        } else {
-            redirect('login', 'refresh');
-        }
-    }
-
-    public function forward($id = 0) {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'EMP') {
-                $this->error(403);
-            } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'ARD') {
-                    $this->error(403);
-                } else {
-                    $id = (int) $id;
-                    $notes = $this->cleanString($_POST['note']);
-                    $action = $this->cleanString($_POST['action']);
-                    $ardId = $this->cleanString($_POST['ardId']);
-                    $empId = $this->cleanString($_POST['empId']);
-                    if ($ardId == $empId)
-                        $empId = '';
-
-                    $this->load->library("RDDocumentFactory");
-                    if ($this->rddocumentfactory->forwardTo($id, $ardId, $empId, $action, $notes)) {
-                        redirect('admin/document/details/' . $id);
-                    } else {
-                        echo "Failed!";
-                    }
-                }
-            }
-        } else {
-            redirect('login', 'refresh');
-        }
-    }
-
-    public function forwardToEmp($id = 0) {
-        $this->checkLogin();
-        if ($this->login) {
-            if ($this->userType == 'EMP') {
-                $this->error(403);
-            } else {
-                if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'RD') {
-                    $this->error(403);
-                } else {
-                    $id = (int) $id;
-                    $empId = $this->cleanString($_POST['emp']);
-
-                    $this->load->library("RDDocumentFactory");
-                    if ($this->rddocumentfactory->forwardToEmp($id, $empId)) {
-                        redirect('admin/document/details/' . $id);
-                    } else {
-                        echo "Failed!";
-                    }
                 }
             }
         } else {
@@ -537,7 +488,7 @@ class Document extends CI_Controller {
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "User '$user' has updated document with ref no. '$refNo' in DOCUMENTS.";
+                    $action = "$user has updated document, ref no. $refNo in DOCUMENTS.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');

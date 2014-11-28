@@ -16,7 +16,7 @@
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Document
                 </button>
             <?php } ?>
-        <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
+    <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
         </div>
     </div>
     <div class="space-10"></div>
@@ -26,7 +26,8 @@
             <table class="table table-condensed table-striped table-responsive table-hover display" id="documentsTable">
                 <thead>
                     <tr>
-						<th>ID</th>
+                        <th>ID</th>
+                        <th>Ref #</th>
                         <th>From</th>
                         <th>Subject</th>
                         <th>Date Received</th>

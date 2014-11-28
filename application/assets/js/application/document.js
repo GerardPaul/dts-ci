@@ -354,10 +354,10 @@ function loadDocuments(change) {
             }
 
             if (received === '0000-00-00' || received === null) {
-                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td><strong>' + field['referenceNumber'] + '</strong></td><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
                         '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             } else {
-                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td>' + field['referenceNumber'] + '</td><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             }
         });
@@ -369,14 +369,16 @@ function loadDocuments(change) {
                 null,
                 null,
                 null,
+                null,
                 {"bSortable": false}
             ],
             "aoColumnDefs": [
-                {"sWidth": "20%", "aTargets": [1]},
-                {"sWidth": "50%", "aTargets": [2]},
-                {"sWidth": "10%", "aTargets": [3]},
+                {"sWidth": "10%", "aTargets": [1]},
+                {"sWidth": "15%", "aTargets": [2]},
+                {"sWidth": "45%", "aTargets": [3]},
                 {"sWidth": "10%", "aTargets": [4]},
-                {"sWidth": "10%", "aTargets": [5]}
+                {"sWidth": "10%", "aTargets": [5]},
+                {"sWidth": "10%", "aTargets": [6]}
             ],
             "bDestroy": true,
             "iDisplayLength": 50
