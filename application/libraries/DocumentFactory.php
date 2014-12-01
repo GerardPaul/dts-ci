@@ -20,6 +20,15 @@ class DocumentFactory {
         }
         return false;
     }
+    
+    public function getRefNo($id = 0) {
+        $sql = "SELECT referenceNumber FROM dts_document WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($id));
+        if ($query->num_rows() > 0) {
+            return $query->row('referenceNumber');
+        }
+        return false;
+    }
 
     public function getDocument($id = 0) {
         if ($id > 0) {

@@ -170,7 +170,7 @@ class Document extends CI_Controller {
                 if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "$user has added a document, ref no. $refNo to DOCUMENTS.";
+                    $action = "$user has added a document, ref no. $refNo.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');
@@ -287,7 +287,9 @@ class Document extends CI_Controller {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
                     
-                    $action = "$user has added a document, ref no. $refNo to DOCUMENTS.";
+                    $this->load->library("DocumentFactory");
+                    $refNo = $this->documentfactory->getRefNo($document);
+                    $action = "$user has changed status of document, ref no. $refNo.";
                     $this->logsfactory->logAction($action);
                     
                     redirect('admin/document/details/' . $track);
@@ -308,15 +310,28 @@ class Document extends CI_Controller {
                 $this->error(403);
             } else {
                 $document = (int) $document;
+                
+                $this->load->library("UserFactory");
+                $usernames = "";
+                
                 $users = array();
                 foreach ($_POST['selectedList'] as $user) {
                     $users[] = $user;
+                    $usernames .= $this->userfactory->getUsername($user) + ", ";
                 }
 
                 $track = $this->cleanString($_POST['trackId']);
 
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->ardForward($document, $users)) {
+                    $this->load->library("LogsFactory");
+                    $assignedBy = $this->username;
+                    
+                    $this->load->library("DocumentFactory");
+                    $refNo = $this->documentfactory->getRefNo($document);
+                    $action = "$assignedBy has assigned document ref no. $refNo to $usernames";
+                    $this->logsfactory->logAction($action);
+                    
                     redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
@@ -341,15 +356,27 @@ class Document extends CI_Controller {
                 $deadline = $this->cleanString($_POST['deadline']);
                 $deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
 
+                $this->load->library("UserFactory");
+                $usernames = "";
+                
                 $users = array();
                 foreach ($_POST['selectedList'] as $user) {
                     $users[] = $user;
+                    $usernames .= $this->userfactory->getUsername($user) . ", ";
                 }
 
                 $track = $this->cleanString($_POST['trackId']);
 
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users, $this->userId)) {
+                    $this->load->library("LogsFactory");
+                    $assignedBy = $this->username;
+                    
+                    $this->load->library("DocumentFactory");
+                    $refNo = $this->documentfactory->getRefNo($document);
+                    $action = "$assignedBy has assigned document ref no. $refNo to $usernames";
+                    $this->logsfactory->logAction($action);
+                    
                     redirect('admin/document/details/' . $track);
                 } else {
                     echo "Failed!";
@@ -488,7 +515,7 @@ class Document extends CI_Controller {
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "$user has updated document, ref no. $refNo in DOCUMENTS.";
+                    $action = "$user has updated document, ref no. $refNo.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');

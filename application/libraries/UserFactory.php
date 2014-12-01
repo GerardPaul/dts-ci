@@ -12,6 +12,15 @@ class UserFactory {
         $this->_ci->load->model("user_model");
     }
 
+    public function getUsername($id = 0) {
+        $sql = "SELECT username FROM dts_user WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($id));
+        if ($query->num_rows() > 0) {
+            return $query->row('username');
+        }
+        return false;
+    }
+    
     public function getUserLogin($username = '') {
         $sql = "SELECT u.id AS 'userID', u.firstname, u.lastname, u.email, u.username, u.password, u.salt, u.userType, u.status,
                         d.id AS 'divisionID', d.name, d.description
