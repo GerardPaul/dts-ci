@@ -166,11 +166,12 @@ class Document extends CI_Controller {
 
                 $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
-
-                if ($this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
+                
+                $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived);
+                if ($id) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "$user has added a document, ref no. $refNo.";
+                    $action = "$user has added a document, ref no. <a href='".base_url()."admin/document/view/$id' target='_blank'>$refNo</a>.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');
@@ -289,7 +290,7 @@ class Document extends CI_Controller {
                     
                     $this->load->library("DocumentFactory");
                     $refNo = $this->documentfactory->getRefNo($document);
-                    $action = "$user has changed status of document, ref no. $refNo.";
+                    $action = "$user has changed status of document, ref no. <a href='".base_url()."admin/document/view/$document' target='_blank'>$refNo</a>.";
                     $this->logsfactory->logAction($action);
                     
                     redirect('admin/document/details/' . $track);
@@ -317,7 +318,7 @@ class Document extends CI_Controller {
                 $users = array();
                 foreach ($_POST['selectedList'] as $user) {
                     $users[] = $user;
-                    $usernames .= $this->userfactory->getUsername($user) + ", ";
+                    $usernames .= $this->userfactory->getUsername($user) . ", ";
                 }
 
                 $track = $this->cleanString($_POST['trackId']);
@@ -329,7 +330,7 @@ class Document extends CI_Controller {
                     
                     $this->load->library("DocumentFactory");
                     $refNo = $this->documentfactory->getRefNo($document);
-                    $action = "$assignedBy has assigned document ref no. $refNo to $usernames";
+                    $action = "$assignedBy has assigned document ref no. <a href='".base_url()."admin/document/view/$document' target='_blank'>$refNo</a> to $usernames";
                     $this->logsfactory->logAction($action);
                     
                     redirect('admin/document/details/' . $track);
@@ -374,7 +375,7 @@ class Document extends CI_Controller {
                     
                     $this->load->library("DocumentFactory");
                     $refNo = $this->documentfactory->getRefNo($document);
-                    $action = "$assignedBy has assigned document ref no. $refNo to $usernames";
+                    $action = "$assignedBy has assigned document ref no. <a href='".base_url()."admin/document/view/$document' target='_blank'>$refNo</a> to $usernames";
                     $this->logsfactory->logAction($action);
                     
                     redirect('admin/document/details/' . $track);
@@ -511,11 +512,11 @@ class Document extends CI_Controller {
                 if ($attachment_path == 'No File.') {
                     $attachment_path = $originalPath;
                 }
-
+                
                 if ($this->documentfactory->updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived)) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
-                    $action = "$user has updated document, ref no. $refNo.";
+                    $action = "$user has updated document, ref no. <a href='".base_url()."admin/document/view/$id' target='_blank'>$refNo</a>.";
                     $this->logsfactory->logAction($action);
 
                     redirect('admin/document');

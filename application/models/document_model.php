@@ -139,7 +139,7 @@ class Document_Model extends CI_Model {
                 $this->_id = $this->db->insert_id();
                 //$this->db->insert("track", array('document' => $this->_id));
                 $this->addDocumentToRD($this->_id);
-                return true;
+                return $this->_id;
             }
         }
         return false;

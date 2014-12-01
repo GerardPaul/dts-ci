@@ -150,6 +150,14 @@ class Document extends CI_Controller {
                 $track = $this->cleanString($_POST['trackId']);
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->updateStatus($document, $status)) {
+                    $this->load->library("LogsFactory");
+                    $user = $this->username;
+                    
+                    $this->load->library("DocumentFactory");
+                    $refNo = $this->documentfactory->getRefNo($document);
+                    $action = "$user has changed status of document, ref no. <a href='".base_url()."admin/document/view/$document' target='_blank'>$refNo</a>.";
+                    $this->logsfactory->logAction($action);
+                    
                     redirect('document/details/' . $track);
                 } else {
                     echo "Failed!";
