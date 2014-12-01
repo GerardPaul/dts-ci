@@ -364,7 +364,7 @@ function loadDocuments(change) {
         $('#documentsTable').dataTable({
             "order": [[0, "desc"]],
             "aoColumns": [
-                {"bVisible": false, "iDataSort": 1},
+                {"bVisible": false, "iDataSort": 0},
                 null,
                 null,
                 null,
