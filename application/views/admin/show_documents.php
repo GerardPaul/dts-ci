@@ -16,7 +16,7 @@
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Document
                 </button>
                 <a class="btn btn-success btn-sm" href="<?php echo base_url(); ?>admin/document/sec">
-                    <i class="glyphicon glyphicon-dashboard"></i> My Documents
+                    <i class="glyphicon glyphicon-file"></i> My Documents
                 </a>
             <?php } ?>
     <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->

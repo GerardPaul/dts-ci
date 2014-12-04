@@ -11,6 +11,9 @@
                 </select>
                 <div class="space-10"></div>
             </div>
+            <?php if ($userType == 'SEC') { ?>
+                <a class="btn btn-sm btn-primary" href="<?php echo base_url(); ?>admin/document" data-toggle="tooltip" title="Back to Documents"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+            <?php } ?>
         </div>
     </div>
     <div class="space-10"></div>
