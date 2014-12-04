@@ -1,6 +1,7 @@
 <?php
 $current_controller = $this->router->fetch_class();
 $active[$current_controller] = 'active';
+$current_method = $this->router->fetch_method();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +24,7 @@ $active[$current_controller] = 'active';
         
         <script type="text/javascript">
             var userType = "<?php echo $userType; ?>";
+            var method = "<?php echo $current_method; ?>";
         </script>
     </head>
     <body>

@@ -85,12 +85,40 @@ class Document extends CI_Controller {
         }
     }
 
+    public function sec(){
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType != 'SEC') {
+                $this->error(403);
+            } else {
+                $data = array(
+                    "title" => $this->title,
+                    "header" => 'My Documents',
+                    "userType" => $this->userType,
+                    "username" => $this->username,
+                    "userId" => $this->userId,
+                    "load" => 'documents'
+                );
+                $this->load->admin_template('user_documents', $data);
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
+    
     public function getAllDocuments() {
         $userType = $_POST['userType'];
         $userId = $_POST['userId'];
+        $method = $_POST['method'];
+        
         if ($userType == 'ADMIN' || $userType == 'SEC') {
-            $this->load->library("DocumentFactory");
-            echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
+            if($method == 'sec'){
+                $this->load->library("TrackFactory");
+                echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $userId));
+            }else{
+                $this->load->library("DocumentFactory");
+                echo json_encode($this->documentfactory->ajaxGetDocument($_POST['change']));
+            }
         } else {
             $this->load->library("TrackFactory");
             echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $userId));
@@ -188,7 +216,7 @@ class Document extends CI_Controller {
         $this->checkLogin();
         if ($this->login) {
             $userType = $this->userType;
-            if ($userType == 'EMP' || $userType == 'ADMIN' || $userType == 'SEC') {
+            if ($userType == 'EMP' || $userType == 'ADMIN') {
                 $this->error(403);
             } else {
                 $track = (int) $track;
@@ -200,8 +228,10 @@ class Document extends CI_Controller {
 
                     if ($userType == 'RD') {
                         $this->rdDetails($document, $status);
-                    } else {
+                    } else if($userType == 'ARD') {
                         $this->ardDetails($document, $status);
+                    }else if($userType == 'SEC'){
+                        $this->secDetails($document, $status);
                     }
                 } else {
                     $this->error(403);
@@ -255,6 +285,23 @@ class Document extends CI_Controller {
         );
         $this->load->admin_template('ard_view_document', $data);
     }
+    
+    private function secDetails($document, $status) {
+        $this->load->library("UserFactory");
+        $division = $this->userfactory->getDivision($this->userId);
+
+        $data = array(
+            "document" => $document,
+            "title" => 'Document Details',
+            "header" => 'Document Details',
+            "userType" => $this->userType,
+            "username" => $this->username,
+            "status" => $status,
+            "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
+            "load" => 'arddetails'
+        );
+        $this->load->admin_template('sec_view_document', $data);
+    }
 
     private function status($status) {
         if ($status == 'Cancelled') {
@@ -277,7 +324,7 @@ class Document extends CI_Controller {
     public function statusChange($document = 0) {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType == 'ADMIN' || $this->userType == 'SEC' || $this->userType == 'EMP') {
+            if ($this->userType == 'ADMIN' || $this->userType == 'EMP') {
                 $this->error(403);
             } else {
                 $document = (int) $document;

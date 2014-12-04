@@ -326,7 +326,7 @@ function loadDocuments(change) {
     $('#documentsTable').dataTable().fnDestroy();
 
     var userId = $('#userId').val();
-    $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, userId: userId}, function (response, status) {
+    $.post(base_url + "admin/document/getAllDocuments", {change: change, userType: userType, method: method, userId: userId}, function (response, status) {
         var result = JSON.parse(response);
 
         $.each(result, function (i, field) {
@@ -343,9 +343,15 @@ function loadDocuments(change) {
 
             var links = '';
             if (userType === 'ADMIN' || userType === 'SEC') {
-                links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
                 if (userType === 'SEC') {
-                    links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
+                    if(method === 'sec'){
+                        links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+                    }else{
+                        links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
+                        links += '<a href="' + base_url + 'admin/document/edit/' + field['id'] + '" class="btn btn-success btn-xs edit_button" title="Edit Document" data-toggle="tooltip"><i class="glyphicon glyphicon-pencil"></i></a>';
+                    }
+                }else{
+                    links = '<a href="' + base_url + 'admin/document/view/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
                 }
             } else if (userType === 'RD' || userType === 'ARD') {
                 links = '<a href="' + base_url + 'admin/document/details/' + field['id'] + '" class="btn btn-primary btn-xs view_button" title="View Details" data-toggle="tooltip"><i class="glyphicon glyphicon-search"></i></a>';
