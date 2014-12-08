@@ -98,11 +98,13 @@ class TrackFactory {
 
                 if ($ard) {
                     if (!$this->checkARD($ard, $document)) {
-                        $this->addUserToTrack($ard, $document);
+                        $doc = $this->addUserToTrack($ard, $document);
+                        $this->addDocumentNotification($userId, $ard, $doc);
                     }
                 }
 
-                $this->addUserToTrack($user, $document);
+                $doc = $this->addUserToTrack($user, $document);
+                $this->addDocumentNotification($userId, $user, $doc);
             }
             $this->setStatusOnGoing($document);
             $this->addNoteToChat($document, $notes, $userId);
@@ -111,9 +113,21 @@ class TrackFactory {
         return false;
     }
 
-    public function ardForward($document, $users) {
+    private function addDocumentNotification($creator, $receiver, $document){
+        $data = array(
+            'creator' => $creator,
+            'receiver' => $receiver,
+            'object' => $document,
+            'type' => 1
+        );
+        
+        $this->_ci->db->insert("dts_notification", $data);
+    }
+    
+    public function ardForward($userId, $document, $users) {
         foreach ($users as $user) {
-            $this->addUserToTrack($user, $document);
+            $doc = $this->addUserToTrack($user, $document);
+            $this->addDocumentNotification($userId, $user, $doc);
         }
         return true;
     }

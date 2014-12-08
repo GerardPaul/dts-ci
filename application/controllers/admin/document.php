@@ -371,7 +371,7 @@ class Document extends CI_Controller {
                 $track = $this->cleanString($_POST['trackId']);
 
                 $this->load->library("TrackFactory");
-                if ($this->trackfactory->ardForward($document, $users)) {
+                if ($this->trackfactory->ardForward($this->userId, $document, $users)) {
                     $this->load->library("LogsFactory");
                     $assignedBy = $this->username;
                     

@@ -150,6 +150,22 @@ class Document_Model extends CI_Model {
         $query = $this->db->query($sql);
         $rd = intval($query->row('id'));
         $this->db->insert("dts_track", array('document' => $document, 'user' => $rd));
+        
+        $this->addDocumentNotification($this->db->insert_id(), $rd);
+    }
+    
+    private function addDocumentNotification($document, $rd){
+        $sql = "SELECT id FROM dts_user WHERE userType = 'SEC'";
+        $query = $this->db->query($sql);
+        $sec = intval($query->row('id'));
+        $data = array(
+            'creator' => $sec,
+            'receiver' => $rd,
+            'object' => $document,
+            'type' => 1
+        );
+        
+        $this->db->insert("dts_notification", $data);
     }
 
 }

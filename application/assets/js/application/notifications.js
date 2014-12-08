@@ -6,7 +6,9 @@ $(document).ready(function () {
     }, 300000);
 
     $('#documents_button').click(function () {
-
+        $('#document_dropdown li:not(:nth-last-child(2)):not(:last)').remove();
+        $('#documents_button span').remove();
+        getNotifications();
     });
 
     function isNotify() {
@@ -22,22 +24,13 @@ $(document).ready(function () {
         }, "json");
     }
     function getNotifications() {
-        var previousLength = $('#numMessages').val();
         $.post(base_url + "notification/ajaxGetNotifications", function (data) {
             if (data.status === 'ok') {
-                var current = $('#chatBody').html();
-                $('#chatBody').html(current + data.content);
+                var content = data.content;
+                $('#document_dropdown').prepend(content);
             } else {
 
             }
-            if (data.content != '') {
-                $('.chatHeading').css('background', '#F94343');
-            }
-            var currentLength = $('#chatBody > div.col-xs-12').length;
-            if (currentLength > previousLength) {
-                scrollChat();
-            }
-            $('#numMessages').val(currentLength);
         }, "json");
     }
 });

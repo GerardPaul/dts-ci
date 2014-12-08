@@ -90,39 +90,40 @@ class Notification extends CI_Controller {
         }
     }
     
-    function _getMessage($user,$document,$chat) {
-        $session_data = $this->session->userdata('logged_in');
-        if($chat=='1' || !isset($session_data['lastID_'.$user.'_'.$document])){
-            $lastID = 0;
-        }
-        else{
-            $lastID = (int)$session_data['lastID_'.$user.'_'.$document];
-        }
+    public function ajaxGetNotifications(){
+        $this->checkLogin();
+        echo $this->_getNotifications();
+    }
+    function _getNotifications() {
+        $this->load->library("NotificationFactory");
+        $notifications = $this->notificationfactory->ajaxGetNotifications($this->userId);
         
-        $this->load->library("ChatFactory");
-        $messages = $this->chatfactory->getChat($document, $lastID);
-        
-        if($messages){
-            $size = count($messages);
-            $lastID = $messages[$size-1]->getId();
-            
-            $session_data['lastID_'.$user.'_'.$document] = $lastID;
-            $this->session->set_userdata('logged_in', $session_data);
-            
-            $chatContents = '';
-            foreach($messages as $message){
-                if($message->getUser() == $user){
-                    $chatContents .= '<div class="col-xs-12"><div class="message self"><div class="row"><div class="col-sm-10"><p>'.  stripslashes($message->getMessage()).'</p></div><div class="col-sm-2"><time>'.$message->getCreated().'</time></div></div></div></div>';
+        $userType = $this->userType;
+        if($userType == 'ADMIN' || $userType == 'SEC'){
+            $base_url = base_url()."admin/document/view/";
+        }
+        else if($userType == 'RD' || $userType == 'ARD'){
+            $base_url = base_url()."admin/document/details/";
+        }
+        else if($userType == 'EMP'){
+            $base_url = base_url()."document/details/";
+        }
+           
+        $contents = '';
+        if($notifications){
+            foreach($notifications as $notification){
+                if($notification->getType() == '1'){
+                    $contents .= "<li><input type='hidden' class='notification' value='".$notification->getId()."'><a href='$base_url".$notification->getObject()."'><span class='glyphicon glyphicon-file'></span> You have a new document.</a></li>";
                 }else{
-                    $chatContents .= '<div class="col-xs-12"><span>'.$message->getFullname().'</span><div class="message other"><div class="row"><div class="col-sm-10"><p>'.  stripslashes($message->getMessage()).'</p></div><div class="col-sm-2"><time>'.$message->getCreated().'</time></div></div></div></div>';
+                    $contents .= "<li><input type='hidden' class='notification' value='".$notification->getId()."'><a href='$base_url".$notification->getObject()."'><span class='glyphicon glyphicon-envelope'></span> You have a new message from ".$notification->getCreator().".</a></li>";
                 }
             }
-            $result = array('status' => 'ok', 'content' => $chatContents);
+            $result = array('status' => 'ok', 'content' => $contents);
             
             return json_encode($result);
             exit();
         }else{
-            $result = array('status' => 'ok', 'content' => '');
+            $result = array('status' => 'ok', 'content' => '<li><a href="#">Nothing to display.</a></li>');
             
             return json_encode($result);
             exit();

@@ -75,8 +75,7 @@ class Notification_model extends CI_Model {
             'creator' => $this->_creator,
             'receiver' => $this->_receiver,
             'object' => $this->_object,
-            'type' => $this->_type,
-            'dateCreated' => $this->_dateCreated
+            'type' => $this->_type
         );
 
         if ($this->_id > 0) {

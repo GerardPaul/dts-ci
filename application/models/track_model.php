@@ -157,8 +157,8 @@ class Track_Model extends CI_Model {
             //We dont have an ID meaning it is new and not yet in the database so we need to do an insert
             if ($this->db->insert("dts_track", $data)) {
                 //Now we can get the ID and update the newly created object
-                $this->_id = $this->db->insert_id();
-                return true;
+                return $this->_id = $this->db->insert_id();
+                //return true;
             }
         }
         return false;

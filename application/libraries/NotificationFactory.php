@@ -22,7 +22,9 @@ class NotificationFactory {
     }
     
     public function ajaxGetNotifications($receiverId) {
-        $sql = "SELECT * FROM dts_notification WHERE receiver = '$receiverId' AND status = '0' ORDER BY dateCreated DESC";
+        $sql = "SELECT n.id, n.receiver, n.object, n.type, n.status, n.dateCreated, u.username AS 'creator'
+                    FROM dts_notification n, dts_user u
+                    WHERE n.creator = u.id AND n.receiver = '$receiverId' AND n.status = '0' ORDER BY dateCreated DESC";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $notifications = array();
@@ -34,6 +36,10 @@ class NotificationFactory {
         return false;
     }
 
+    public function addNotification(){
+        
+    }
+    
     public function ajaxSeen($id) {
         
     }
@@ -47,7 +53,7 @@ class NotificationFactory {
         $notification->setObject($row->object);
         $notification->setStatus($row->status);
         $notification->setType($row->type);
-        $notification->setDateCreated($this->formatDate($row->timeOccured));
+        $notification->setDateCreated($this->formatDate($row->dateCreated));
 
         return $notification;
     }
