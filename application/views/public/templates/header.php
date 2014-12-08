@@ -41,9 +41,19 @@ $current_method = $this->router->fetch_method();
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="<?php if (isset($active['document'])) echo $active['document']; ?>"><a href="<?php echo base_url("document"); ?>">Documents</a></li>
+                        <li role="presentation" class="<?php if (isset($active['document'])) echo $active['document']; ?> dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                Documents
+                            </a>
+                            <ul class="dropdown-menu" role="menu" id="document_dropdown">
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?php echo base_url("document"); ?>">View All</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="dropdown <?php if (isset($active['profile'])) echo $active['profile']; ?>">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $username; ?><span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $username; ?> <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?php echo base_url("profile/edit"); ?>">Profile</a></li>
                                 <li class="divider"></li>
