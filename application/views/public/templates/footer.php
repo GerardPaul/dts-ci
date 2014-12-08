@@ -18,7 +18,8 @@
 	
         <?php $javascript = $this->router->fetch_class(); ?>
 	<script type="text/javascript" src="<?php echo base_url()."application/assets/js/application/".$javascript.".js"; ?>"></script>
-	    
+	<script type="text/javascript" src="<?php echo base_url("application/assets/js/application/notifications.js"); ?>"></script>
+        
 	<script>
             $(document).ready(function() {
                 $('.dataTables_wrapper .dataTables_filter input').addClass('form-control, input-sm').attr('display','inline');

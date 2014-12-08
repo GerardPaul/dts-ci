@@ -47,7 +47,7 @@ $(document).ready(function() {
 
     function getMessages() {
         var previousLength = $('#numMessages').val();
-        $.post(base_url + "chat/ajaxGetMessages", {document: document, chat: chat}, function(data) {
+        $.post(base_url + "chat/ajaxGetMessages", {document: document, chat: chat}, function (data) {
             if (data.status === 'ok') {
                 var current = $('#chatBody').html();
                 $('#chatBody').html(current + data.content);
@@ -58,10 +58,10 @@ $(document).ready(function() {
                 $('.chatHeading').css('background', '#F94343');
             }
             var currentLength = $('#chatBody > div.col-xs-12').length;
-            if(currentLength > previousLength){
+            if (currentLength > previousLength) {
                 scrollChat();
             }
-			$('#numMessages').val(currentLength);
+            $('#numMessages').val(currentLength);
         }, "json");
     }
 

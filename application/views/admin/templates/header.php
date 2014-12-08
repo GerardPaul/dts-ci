@@ -21,7 +21,7 @@ $current_method = $this->router->fetch_method();
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/moment.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/bootstrap.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/functions.js"); ?>"></script>
-
+        
         <script type="text/javascript">
             var userType = "<?php echo $userType; ?>";
             var method = "<?php echo $current_method; ?>";
@@ -43,7 +43,7 @@ $current_method = $this->router->fetch_method();
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li role="presentation" class="<?php if (isset($active['document'])) echo $active['document']; ?> dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                            <a id="documents_button" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
                                 Documents
                             </a>
                             <ul class="dropdown-menu" role="menu" id="document_dropdown">

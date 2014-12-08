@@ -3,11 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Chat extends CI_Controller {
+class Notification extends CI_Controller {
 
     var $login = FALSE;
-    var $id = '';
     var $userType = '';
+    var $userId = '';
     var $username = '';
     
     public function index() {
@@ -19,7 +19,7 @@ class Chat extends CI_Controller {
             $this->login = TRUE;
             $session_data = $this->session->userdata('logged_in');
             $this->userType = $session_data['userType'];
-            $this->id = $session_data['id'];
+            $this->userId = $session_data['id'];
             $this->username = $session_data['username'];
         } else {
             $this->login = FALSE;
@@ -68,15 +68,26 @@ class Chat extends CI_Controller {
         echo $this->_getMessage($user, $document, '0');
     }
 
-    public function ajaxGetMessages(){
+    public function ajaxCountNotifications(){
         $this->checkLogin();
-        $document = 0;
-        $chat = $_POST['chat'];
-        if(isset($_POST['document'])){
-            $document = $_POST['document'];
+        echo $this->_getCountNotifications();
+    }
+    
+    function _getCountNotifications(){
+        $this->load->library("NotificationFactory");
+        $count = (int) $this->notificationfactory->ajaxCountNotifications($this->userId);
+        
+        if($count > 0){
+            $result = array('status' => 'ok', 'num' => $count);
+            
+            return json_encode($result);
+            exit();
+        }else{
+            $result = array('status' => 'ok', 'num' => '');
+            
+            return json_encode($result);
+            exit();
         }
-        $user = $this->id;
-        echo $this->_getMessage($user, $document,$chat);
     }
     
     function _getMessage($user,$document,$chat) {
