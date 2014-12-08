@@ -112,6 +112,12 @@ class Document extends CI_Controller {
                         "load" => 'empdetails'
                     );
                     $this->load->template('emp_view_document', $data);
+                    
+                    if(isset($_GET['notification'])){
+                        $notification_id = $_GET['notification'];
+                        $this->load->library('NotificationFactory');
+                        $this->notificationfactory->seenNotification($notification_id);
+                    }
                 } else {
                     $this->error(404);
                 }

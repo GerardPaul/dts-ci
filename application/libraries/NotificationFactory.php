@@ -35,15 +35,14 @@ class NotificationFactory {
         }
         return false;
     }
-
-    public function addNotification(){
-        
+    
+    public function seenNotification($id){
+        $sql = "UPDATE dts_notification SET status = '1' WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($id)))
+            return true;
+        return false;
     }
     
-    public function ajaxSeen($id) {
-        
-    }
-
     public function createObjectFromData($row) {
         $notification = new Notification_Model();
 

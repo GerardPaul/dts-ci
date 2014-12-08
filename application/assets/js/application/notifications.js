@@ -33,4 +33,10 @@ $(document).ready(function () {
             }
         }, "json");
     }
+    
+    $('#document_dropdown .notify').click(function(e){
+        var id = this.id;
+        alert(id);
+        e.preventDefault();
+    });
 });

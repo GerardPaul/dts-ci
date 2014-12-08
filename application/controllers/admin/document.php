@@ -233,6 +233,12 @@ class Document extends CI_Controller {
                     }else if($userType == 'SEC'){
                         $this->secDetails($document, $status);
                     }
+                    
+                    if(isset($_GET['notification'])){
+                        $notification_id = $_GET['notification'];
+                        $this->load->library('NotificationFactory');
+                        $this->notificationfactory->seenNotification($notification_id);
+                    }
                 } else {
                     $this->error(403);
                 }

@@ -99,10 +99,10 @@ class Notification extends CI_Controller {
         $notifications = $this->notificationfactory->ajaxGetNotifications($this->userId);
         
         $userType = $this->userType;
-        if($userType == 'ADMIN' || $userType == 'SEC'){
+        if($userType == 'ADMIN'){
             $base_url = base_url()."admin/document/view/";
         }
-        else if($userType == 'RD' || $userType == 'ARD'){
+        else if($userType == 'RD' || $userType == 'ARD' || $userType == 'SEC'){
             $base_url = base_url()."admin/document/details/";
         }
         else if($userType == 'EMP'){
@@ -111,19 +111,21 @@ class Notification extends CI_Controller {
            
         $contents = '';
         if($notifications){
+            $i = 1;
             foreach($notifications as $notification){
                 if($notification->getType() == '1'){
-                    $contents .= "<li><input type='hidden' class='notification' value='".$notification->getId()."'><a href='$base_url".$notification->getObject()."'><span class='glyphicon glyphicon-file'></span> You have a new document.</a></li>";
+                    $contents .= "<li><a class='notify' href='$base_url".$notification->getObject()."?notification=".$notification->getId()."'><span class='glyphicon glyphicon-file'></span> You have a new document.</a></li>";
                 }else{
-                    $contents .= "<li><input type='hidden' class='notification' value='".$notification->getId()."'><a href='$base_url".$notification->getObject()."'><span class='glyphicon glyphicon-envelope'></span> You have a new message from ".$notification->getCreator().".</a></li>";
+                    $contents .= "<li><a class='notify' href='$base_url".$notification->getObject()."?notification=".$notification->getId()."'><span class='glyphicon glyphicon-envelope'></span> You have a new message from ".$notification->getCreator().".</a></li>";
                 }
+                $i++;
             }
             $result = array('status' => 'ok', 'content' => $contents);
             
             return json_encode($result);
             exit();
         }else{
-            $result = array('status' => 'ok', 'content' => '<li><a href="#">Nothing to display.</a></li>');
+            $result = array('status' => 'ok', 'content' => '');
             
             return json_encode($result);
             exit();
