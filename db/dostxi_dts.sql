@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2014 at 03:24 AM
+-- Generation Time: Dec 09, 2014 at 01:22 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `dts_chat` (
   PRIMARY KEY (`id`),
   KEY `document` (`document`,`user`),
   KEY `user` (`user`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=54 ;
 
 -- --------------------------------------------------------
 
@@ -80,8 +80,9 @@ CREATE TABLE IF NOT EXISTS `dts_document` (
   `referenceNumber` varchar(20) DEFAULT NULL,
   `dateReceived` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `dts_logs`
@@ -92,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `dts_logs` (
   `actionTaken` varchar(250) NOT NULL,
   `timeOccured` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=73 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=87 ;
 
 -- --------------------------------------------------------
 
@@ -105,12 +106,13 @@ CREATE TABLE IF NOT EXISTS `dts_notification` (
   `creator` int(11) NOT NULL,
   `receiver` int(11) NOT NULL,
   `object` int(11) NOT NULL,
+  `type` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `dateCreated` timestamp NOT NULL,
+  `dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `creator` (`creator`),
   KEY `receiver` (`receiver`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 -- --------------------------------------------------------
 
@@ -126,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `dts_track` (
   PRIMARY KEY (`id`),
   KEY `document` (`document`,`user`),
   KEY `user` (`user`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=83 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
 
 -- --------------------------------------------------------
 

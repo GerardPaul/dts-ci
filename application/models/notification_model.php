@@ -9,6 +9,7 @@ class Notification_model extends CI_Model {
     private $_status;
     private $_dateCreated;
     private $_type;
+    private $_documentRefNo;
 
     function __construct() {
         parent::__construct();
@@ -68,6 +69,14 @@ class Notification_model extends CI_Model {
 
     public function getDateCreated() {
         return $this->_dateCreated;
+    }
+    
+    public function setDocumentRefNo($value) {
+        $this->_documentRefNo = $value;
+    }
+
+    public function getDocumentRefNo() {
+        return $this->_documentRefNo;
     }
     
     public function commit() {

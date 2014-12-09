@@ -114,7 +114,7 @@ class Notification extends CI_Controller {
             $i = 1;
             foreach($notifications as $notification){
                 if($notification->getType() == '1'){
-                    $contents .= "<li><a class='notify' href='$base_url".$notification->getObject()."?notification=".$notification->getId()."'><span class='glyphicon glyphicon-file'></span> You have a new document.</a></li>";
+                    $contents .= "<li><a class='notify' href='$base_url".$notification->getObject()."?notification=".$notification->getId()."'><span class='glyphicon glyphicon-file'></span> You have a new document (ref.# ".$notification->getDocumentRefNo().").</a></li>";
                 }else{
                     $contents .= "<li><a class='notify' href='$base_url".$notification->getObject()."?notification=".$notification->getId()."'><span class='glyphicon glyphicon-envelope'></span> You have a new message from ".$notification->getCreator().".</a></li>";
                 }
