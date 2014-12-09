@@ -23,8 +23,10 @@ $(document).ready(function () {
         }, "json");
     }
     function getNotifications() {
+        $('#document_dropdown').prepend('<li><a href="#">Loading notifications...</a></li>');
         $.post(base_url + "notification/ajaxGetNotifications", function (data) {
             if (data.status === 'ok') {
+                $('#document_dropdown li:first').remove();
                 var content = data.content;
                 $('#document_dropdown').prepend(content);
                 $('#documents_button span').remove();
