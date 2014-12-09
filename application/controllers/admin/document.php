@@ -227,11 +227,11 @@ class Document extends CI_Controller {
                     $status = $this->status($document->getStatus());
 
                     if ($userType == 'RD') {
-                        $this->rdDetails($document, $status);
+                        $this->rdDetails($document, $status, $track);
                     } else if($userType == 'ARD') {
-                        $this->ardDetails($document, $status);
+                        $this->ardDetails($document, $status, $track);
                     }else if($userType == 'SEC'){
-                        $this->secDetails($document, $status);
+                        $this->secDetails($document, $status, $track);
                     }
                     
                     if(isset($_GET['notification'])){
@@ -248,7 +248,7 @@ class Document extends CI_Controller {
         }
     }
 
-    private function rdDetails($document, $status) {
+    private function rdDetails($document, $status, $track) {
         $this->load->library("UserFactory");
 
         $data = array(
@@ -260,12 +260,13 @@ class Document extends CI_Controller {
             "username" => $this->username,
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
-            "load" => 'rddetails'
+            "load" => 'rddetails',
+            "track" => $track
         );
         $this->load->admin_template('rd_view_document', $data);
     }
 
-    private function ardDetails($document, $status) {
+    private function ardDetails($document, $status, $track) {
         $this->load->library("UserFactory");
         $division = $this->userfactory->getDivision($this->userId);
 
@@ -287,12 +288,13 @@ class Document extends CI_Controller {
             "username" => $this->username,
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
-            "load" => 'arddetails'
+            "load" => 'arddetails',
+            "track" => $track
         );
         $this->load->admin_template('ard_view_document', $data);
     }
     
-    private function secDetails($document, $status) {
+    private function secDetails($document, $status, $track) {
         $this->load->library("UserFactory");
         $division = $this->userfactory->getDivision($this->userId);
 
@@ -304,7 +306,8 @@ class Document extends CI_Controller {
             "username" => $this->username,
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
-            "load" => 'arddetails'
+            "load" => 'arddetails',
+            "track" => $track
         );
         $this->load->admin_template('sec_view_document', $data);
     }

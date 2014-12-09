@@ -42,13 +42,40 @@ class ChatFactory {
         }
     }
 
-    public function addMessage($document, $user, $message) {
+    public function addMessage($document, $user, $message, $track) {
         $chat = new Chat_Model();
         $chat->setDocument($document);
         $chat->setUser($user);
         $chat->setMessage($message);
 
-        return $chat->commit();
+        if($chat->commit()){
+            $this->getUsersInvolved($document, $track, $user);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    private function getUsersInvolved($document, $track, $creator){
+        $sql = "SELECT user FROM dts_track WHERE document = $document AND user <> $creator";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $receiver = $row->user;
+                $this->addMessageNotification($creator, $receiver, $track);
+            }
+        }
+    }
+    
+    private function addMessageNotification($creator, $receiver, $document){
+        $data = array(
+            'creator' => $creator,
+            'receiver' => $receiver,
+            'object' => $document,
+            'type' => 2
+        );
+        
+        $this->_ci->db->insert("dts_notification", $data);
     }
 
     public function createObjectFromData($row) {

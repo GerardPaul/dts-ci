@@ -109,7 +109,8 @@ class Document extends CI_Controller {
                         "username" => $this->username,
                         "status" => $status,
                         "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
-                        "load" => 'empdetails'
+                        "load" => 'empdetails',
+                        "track" => $track
                     );
                     $this->load->template('emp_view_document', $data);
                     

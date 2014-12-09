@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var document = $('input#document').val();
     var chat = $('input#chat').val();
+    var track = $('input#track').val();
 
     setInterval(function() {
         getMessages();
@@ -29,7 +30,7 @@ $(document).ready(function() {
                 return false;
             }
 
-            $.post(base_url + "chat/ajaxAddMessage", {document: document, message: message}, function(data) {
+            $.post(base_url + "chat/ajaxAddMessage", {document: document, message: message, track: track}, function(data) {
                 if (data.status == 'ok') {
                     var current = $('#chatBody').html();
                     $('#chatBody').html(current + data.content);

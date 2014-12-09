@@ -61,9 +61,10 @@ class Chat extends CI_Controller {
         $document = $this->cleanString($_POST['document']);
         $user = $this->id;
         $message = $this->cleanString($_POST['message']);
+        $track = $this->cleanString($_POST['track']);
 
         $this->load->library("ChatFactory");
-        $this->chatfactory->addMessage($document, $user, $message);
+        $this->chatfactory->addMessage($document, $user, $message, $track);
         
         echo $this->_getMessage($user, $document, '0');
     }

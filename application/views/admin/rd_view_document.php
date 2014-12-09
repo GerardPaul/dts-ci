@@ -1,4 +1,5 @@
 <input type="hidden" name="load" id="load" value="<?php echo $load; ?>">
+<input type="hidden" name="track" id="track" value="<?php echo $track; ?>">       
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
