@@ -39,7 +39,7 @@ HTML;
             } else {
                 //Now user could be found so display an error messsage to the user
                 echo <<<HTML
-			<div class="alert alert-warning">There are no <strong>Divisions</strong> to display.</div>
+			<div class="alert alert-warning">There are no <strong>Logs</strong> to display.</div>
 HTML;
             }
             ?>

@@ -42,26 +42,27 @@ class ChatFactory {
         }
     }
 
-    public function addMessage($document, $user, $message, $track) {
+    public function addMessage($document, $user, $message) {
         $chat = new Chat_Model();
         $chat->setDocument($document);
         $chat->setUser($user);
         $chat->setMessage($message);
 
         if($chat->commit()){
-            $this->getUsersInvolved($document, $track, $user);
+            $this->getUsersInvolved($document, $user);
             return true;
         }else{
             return false;
         }
     }
     
-    private function getUsersInvolved($document, $track, $creator){
-        $sql = "SELECT user FROM dts_track WHERE document = $document AND user <> $creator";
+    private function getUsersInvolved($document, $creator){
+        $sql = "SELECT id, user FROM dts_track WHERE document = $document AND user <> $creator";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $receiver = $row->user;
+                $track = $row->id;
                 $this->addMessageNotification($creator, $receiver, $track);
             }
         }
@@ -79,13 +80,24 @@ class ChatFactory {
     }
 
     public function createObjectFromData($row) {
+        $date = explode(',', $row->created);
+        $rowDate = $date[0];
+        $currentDate = date('M d');
+        
+        $createdDate = '';
+        if($rowDate == $currentDate){
+            $createdDate = 'Today, '.$date[1];
+        }else{
+            $createdDate = $row->created;
+        }
+        
         $chat = new Chat_Model();
 
         $chat->setId($row->id);
         $chat->setDocument($row->document);
         $chat->setUser($row->user);
         $chat->setMessage($row->message);
-        $chat->setCreated($row->created);
+        $chat->setCreated($createdDate);
         $chat->setFullname($row->fullname);
 
         return $chat;

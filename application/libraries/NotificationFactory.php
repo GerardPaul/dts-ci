@@ -43,6 +43,13 @@ class NotificationFactory {
         return false;
     }
     
+    public function seenMessageNotification($document, $user){
+        $sql = "UPDATE dts_notification SET status = '1' WHERE receiver = '$user' AND object = '$document' AND type = '2'";
+        if ($this->_ci->db->query($sql))
+            return true;
+        return false;
+    }
+    
     public function createObjectFromData($row) {
         $notification = new Notification_Model();
 

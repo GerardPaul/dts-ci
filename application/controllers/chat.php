@@ -56,15 +56,31 @@ class Chat extends CI_Controller {
         $this->load->admin_template('error_view', $data);
     }
 
+    public function ajaxSeenMessage(){
+        $this->checkLogin();
+        $document = $this->cleanString($_POST['track']);
+        $user = $this->id;
+        
+        $this->load->library("NotificationFactory");
+        if($this->notificationfactory->seenMessageNotification($document,$user)){
+            $result = array('status' => 'ok');
+            
+            echo json_encode($result);
+        }else{
+            $result = array('status' => 'failed');
+            
+            echo json_encode($result);
+        }
+    }
+    
     public function ajaxAddMessage() {
         $this->checkLogin();
         $document = $this->cleanString($_POST['document']);
         $user = $this->id;
         $message = $this->cleanString($_POST['message']);
-        $track = $this->cleanString($_POST['track']);
 
         $this->load->library("ChatFactory");
-        $this->chatfactory->addMessage($document, $user, $message, $track);
+        $this->chatfactory->addMessage($document, $user, $message);
         
         echo $this->_getMessage($user, $document, '0');
     }

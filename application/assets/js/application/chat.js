@@ -16,6 +16,11 @@ $(document).ready(function() {
 
     $('.chatBox').click(function() {
         $('.chatHeading').css('background', '#428BCA');
+        $.post(base_url + "chat/ajaxSeenMessage", {track: track}, function(data){
+            if(data.status == 'ok'){
+                alert('success');
+            }
+        });
     });
     
     $('input#message').focus(function() {
@@ -30,7 +35,7 @@ $(document).ready(function() {
                 return false;
             }
 
-            $.post(base_url + "chat/ajaxAddMessage", {document: document, message: message, track: track}, function(data) {
+            $.post(base_url + "chat/ajaxAddMessage", {document: document, message: message}, function(data) {
                 if (data.status == 'ok') {
                     var current = $('#chatBody').html();
                     $('#chatBody').html(current + data.content);
