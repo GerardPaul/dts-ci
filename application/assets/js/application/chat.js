@@ -17,8 +17,8 @@ $(document).ready(function() {
     $('.chatBox').click(function() {
         $('.chatHeading').css('background', '#428BCA');
         $.post(base_url + "chat/ajaxSeenMessage", {track: track}, function(data){
-            if(data.status == 'ok'){
-                alert('success');
+            if(data.status === 'ok'){
+                //alert('success');
             }
         });
     });
@@ -36,7 +36,7 @@ $(document).ready(function() {
             }
 
             $.post(base_url + "chat/ajaxAddMessage", {document: document, message: message}, function(data) {
-                if (data.status == 'ok') {
+                if (data.status === 'ok') {
                     var current = $('#chatBody').html();
                     $('#chatBody').html(current + data.content);
                 } else {
@@ -60,7 +60,7 @@ $(document).ready(function() {
             } else {
 
             }
-            if (data.content != '') {
+            if (data.content !== '') {
                 $('.chatHeading').css('background', '#F94343');
             }
             var currentLength = $('#chatBody > div.col-xs-12').length;
