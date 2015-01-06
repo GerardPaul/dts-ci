@@ -13,7 +13,7 @@
                 Each document is assigned to specific users. The system then creates a unique chat session for the
                 document and only those users assigned to it are included in the chat group.
                 Each user has it's own designation and have specific privileges depending on the type of user. All
-                users have can edit their own profile.
+                users can edit their own profile.
             </p>
         </div>
     </div>
