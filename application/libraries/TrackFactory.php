@@ -33,11 +33,11 @@ class TrackFactory {
     }
 
     public function ajaxGetDocument($get, $user) {
-        $sql = "SELECT t.id, d.referenceNumber, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received
+        $sql = "SELECT t.id, d.referenceNumber, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received, d.status
                 FROM dts_document d, dts_track t 
                 WHERE t.document = d.id AND t.user = '$user'";
         if ($get !== 'All') {
-            $sql .= " AND status = '$get'";
+            $sql .= " AND d.status = '$get'";
         }
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
@@ -203,4 +203,15 @@ class TrackFactory {
         }
     }
 
+    public function setUrgent($id){
+        $sql = "SELECT subject FROM dts_document WHERE id = $id ";
+        $query = $this->_ci->db->query($sql);
+        if($query->num_rows() > 0){
+            $subject  = $query->row('subject');
+            if($subject[0] != '!'){
+                $sql1 = "UPDATE dts_document SET subject = '!!! URGENT !!! $subject' WHERE id = $id";
+                $this->_ci->db->query($sql1);
+            }
+        }
+    }
 }

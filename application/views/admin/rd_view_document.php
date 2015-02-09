@@ -38,10 +38,18 @@
                     $deadline = date('j-M-Y', strtotime($document->getDeadline()));
                 }
 
+                $action = $document->getAction();
+                if($action=='')
+                    $action = '<span class="text-danger">Not set.</span>';
+                
                 echo '<input type="hidden" name="getUserCount" id="getUserCount" value="' . $users . '" >';
 
                 echo <<<HTML
                     <table class="table table-condensed table-responsive table-striped table-hover" id="documentDetails">
+                        <tr>
+                                <th>Instruction</th>
+                                <td>{$action}</td>
+                        </tr>
                         <tr>
                                 <th>Subject</th>
                                 <td><strong>{$document->getSubject()}</strong></td>
@@ -165,13 +173,17 @@ HTML;
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Deadline</label>
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <div class="input-group date">
                                 <input id="deadline" type="text" class="form-control" name="deadline" date-format="YYYY/MM/DD" />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="urgent" id="urgent" value="1">
+                            <label for="urgent">Urgent</label>
                         </div>
                     </div>
                     <div class="form-group">

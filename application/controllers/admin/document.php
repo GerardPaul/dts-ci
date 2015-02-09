@@ -166,8 +166,8 @@ class Document extends CI_Controller {
                 $config = array(
                     'upload_path' => './upload/',
                     'file_name' => $filename,
-                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
-                    'max_size' => 2048,
+                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc|xls|csv|ppt|tar|tgz|zip|text',
+                    'max_size' => 0,
                 );
                 $this->load->library('upload', $config);
 
@@ -189,10 +189,12 @@ class Document extends CI_Controller {
                 $from = $this->cleanString($_POST['from']);
                 $refNo = $this->cleanString($_POST['referenceNumber']);
 
-                $due = $this->cleanString($_POST['dueDate']);
+                $dueDate = $this->cleanString($_POST['dueDate']);
                 $received = $this->cleanString($_POST['dateReceived']);
-
-                $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+                
+                if($dueDate == '')
+                    $dueDate = '00/00/0000';
+                
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
                 
                 $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived);
@@ -317,7 +319,7 @@ class Document extends CI_Controller {
             return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'On-Going') {
             return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
-        } else if ($status == 'Compiled') {
+        } else if ($status == 'Complied') {
             return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         }
     }
@@ -426,6 +428,10 @@ class Document extends CI_Controller {
 
                 $this->load->library("TrackFactory");
                 if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users, $this->userId)) {
+                    if(isset($_POST['urgent'])){
+                        $this->trackfactory->setUrgent($document);
+                    }
+                    
                     $this->load->library("LogsFactory");
                     $assignedBy = $this->username;
                     
@@ -562,9 +568,11 @@ class Document extends CI_Controller {
                 $due = $this->cleanString($_POST['dueDate']);
                 $received = $this->cleanString($_POST['dateReceived']);
 
-                $dueDate = date('Y-m-d', strtotime(str_replace('-', '/', $due)));
+                 if($dueDate == '')
+                    $dueDate = '00/00/0000';
+                
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
-
+                
                 if ($attachment_path == 'No File.') {
                     $attachment_path = $originalPath;
                 }

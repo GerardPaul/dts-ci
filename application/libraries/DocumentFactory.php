@@ -70,34 +70,48 @@ class DocumentFactory {
     }
 
     public function addDocument($subject, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
+        $days15 = date('Y-m-d', strtotime($dateReceived . ' + 15 days'));
+        
         $document = new Document_Model();
         $document->setSubject($subject);
         $document->setDescription($description);
         $document->setFrom($from);
-        $document->setDueDate($dueDate);
         $document->setAttachment($attachment);
-        //$document->setStatus('On-Going');
+        $document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
-
-        $document->setDue15Days(date('Y-m-d', strtotime($dateReceived . ' + 15 days')));
+        
+        if($dueDate == '00/00/0000'){
+            $document->setDueDate($days15);
+        }else{
+            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $due))));
+        }
+        
+        $document->setDue15Days($days15);
 
         return $document->commit();
     }
 
     public function updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
+        $days15 = date('Y-m-d', strtotime($dateReceived . ' + 15 days'));
+        
         $document = new Document_Model();
         $document->setId($id);
         $document->setSubject($subject);
         $document->setDescription($description);
         $document->setFrom($from);
-        $document->setDueDate($dueDate);
         $document->setAttachment($attachment);
         $document->setStatus($status);
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
 
-        $document->setDue15Days(date('Y-m-d', strtotime($dateReceived . ' + 15 days')));
+        if($dueDate == '00/00/0000'){
+            $document->setDueDate($days15);
+        }else{
+            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $due))));
+        }
+        
+        $document->setDue15Days($days15);
 
         return $document->commit();
     }
@@ -120,6 +134,7 @@ class DocumentFactory {
         $document->setDeadline($row->deadline);
         $document->setDue15Days($row->due15Days);
         $document->setDateReceived($row->dateReceived);
+        $document->setAction($row->action);
 
         return $document;
     }

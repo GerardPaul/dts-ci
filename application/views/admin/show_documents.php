@@ -5,7 +5,7 @@
             <div class="col-sm-2">
                 <select class="form-control" id="changeView">
                     <option value="1">All</option>
-                    <option value="2">Compiled</option>
+                    <option value="2">Complied</option>
                     <option value="3">On-Going</option>
                     <option value="4">Cancelled</option>
                 </select>
@@ -97,6 +97,7 @@
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                            <span class="help-block">* Leave blank to set document due date to 15 days.</span>
                         </div>
                     </div>
                     <div class="form-group">

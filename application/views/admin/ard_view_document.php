@@ -37,11 +37,19 @@
                 if ($document->getDeadline() !== '0000-00-00') {
                     $deadline = date('j-M-Y', strtotime($document->getDeadline()));
                 }
+                
+                $action = $document->getAction();
+                if($action=='')
+                    $action = '<span class="text-danger">Not set.</span>';
 
                 echo '<input type="hidden" name="getUserCount" id="getUserCount" value="' . $users . '" >';
 
                 echo <<<HTML
                     <table class="table table-condensed table-responsive table-striped table-hover" id="documentDetails">
+                        <tr>
+                                <th>Instruction</th>
+                                <td>{$action}</td>
+                        </tr>                     
                         <tr>
                                 <th>Subject</th>
                                 <td><strong>{$document->getSubject()}</strong></td>
@@ -189,7 +197,7 @@ HTML;
                             <select class="form-control" name="status" id="status">
                                 <option value="">- Select -</option>
                                 <option value="On-Going">On-Going</option>
-                                <option value="Compiled">Compiled</option>
+                                <option value="Complied">Complied</option>
                             </select>
                         </div>
                     </div>

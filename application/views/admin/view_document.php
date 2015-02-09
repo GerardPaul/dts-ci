@@ -25,9 +25,17 @@
                 if ($documents->getDeadline() !== '0000-00-00')
                     $deadline = date('j-M-Y', strtotime($documents->getDeadline()));
 
+                $action = $documents->getAction();
+                if($action=='')
+                    $action = '<span class="text-danger">Not set.</span>';
+                
                 echo <<<HTML
 				<table class="table table-condensed table-responsive table-striped table-hover" id="documentDetails">
 					<tr>
+						<th>Instruction</th>
+						<td>{$action}</td>
+					</tr>
+                                        <tr>
 						<th>Subject</th>
 						<td><strong>{$documents->getSubject()}</strong></td>
 					</tr>
