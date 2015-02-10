@@ -30,6 +30,20 @@ class DocumentFactory {
         return false;
     }
 
+    public function getLastRefNo() {
+        $sql = "SELECT referenceNumber FROM dts_document ORDER BY referenceNumber DESC LIMIT 1";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            $refNo = $query->row('referenceNumber');
+            $number = explode("-",$refNo);
+            $reference = $number[1] + 1;
+            $reference = sprintf("%04d",$reference);
+            
+            return date('y') . "-$reference";
+        }
+        return false;
+    }
+    
     public function getDocument($id = 0) {
         if ($id > 0) {
             $sql = "SELECT * FROM dts_document WHERE id = ?";

@@ -12,14 +12,21 @@
                 <div class="space-10"></div>
             </div>
             <?php if ($userType == 'SEC') { ?>
+            <div class="col-sm-10">
                 <button id="addDivision" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#addDocumentModal" data-backdrop="static" data-keyboard="false">
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Document
                 </button>
                 <a class="btn btn-success btn-sm" href="<?php echo base_url(); ?>admin/document/sec">
                     <i class="glyphicon glyphicon-file"></i> My Documents
                 </a>
+                <a class="btn btn-primary btn-sm" href="<?php echo base_url(); ?>admin/document/print">
+                    <i class="glyphicon glyphicon-print"></i> Print Uncomplied
+                </a>
+                <!-- <a class="btn btn-danger btn-sm" href="<?php echo base_url(); ?>admin/document/archives">
+                    <i class="glyphicon glyphicon-folder-open"></i> Open Archives
+                </a> -->
+            </div>
             <?php } ?>
-    <!-- <a class="btn btn-danger btn-sm" href=""><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Open Archives</a> -->
         </div>
     </div>
     <div class="space-10"></div>
@@ -44,6 +51,7 @@
     </div>
 </div>
 
+<?php if ($userType == 'SEC') { ?>
 <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -67,6 +75,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Reference No.</label>
                         <div class="col-md-8">
+                            <!--<input type="text" class="form-control" name="referenceNumber" value="<?php echo $refNo; ?>" readonly="readonly"/>-->
                             <input type="text" class="form-control" name="referenceNumber" />
                         </div>
                     </div>
@@ -116,3 +125,4 @@
         </div>
     </div>
 </div>
+<?php } ?>

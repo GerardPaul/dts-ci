@@ -66,13 +66,16 @@ class Document extends CI_Controller {
             if ($this->userType == 'EMP') {
                 $this->error(403);
             } else {
+                $this->load->library('DocumentFactory');
+                
                 $data = array(
                     "title" => $this->title,
                     "header" => 'All Documents',
                     "userType" => $this->userType,
                     "username" => $this->username,
                     "userId" => $this->userId,
-                    "load" => 'documents'
+                    "load" => 'documents',
+                    "refNo" => $this->documentfactory->getLastRefNo()
                 );
                 if ($this->userType == 'ADMIN' || $this->userType == 'SEC') {
                     $this->load->admin_template('show_documents', $data);
