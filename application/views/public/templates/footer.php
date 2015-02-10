@@ -1,6 +1,6 @@
 	<div id="footer">
             <div class="container">
-                <p class="navbar-text">Copyright &copy; 
+                <p class="navbar-text">Copyright &copy; 2014 -
                     <script>
                         document.write(new Date().getFullYear());
                     </script>

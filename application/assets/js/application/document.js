@@ -54,13 +54,13 @@ $(document).ready(function () {
                 validators: {
                     file: {
                         extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
-                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/x-msexcel,application/x-excel,application/vnd.ms-excel,application/excel,application/x-compressed,application/zip,text/plain',
                         maxSize: 2048 * 1024, // 2 MB
                         message: 'The selected file is not valid!'
                     }
                 }
             },
-            dueDate: {
+            /*dueDate: {
                 validators: {
                     notEmpty: {
                         message: 'Please set due date for document!'
@@ -69,7 +69,7 @@ $(document).ready(function () {
                         format: 'MM/DD/YYYY'
                     }
                 }
-            },
+            },*/
             dateReceived: {
                 validators: {
                     notEmpty: {
@@ -135,13 +135,13 @@ $(document).ready(function () {
                 validators: {
                     file: {
                         extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
-                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/x-msexcel,application/x-excel,application/vnd.ms-excel,application/excel,application/x-compressed,application/zip,text/plain',
                         maxSize: 2048 * 1024, // 2 MB
                         message: 'The selected file is not valid!'
                     }
                 }
             },
-            dueDate: {
+            /*dueDate: {
                 validators: {
                     notEmpty: {
                         message: 'Please set due date for document!'
@@ -150,7 +150,7 @@ $(document).ready(function () {
                         format: 'MM/DD/YYYY'
                     }
                 }
-            },
+            },*/
             dateReceived: {
                 validators: {
                     notEmpty: {
@@ -271,7 +271,7 @@ $(document).ready(function () {
         if (value === '1') {
             change = 'All';
         } else if (value === '2') {
-            change = 'Compiled';
+            change = 'Complied';
         } else if (value === '3') {
             change = 'On-Going';
         } else if (value === '4') {
@@ -330,6 +330,16 @@ function loadDocuments(change) {
         var result = JSON.parse(response);
 
         $.each(result, function (i, field) {
+            var status = field['status'];
+            var stat = '';
+            if (status === 'Cancelled') {
+                stat = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
+            } else if (status === 'On-Going') {
+                stat = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
+            } else if (status === 'Complied') {
+                stat = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
+            }
+            
             var received = field['received'];
 
             var dateReceived = format_mysqldate(field['dateReceived']);
@@ -360,10 +370,10 @@ function loadDocuments(change) {
             }
 
             if (received === '0000-00-00' || received === null) {
-                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td><strong>' + field['referenceNumber'] + '</strong></td><td><strong>' + field['from'] + '</strong></td><td><strong>' + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td><strong>' + field['referenceNumber'] + '</strong></td><td><strong>' + field['from'] + '</strong></td><td><strong>' + stat + " " + field['subject'] + '</strong></td><td><strong>' + dateReceived + '</strong></td><td><strong>' + dueDate +
                         '</strong></td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             } else {
-                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td>' + field['referenceNumber'] + '</td><td>' + field['from'] + '</td><td>' + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
+                $('#documentsTable tbody').append('<tr><td>' + field['id'] + '</td><td>' + field['referenceNumber'] + '</td><td>' + field['from'] + '</td><td>' + stat + " " + field['subject'] + '</td><td>' + dateReceived + '</td><td>' + dueDate +
                         '</td><td><div class="visible-md visible-lg visible-sm visible-xs btn-group">' + links + '</div></td></tr>');
             }
         });
