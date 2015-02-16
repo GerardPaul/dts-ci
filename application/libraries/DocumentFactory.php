@@ -88,7 +88,7 @@ class DocumentFactory {
         $sql = "SELECT d.id, d.subject, d.description, d.from, d.dueDate, d.due15Days, d.deadline 
                 FROM dts_document d 
                 WHERE (d.status = 'On-Going' OR d.status = 'Cancelled') 
-                AND (d.dateReceived >= '$from' AND d.dateReceived < '$to')";
+                AND (d.dateReceived >= '$from' AND d.dateReceived <= '$to')";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $documents = array();

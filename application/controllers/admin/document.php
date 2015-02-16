@@ -617,8 +617,8 @@ class Document extends CI_Controller {
                     $excel->getActiveSheet()->setTitle('Export Uncomplied');
                     
                     $col = 0;
-                    for ($i=0; $i<6; $i++){
-                        $excel->getActiveSheet()->setCellValueByColumnAndRow($col,1,$heading[$i]);
+                    foreach ($heading as $h){
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow($col,1,$h);
                         $col++;
                     }
                     
