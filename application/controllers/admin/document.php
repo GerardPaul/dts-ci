@@ -200,6 +200,7 @@ class Document extends CI_Controller {
                 
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
                 
+                
                 $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, $attachment_path, $refNo, $dateReceived);
                 if ($id) {
                     $this->load->library("LogsFactory");
@@ -596,4 +597,57 @@ class Document extends CI_Controller {
         }
     }
 
+    public function export() {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType != 'SEC') {
+                $this->error(403);
+            } else {
+                $fromDate = date('Ymd', strtotime(str_replace('-', '/', $_POST['fromDate'])));
+                $toDate = date('Ymd', strtotime(str_replace('-', '/', $_POST['toDate'])));
+                
+                
+                $this->load->library("DocumentFactory");
+                $documents = $this->documentfactory->getUncomplied($fromDate,$toDate);
+                if ($documents) {
+                    $heading = array('Subject', 'Description', 'From', 'Due Date', '15 Day', 'Deadline');
+                    $this->load->library('PHPExcel');
+                    //$this->load->library('PHPExcel/IOFactory');
+                    $excel = new PHPExcel();
+                    $excel->getActiveSheet()->setTitle('Export Uncomplied');
+                    
+                    $col = 0;
+                    for ($i=0; $i<6; $i++){
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow($col,1,$heading[$i]);
+                        $col++;
+                    }
+                    
+                    $num = count($documents);
+                    $row = 2;
+                    foreach ($documents as $document){
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(0,$row,$document->getSubject());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(1,$row,$document->getDescription());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(2,$row,$document->getFrom());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(3,$row,$document->getDueDate());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(4,$row,$document->getDue15Days());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(5,$row,$document->getDueRD());
+                        $row++;
+                    }
+                    $writer = PHPExcel_IOFactory::createWriter($excel,'Excel5');
+                    
+                    header('Content-Type: application/vnd.ms-excel');
+                    header('Content-Disposition: attachment;filename="export.xls"');
+                    header('Cache-Control: max-age=0');
+
+                    $writer->save('php://output');
+                    
+                    redirect('admin/document', 'refresh');
+                } else {
+                    $this->error(404);
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 }

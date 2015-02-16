@@ -10,6 +10,7 @@ class DocumentFactory {
     function __construct() {
         $this->_ci = & get_instance();
         $this->_ci->load->model("document_model");
+        $this->_ci->load->model("excel_model");
     }
 
     public function getStatus($id = 0) {
@@ -20,7 +21,7 @@ class DocumentFactory {
         }
         return false;
     }
-    
+
     public function getRefNo($id = 0) {
         $sql = "SELECT referenceNumber FROM dts_document WHERE id = ?";
         $query = $this->_ci->db->query($sql, array($id));
@@ -35,15 +36,15 @@ class DocumentFactory {
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $refNo = $query->row('referenceNumber');
-            $number = explode("-",$refNo);
+            $number = explode("-", $refNo);
             $reference = $number[1] + 1;
-            $reference = sprintf("%04d",$reference);
-            
+            $reference = sprintf("%04d", $reference);
+
             return date('y') . "-$reference";
         }
         return false;
     }
-    
+
     public function getDocument($id = 0) {
         if ($id > 0) {
             $sql = "SELECT * FROM dts_document WHERE id = ?";
@@ -83,9 +84,26 @@ class DocumentFactory {
         return false;
     }
 
+    public function getUncomplied($from, $to) {
+        $sql = "SELECT d.id, d.subject, d.description, d.from, d.dueDate, d.due15Days, d.deadline 
+                FROM dts_document d 
+                WHERE (d.status = 'On-Going' OR d.status = 'Cancelled') 
+                AND (d.dateReceived >= '$from' AND d.dateReceived < '$to')";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            $documents = array();
+            foreach ($query->result() as $row) {
+                $id = $row->id;
+                $documents[] = $this->createExcelObjectFromData($row);
+            }
+            return $documents;
+        }
+        return false;
+    }
+
     public function addDocument($subject, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
-        $days15 = date('Y-m-d', strtotime($dateReceived . ' + 15 days'));
-        
+        $days15 = date('Y-m-d', strtotime($dateReceived . '+ 15 days'));
+
         $document = new Document_Model();
         $document->setSubject($subject);
         $document->setDescription($description);
@@ -94,13 +112,13 @@ class DocumentFactory {
         $document->setStatus('On-Going');
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
-        
-        if($dueDate == '00/00/0000'){
+
+        if ($dueDate == '00/00/0000') {
             $document->setDueDate($days15);
-        }else{
-            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $due))));
+        } else {
+            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $dueDate))));
         }
-        
+
         $document->setDue15Days($days15);
 
         return $document->commit();
@@ -108,7 +126,7 @@ class DocumentFactory {
 
     public function updateDocument($id, $subject, $status, $description, $from, $dueDate, $attachment, $referenceNumber, $dateReceived) {
         $days15 = date('Y-m-d', strtotime($dateReceived . ' + 15 days'));
-        
+
         $document = new Document_Model();
         $document->setId($id);
         $document->setSubject($subject);
@@ -119,12 +137,12 @@ class DocumentFactory {
         $document->setReferenceNumber($referenceNumber);
         $document->setDateReceived($dateReceived);
 
-        if($dueDate == '00/00/0000'){
+        if ($dueDate == '00/00/0000') {
             $document->setDueDate($days15);
-        }else{
-            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $due))));
+        } else {
+            $document->setDueDate(date('Y-m-d', strtotime(str_replace('-', '/', $dueDate))));
         }
-        
+
         $document->setDue15Days($days15);
 
         return $document->commit();
@@ -132,6 +150,20 @@ class DocumentFactory {
 
     private function formatDate($date) {
         return date('j-M-Y', strtotime($date));
+    }
+
+    public function createExcelObjectFromData($row) {
+        $document = new Excel_Model();
+
+        $document->setId($row->id);
+        $document->setSubject($row->subject);
+        $document->setDescription($row->description);
+        $document->setFrom($row->from);
+        $document->setDueDate($row->dueDate);
+        $document->setDueRD($row->deadline);
+        $document->setDue15Days($row->due15Days);
+
+        return $document;
     }
 
     public function createObjectFromData($row) {

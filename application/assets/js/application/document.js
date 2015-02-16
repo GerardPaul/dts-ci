@@ -1,6 +1,8 @@
 $(document).ready(function () {
     $('#dueDate').datetimepicker({pickTime: false});
     $('#dateReceived').datetimepicker({pickTime: false});
+    $('#fromDate').datetimepicker({pickTime: false});
+    $('#toDate').datetimepicker({pickTime: false});
     $('#deadline').datetimepicker({pickTime: false});
     $('#attachment').bootstrapFileInput();
 
