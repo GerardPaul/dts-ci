@@ -5,6 +5,7 @@ class Excel_Model extends CI_Model {
     private $_id = 0;
     private $_subject;
     private $_description;
+    private $_dateReceived;
     private $_dueDate;
     private $_due15Days;
     private $_dueRD;
@@ -37,6 +38,14 @@ class Excel_Model extends CI_Model {
 
     public function getDescription() {
         return $this->_description;
+    }
+    
+    public function setDateReceived($value) {
+        $this->_dateReceived = $value;
+    }
+
+    public function getDateReceived() {
+        return $this->_dateReceived;
     }
     
     public function setDueDate($value) {

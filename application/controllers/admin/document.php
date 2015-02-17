@@ -610,7 +610,7 @@ class Document extends CI_Controller {
                 $this->load->library("DocumentFactory");
                 $documents = $this->documentfactory->getUncomplied($fromDate,$toDate);
                 if ($documents) {
-                    $heading = array('Subject', 'Description', 'From', 'Due Date', '15 Day', 'Deadline');
+                    $heading = array('Document Subject', 'Document Description', 'From', 'Date Received', 'RD Deadline', 'Due Date', '15 Day', 'Chat Messages');
                     $this->load->library('PHPExcel');
                     //$this->load->library('PHPExcel/IOFactory');
                     $excel = new PHPExcel();
@@ -628,9 +628,10 @@ class Document extends CI_Controller {
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(0,$row,$document->getSubject());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(1,$row,$document->getDescription());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(2,$row,$document->getFrom());
-                        $excel->getActiveSheet()->setCellValueByColumnAndRow(3,$row,$document->getDueDate());
-                        $excel->getActiveSheet()->setCellValueByColumnAndRow(4,$row,$document->getDue15Days());
-                        $excel->getActiveSheet()->setCellValueByColumnAndRow(5,$row,$document->getDueRD());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(3,$row,$document->getDateReceived());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(4,$row,$document->getDueRD());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(5,$row,$document->getDueDate());
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(6,$row,$document->getDue15Days());
                         $row++;
                     }
                     $writer = PHPExcel_IOFactory::createWriter($excel,'Excel5');
