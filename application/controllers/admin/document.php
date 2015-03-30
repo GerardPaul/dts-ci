@@ -45,10 +45,14 @@ class Document extends CI_Controller {
         } else if ($er == 404) {
             $header = 'Not Found';
             $content = 'We cannot find the page you are looking for.';
+        }else if ($er == 400) {
+            $header = 'No Data Available';
+            $content = 'There is no data available for export. Select another date range.';
+            $er = 404;
         }
         $data = array(
             "title" => 'Error ' . $er,
-            "header" => 'Error ' . $er . ' ' . $header,
+            "header" => 'Error ' . $er . ' : ' . $header,
             "content" => $content,
             "userType" => $this->userType,
             "username" => $this->username
@@ -644,7 +648,7 @@ class Document extends CI_Controller {
                     
                     redirect('admin/document', 'refresh');
                 } else {
-                    $this->error(404);
+                    $this->error(400);
                 }
             }
         } else {
