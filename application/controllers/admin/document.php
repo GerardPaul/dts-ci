@@ -636,6 +636,9 @@ class Document extends CI_Controller {
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(4,$row,$document->getDueRD());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(5,$row,$document->getDueDate());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(6,$row,$document->getDue15Days());
+                        //$excel->getActiveSheet()->setCellValueByColumnAndRow(7,$row,trim(preg_replace('', '\n', $document->getChat())));
+                        //$excel->getActiveSheet()->setCellValueByColumnAndRow(7,$row,trim(preg_replace('/\s+/', ' ', $document->getChat())));
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow(7,$row,$document->getChat());
                         $row++;
                     }
                     $writer = PHPExcel_IOFactory::createWriter($excel,'Excel5');

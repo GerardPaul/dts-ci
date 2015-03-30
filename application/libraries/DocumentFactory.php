@@ -94,6 +94,20 @@ class DocumentFactory {
             $documents = array();
             foreach ($query->result() as $row) {
                 $id = $row->id;
+                $chat = "SELECT c.message, DATE_FORMAT(c.created, '%b %d, %h:%i %p') AS 'created', CONCAT(u.lastname, ',', u.firstname) AS 'fullname'
+                            FROM dts_chat c, dts_user u
+                            WHERE c.document = '$id' AND c.user = u.id
+                            ORDER BY c.created DESC";
+                $chat_q = $this->_ci->db->query($chat);
+                $chat_message = "";
+                if ($query->num_rows() > 0) {
+                    foreach($chat_q->result() as $c){
+                        $chat_message .= "($c->created) $c->fullname : $c->message";
+                    }
+                }else{
+                    $chat_message = "No chat messages.";
+                }
+                $row->chat = $chat_message;
                 $documents[] = $this->createExcelObjectFromData($row);
             }
             return $documents;
@@ -163,6 +177,7 @@ class DocumentFactory {
         $document->setDueRD($row->deadline);
         $document->setDue15Days($row->due15Days);
         $document->setDateReceived($row->dateReceived);
+        $document->setChat($row->chat);
 
         return $document;
     }
