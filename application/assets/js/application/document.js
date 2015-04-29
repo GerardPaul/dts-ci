@@ -55,9 +55,9 @@ $(document).ready(function () {
             attachment: {
                 validators: {
                     file: {
-                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
+                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc,xls,xlsx,zip,txt,ppt,pptx,csv',
                         type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/x-msexcel,application/x-excel,application/vnd.ms-excel,application/excel,application/x-compressed,application/zip,text/plain',
-                        maxSize: 2048 * 1024, // 2 MB
+                        maxSize: 0, // 2 MB
                         message: 'The selected file is not valid!'
                     }
                 }
@@ -136,9 +136,9 @@ $(document).ready(function () {
             attachment: {
                 validators: {
                     file: {
-                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc',
+                        extension: 'jpeg,jpg,png,gif,pdf,docx,doc,xls,xlsx,zip,txt,ppt,pptx,csv',
                         type: 'image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/x-msexcel,application/x-excel,application/vnd.ms-excel,application/excel,application/x-compressed,application/zip,text/plain',
-                        maxSize: 2048 * 1024, // 2 MB
+                        maxSize: 0, // 2 MB
                         message: 'The selected file is not valid!'
                     }
                 }

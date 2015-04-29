@@ -166,8 +166,8 @@ class Document extends CI_Controller {
         $config = array();
         $config['upload_path'] = './upload/';
         $config['file_name'] = $filename;
-        $config['allowed_types'] = 'gif|jpg|jpeg|png|pdf|docx|doc|xls|csv|ppt|tar|tgz|zip|text';
-        $config['max_size'] = '0';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png|pdf|docx|doc|xls|xlsx|csv|ppt|pptx|tar|tgz|zip|text';
+        $config['max_size'] = 0;
 
         return $config;
     }
@@ -573,8 +573,8 @@ class Document extends CI_Controller {
                 $config = array(
                     'upload_path' => './upload/',
                     'file_name' => $filename,
-                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc',
-                    'max_size' => 2048,
+                    'allowed_types' => 'gif|jpg|jpeg|png|pdf|docx|doc|xls|xlsx|csv|ppt|pptx|tar|tgz|zip|text',
+                    'max_size' => 0,
                 );
                 $this->load->library('upload', $config);
 
