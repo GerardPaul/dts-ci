@@ -352,7 +352,7 @@ function loadDocuments(change) {
             var dateReceived = format_mysqldate(field['dateReceived']);
             var deadline = field['deadline'];
             var dueDate = '';
-            if (deadline === '0000-00-00') {
+            if (deadline === '0000-00-00' || deadline === '1970-01-01') {
                 dueDate = compare_mysqldate(field['due15Days'], field['dueDate']);
             } else {
                 dueDate = format_mysqldate(deadline);
