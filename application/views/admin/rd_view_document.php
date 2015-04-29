@@ -172,7 +172,10 @@ HTML;
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Deadline</label>
+                        <div class="col-md-3 control-label">
+                            <input type="checkbox" name="urgent" id="deadline_box" value="1">
+                            <label for="deadline_box">Deadline</label>
+                        </div>
                         <div class="col-md-5">
                             <div class="input-group date">
                                 <input id="deadline" type="text" class="form-control" name="deadline" date-format="YYYY/MM/DD" />

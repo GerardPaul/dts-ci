@@ -206,9 +206,6 @@ $(document).ready(function () {
         fields: {
             deadline: {
                 validators: {
-                    notEmpty: {
-                        message: 'Please set deadline for document!'
-                    },
                     date: {
                         format: 'MM/DD/YYYY'
                     }
@@ -235,6 +232,14 @@ $(document).ready(function () {
         // Validate the date when user change it
         $('#assignForm').bootstrapValidator('revalidateField', 'deadline');
     });
+
+    $('#deadline_box').change(function(){
+        if(this.checked){
+            $('#deadline').removeAttr('disabled');
+        }else{
+            $('#deadline').attr('disabled','disabled');
+        }
+    }).change();
 
     $('.toggleChat').click(function () {
         $('.toggleChat i').toggle();

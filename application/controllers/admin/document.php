@@ -443,7 +443,12 @@ class Document extends CI_Controller {
                 $notes = $this->cleanString($_POST['note']);
                 $action = $this->cleanString($_POST['action']);
 
-                $deadline = $this->cleanString($_POST['deadline']);
+                $deadline = "";
+                if(isset($_POST['deadline'])){
+                    $deadline = $this->cleanString($_POST['deadline']);
+                }else{
+                    $deadline = "00/00/0000";
+                }
                 $deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
 
                 $this->load->library("UserFactory");
