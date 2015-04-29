@@ -201,4 +201,16 @@ class DocumentFactory {
         return $document;
     }
 
+    public function getAttachments($id){
+        $sql = "SELECT * FROM dts_files WHERE document = $id";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            $attachments = array();
+            foreach ($query->result() as $row) {
+                $attachments[] = $row->file_url;
+            }
+            return $attachments;
+        }
+        return false;
+    }
 }

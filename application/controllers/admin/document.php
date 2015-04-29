@@ -193,8 +193,16 @@ class Document extends CI_Controller {
 
                 $dateReceived = date('Y-m-d', strtotime(str_replace('-', '/', $received)));
 
-
-                $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, "No File.", $refNo, $dateReceived);
+                $files = $_FILES;
+                $count = count($_FILES['attachment']['name']);
+                $att = '';
+                if($count>0){
+                    $att = "Has attachment.";
+                }else{
+                    $att = "No File.";
+                }
+                    
+                $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, $att, $refNo, $dateReceived);
                 if ($id) {
                     $this->load->library("LogsFactory");
                     $user = $this->username;
@@ -203,8 +211,6 @@ class Document extends CI_Controller {
 
                     //----- multiple file upload ------
 
-                    $files = $_FILES;
-                    $count = count($_FILES['attachment']['name']);
                     $attachment_path = 'No File.';
                     $this->load->library('upload');
                     $this->load->library('FileFactory');
@@ -687,4 +693,31 @@ class Document extends CI_Controller {
         }
     }
 
+    public function getAttachment($id = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType == 'EMP') {
+                $this->error(403);
+            } else {
+                $id = (int) $id;
+                $this->load->library("DocumentFactory");
+                $attachments = $this->documentfactory->getAttachments($id);
+                if ($attachments && $id > 0) {
+                    if(sizeof($attachments)>1){
+                        $this->load->library('zip');
+                        for($i = 0; $i < sizeof($attachments); $i++){
+                           $this->zip->read_file($attachments[$i]); 
+                        }
+                        $this->zip->download('attachments.zip');
+                    }else{
+                        
+                    }
+                } else {
+                    $this->error(404);
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 }
