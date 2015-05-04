@@ -179,7 +179,7 @@ class Document extends CI_Controller {
                 $this->error(403);
             } else {
                 $this->load->library("DocumentFactory");
-
+                
                 $subject = $this->cleanString($_POST['subject']);
                 $description = $this->cleanString($_POST['description']);
                 $from = $this->cleanString($_POST['from']);
@@ -196,6 +196,7 @@ class Document extends CI_Controller {
                 $files = $_FILES;
                 $count = count($_FILES['attachment']['name']);
                 $att = '';
+                $full_path = '';
                 if($count>0){
                     $att = "Has attachment.";
                 }else{
@@ -238,7 +239,10 @@ class Document extends CI_Controller {
                             $this->filefactory->addFile($id, $attachment_path);
                         }
                     }
-
+                    if($count == 1){
+                        $this->documentfactory->updateAttachment($id, $attachment_path);
+                    }
+                    
                     //----- multiple file upload ------
 
                     redirect('admin/document');

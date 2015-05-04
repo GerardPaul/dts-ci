@@ -213,4 +213,9 @@ class DocumentFactory {
         }
         return false;
     }
+    
+    public function updateAttachment($id, $file_url){
+        $sql = "UPDATE dts_document SET attachment = '$file_url' WHERE id = '$id'";
+        $query = $this->_ci->db->query($sql);
+    }
 }

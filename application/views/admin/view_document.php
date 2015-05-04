@@ -12,11 +12,14 @@
             if ($documents !== FALSE) {
                 $download = '<button class="btn btn-sm btn-success disabled" >No Attachments</button>';
                 if ($documents->getAttachment() != 'No File.') {
-                    //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
-                    //$str = $documents->getAttachment();
-                    //$link = base_url() . strstr($str, 'upload');
-                    //$download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View this File" target="_blank" data-toggle="tooltip">View File <i class="glyphicon glyphicon-new-window"></i></a>';
-                    $download = '<a href="'.base_url().'admin/document/getAttachment/'.$documents->getId().'" class="btn btn-sm btn-success" title="View this File" data-toggle="tooltip">Download <i class="glyphicon glyphicon-new-window"></i></a>';
+                    if($documents->getAttachment() != 'Has attachment.'){
+                        //$download = '<form method="post" action="'. base_url() .'admin/document/download"><input type="hidden" name="document" value="'.$documents->getId().'"><button class="btn btn-sm btn-success" type="submit"><i class="glyphicon glyphicon-download"></i> Download Attachments</button></form>';
+                        $str = $documents->getAttachment();
+                        $link = base_url() . strstr($str, 'upload');
+                        $download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View this File" target="_blank" data-toggle="tooltip">View File <i class="glyphicon glyphicon-new-window"></i></a>';
+                    }else{
+                        $download = '<a href="'.base_url().'admin/document/getAttachment/'.$documents->getId().'" class="btn btn-sm btn-success" title="View this File" data-toggle="tooltip">Download <i class="glyphicon glyphicon-new-window"></i></a>';
+                    }
                 }
                 $dateReceived = date('j-M-Y', strtotime($documents->getDateReceived()));
                 $dueDate = date('j-M-Y', strtotime($documents->getDueDate()));
