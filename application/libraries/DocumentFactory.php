@@ -44,6 +44,18 @@ class DocumentFactory {
         }
         return false;
     }
+    
+    public function getNamesReceived($document){
+        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document";
+        $query = $this->_ci->db->query($sql);
+        $names = '';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $names .= $row->name . "<br>";
+            }
+        }
+        return $names;
+    }
 
     public function getDocument($id = 0) {
         if ($id > 0) {

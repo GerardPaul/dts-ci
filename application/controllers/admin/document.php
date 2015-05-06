@@ -142,6 +142,8 @@ class Document extends CI_Controller {
                 $this->load->library("DocumentFactory");
                 $documents = $this->documentfactory->getDocument($documentId);
 
+                $seen = $this->documentfactory->getNamesReceived($documentId);
+                
                 if ($documentId > 0 && $documents) {
                     $status = $this->status($documents->getStatus());
                     $data = array(
@@ -150,7 +152,8 @@ class Document extends CI_Controller {
                         "header" => 'Document Details',
                         "userType" => $this->userType,
                         "username" => $this->username,
-                        "status" => $status
+                        "status" => $status,
+                        "seen" => $seen
                     );
                     $this->load->admin_template('view_document', $data);
                 } else {
@@ -268,13 +271,15 @@ class Document extends CI_Controller {
                 if ($track > 0 && $document) {
                     $this->receive($this->userId, $track); //automatically receive upon viewing document
                     $status = $this->status($document->getStatus());
-
+                    
+                    $seen = $this->trackfactory->getNamesReceived($document->getDocument());
+                    
                     if ($userType == 'RD') {
-                        $this->rdDetails($document, $status, $track);
+                        $this->rdDetails($document, $status, $track, $seen);
                     } else if ($userType == 'ARD') {
-                        $this->ardDetails($document, $status, $track);
+                        $this->ardDetails($document, $status, $track, $seen);
                     } else if ($userType == 'SEC') {
-                        $this->secDetails($document, $status, $track);
+                        $this->secDetails($document, $status, $track, $seen);
                     }
 
                     if (isset($_GET['notification'])) {
@@ -282,6 +287,8 @@ class Document extends CI_Controller {
                         $this->load->library('NotificationFactory');
                         $this->notificationfactory->seenNotification($notification_id);
                     }
+                    
+                    
                 } else {
                     $this->error(403);
                 }
@@ -291,7 +298,7 @@ class Document extends CI_Controller {
         }
     }
 
-    private function rdDetails($document, $status, $track) {
+    private function rdDetails($document, $status, $track, $seen) {
         $this->load->library("UserFactory");
 
         $data = array(
@@ -304,12 +311,13 @@ class Document extends CI_Controller {
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'rddetails',
-            "track" => $track
+            "track" => $track,
+            "seen" => $seen
         );
         $this->load->admin_template('rd_view_document', $data);
     }
 
-    private function ardDetails($document, $status, $track) {
+    private function ardDetails($document, $status, $track, $seen) {
         $this->load->library("UserFactory");
         $division = $this->userfactory->getDivision($this->userId);
 
@@ -332,12 +340,13 @@ class Document extends CI_Controller {
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'arddetails',
-            "track" => $track
+            "track" => $track,
+            "seen" => $seen
         );
         $this->load->admin_template('ard_view_document', $data);
     }
 
-    private function secDetails($document, $status, $track) {
+    private function secDetails($document, $status, $track, $seen) {
         $this->load->library("UserFactory");
         $division = $this->userfactory->getDivision($this->userId);
 
@@ -350,7 +359,8 @@ class Document extends CI_Controller {
             "status" => $status,
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'arddetails',
-            "track" => $track
+            "track" => $track,
+            "seen" => $seen
         );
         $this->load->admin_template('sec_view_document', $data);
     }

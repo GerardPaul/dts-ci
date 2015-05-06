@@ -101,6 +101,8 @@ class Document extends CI_Controller {
                     $this->receive($this->userId, $track); //automatically receive upon viewing document
                     $status = $this->status($document->getStatus());
                     
+                    $seen = $this->trackfactory->getNamesReceived($document->getDocument());
+                    
                     $data = array(
                         "document" => $document,
                         "title" => 'Document Details',
@@ -110,7 +112,8 @@ class Document extends CI_Controller {
                         "status" => $status,
                         "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
                         "load" => 'empdetails',
-                        "track" => $track
+                        "track" => $track,
+                        "seen" => $seen
                     );
                     $this->load->template('emp_view_document', $data);
                     

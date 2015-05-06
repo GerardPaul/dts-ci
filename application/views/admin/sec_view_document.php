@@ -37,7 +37,7 @@
                 $due15Days = date('j-M-Y', strtotime($document->getDue15Days()));
 
                 $deadline = '<strong>Not Set</strong>';
-                if ($document->getDeadline() !== '0000-00-00') {
+                if ($document->getDeadline() !== '0000-00-00' && $document->getDeadline() !== '1970-01-01') {
                     $deadline = date('j-M-Y', strtotime($document->getDeadline()));
                 }
 
@@ -92,6 +92,10 @@
                         <tr>
                                 <th>Attachment</th>
                                 <td>{$download}</td>
+                        </tr>
+                        <tr>
+                                <th>Seen By</th>
+                                <td>{$seen}</td>
                         </tr>
                     </table>
 HTML;

@@ -49,6 +49,18 @@ class TrackFactory {
         }
         return false;
     }
+    
+    public function getNamesReceived($document){
+        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document";
+        $query = $this->_ci->db->query($sql);
+        $names = '';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $names .= $row->name . "<br>";
+            }
+        }
+        return $names;
+    }
 
     public function getCountUserDocuments($document) {
         $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE document = $document";
@@ -89,7 +101,7 @@ class TrackFactory {
             return true;
         return false;
     }
-
+    
     public function forward($document, $notes, $action, $deadline, $users, $userId) {
         $sql = "UPDATE dts_document SET action = '$action', deadline = '$deadline' WHERE id = ?";
         if ($this->_ci->db->query($sql, array($document))) {

@@ -94,6 +94,10 @@
                                 <th>Attachment</th>
                                 <td>{$download}</td>
                         </tr>
+                        <tr>
+                                <th>Seen By</th>
+                                <td>{$seen}</td>
+                        </tr>
                     </table>
 HTML;
             } else {
