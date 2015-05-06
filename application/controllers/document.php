@@ -175,4 +175,31 @@ class Document extends CI_Controller {
         }
     }
 
+    public function getAttachment($id = 0) {
+        $this->checkLogin();
+        if ($this->login) {
+            if ($this->userType != 'EMP') {
+                $this->error(403);
+            } else {
+                $id = (int) $id;
+                $this->load->library("DocumentFactory");
+                $attachments = $this->documentfactory->getAttachments($id);
+                if ($attachments && $id > 0) {
+                    if(sizeof($attachments)>1){
+                        $this->load->library('zip');
+                        for($i = 0; $i < sizeof($attachments); $i++){
+                           $this->zip->read_file($attachments[$i]); 
+                        }
+                        $this->zip->download('attachments.zip');
+                    }else{
+                        
+                    }
+                } else {
+                    $this->error(404);
+                }
+            }
+        } else {
+            redirect('login', 'refresh');
+        }
+    }
 }

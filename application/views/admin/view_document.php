@@ -18,7 +18,7 @@
                         $link = base_url() . strstr($str, 'upload');
                         $download = '<a href="' . $link . '" class="btn btn-sm btn-success" title="View this File" target="_blank" data-toggle="tooltip">View File <i class="glyphicon glyphicon-new-window"></i></a>';
                     }else{
-                        $download = '<a href="'.base_url().'admin/document/getAttachment/'.$documents->getId().'" class="btn btn-sm btn-success" title="View this File" data-toggle="tooltip">Download <i class="glyphicon glyphicon-new-window"></i></a>';
+                        $download = '<a href="'.base_url().'admin/document/getAttachment/'.$documents->getId().'" class="btn btn-sm btn-success" title="Download Attachments" data-toggle="tooltip">Download <i class="glyphicon glyphicon-new-window"></i></a>';
                     }
                 }
                 $dateReceived = date('j-M-Y', strtotime($documents->getDateReceived()));
@@ -26,8 +26,9 @@
                 $due15Days = date('j-M-Y', strtotime($documents->getDue15Days()));
 
                 $deadline = 'Not Set';
-                if ($documents->getDeadline() !== '0000-00-00')
+                if ($documents->getDeadline() !== '0000-00-00' && $document->getDeadline() !== '1970-01-01'){
                     $deadline = date('j-M-Y', strtotime($documents->getDeadline()));
+                }
 
                 $action = $documents->getAction();
                 if($action=='')
