@@ -114,7 +114,7 @@ class DocumentFactory {
                 $chat_message = "";
                 if ($query->num_rows() > 0) {
                     foreach($chat_q->result() as $c){
-                        $chat_message .= " ($c->created) $c->fullname : $c->message ";
+                        $chat_message .= "($c->created) $c->fullname : $c->message\n";
                     }
                 }else{
                     $chat_message = "No chat messages.";

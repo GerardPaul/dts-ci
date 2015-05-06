@@ -667,15 +667,17 @@ class Document extends CI_Controller {
                     //$this->load->library('PHPExcel/IOFactory');
                     $excel = new PHPExcel();
                     $excel->getActiveSheet()->setTitle('Export Uncomplied');
-
+                    $excel->getActiveSheet()->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+                    
                     $col = 0;
                     foreach ($heading as $h) {
                         $excel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $h);
+                        $excel->getActiveSheet()->setCellValueByColumnAndRow($col, 2, "-------");
                         $col++;
                     }
 
                     $num = count($documents);
-                    $row = 2;
+                    $row = 3;
                     foreach ($documents as $document) {
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $document->getSubject());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $document->getDescription());
@@ -684,9 +686,10 @@ class Document extends CI_Controller {
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $document->getDueRD());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $document->getDueDate());
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $document->getDue15Days());
-                        //$excel->getActiveSheet()->setCellValueByColumnAndRow(7,$row,trim(preg_replace('', '\n', $document->getChat())));
-                        //$excel->getActiveSheet()->setCellValueByColumnAndRow(7,$row,trim(preg_replace('/\s+/', ' ', $document->getChat())));
                         $excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $document->getChat());
+                        
+                        $excel->getActiveSheet()->getColumnDimensionByColumn(7)->setWidth(500);
+                        $excel->getActiveSheet()->getStyleByColumnAndRow(7, $row)->getAlignment()->setWrapText(true);
                         $row++;
                     }
                     $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
