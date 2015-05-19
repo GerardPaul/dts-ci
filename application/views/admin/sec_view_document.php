@@ -136,13 +136,13 @@ HTML;
                         <div class="chatBody">
                             <input type="hidden" name="numMessages" value="0" id="numMessages">
                             <div class="row" id="chatBody">
-								<span id="loadingConversation" style="margin-left: 10px;">Loading conversation...</span>
+				<span id="loadingConversation" style="margin-left: 10px;">Loading conversation...</span>
                             </div>
                         </div>
                         <div class="chatFooter">
                             <input type="hidden" name="document" id="document" value="<?php echo $document->getDocument(); ?>">
                             <input type="hidden" name="chat" id="chat" value="1">
-                            <input class="form-control" type="text" name="message" id="message">
+                            <input class="form-control" type="text" name="message" id="message" <?php if($archive == 1){ ?> disabled="disabled" placeholder="Messaging Not Available." <?php } ?>>
                         </div>
                     </div>
                 </div>
