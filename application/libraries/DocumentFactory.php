@@ -80,7 +80,7 @@ class DocumentFactory {
     }
 
     public function ajaxGetDocument($get) {
-        $sql = "SELECT * FROM dts_document";
+        $sql = "SELECT * FROM dts_document WHERE archive = 0";
         if ($get !== 'All') {
             $sql .= " WHERE status = '$get'";
         }

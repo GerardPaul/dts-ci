@@ -35,7 +35,7 @@ class TrackFactory {
     public function ajaxGetDocument($get, $user) {
         $sql = "SELECT t.id, d.referenceNumber, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received, d.status
                 FROM dts_document d, dts_track t 
-                WHERE t.document = d.id AND t.user = '$user'";
+                WHERE t.document = d.id AND t.user = '$user' AND d.archive = 0";
         if ($get !== 'All') {
             $sql .= " AND d.status = '$get'";
         }

@@ -251,10 +251,10 @@ $(document).ready(function () {
             $('.chatBox').height(35);
         } else if (height === 35) {
             $('.chatBox').height(300);
-        } else if (height === 500) {
+        } else if (height === 400) {
             $('.chatBox').height(34);
         } else if (height === 34) {
-            $('.chatBox').height(500);
+            $('.chatBox').height(400);
         }
     });
 

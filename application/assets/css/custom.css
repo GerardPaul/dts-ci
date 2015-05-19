@@ -116,37 +116,37 @@ body{
 @media (min-width: 768px) {
     .chatBox {
         width: 600px; /* Chatbox width */
-        height: 500px;
+        height: 400px;
     }
     .chatContainer{
-        height:500px;
+        height:400px;
     }
     .chatBody {
-        height: 410px;
+        height: 310px;
     }
 }
 @media (min-width: 900px) {
     .chatBox {
         width: 850px; /* Chatbox width */
-        height: 500px;
+        height: 400px;
     }
     .chatContainer{
-        height:500px;
+        height:400px;
     }
     .chatBody {
-        height: 410px;
+        height: 310px;
     }
 }
 @media (min-width: 600px) and (min-height : 1280px) {
     .chatBox {
         width: 500px; /* Chatbox width */
-        height: 500px;
+        height: 400px;
     }
     .chatContainer{
-        height:500px;
+        height:400px;
     }
     .chatBody {
-        height: 410px;
+        height: 310px;
     }
 }
 .chatBox {
