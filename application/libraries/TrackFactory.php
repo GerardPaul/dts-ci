@@ -35,10 +35,16 @@ class TrackFactory {
     public function ajaxGetDocument($get, $user) {
         $sql = "SELECT t.id, d.referenceNumber, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received, d.status
                 FROM dts_document d, dts_track t 
-                WHERE t.document = d.id AND t.user = '$user' AND d.archive = 0";
+                WHERE t.document = d.id AND t.user = '$user'";
         if ($get !== 'All') {
-            $sql .= " AND d.status = '$get'";
+            if($get === 'Archived')
+                $sql .= " AND archive = 1";
+            else
+                $sql .= " AND status = '$get' AND archive = 0";
+        }else{
+            $sql .= " AND archive = 0";
         }
+        $sql .= " ORDER BY id ASC";
         $query = $this->_ci->db->query($sql);
         if ($query->num_rows() > 0) {
             $documents = array();

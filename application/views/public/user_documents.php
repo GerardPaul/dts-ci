@@ -8,6 +8,7 @@
                     <option value="2">Complied</option>
                     <option value="3">On-Going</option>
                     <option value="4">Cancelled</option>
+                    <option value="5">Archived</option>
                 </select>
                 <div class="space-10"></div>
             </div>

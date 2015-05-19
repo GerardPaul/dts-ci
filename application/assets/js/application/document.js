@@ -283,6 +283,8 @@ $(document).ready(function () {
             change = 'On-Going';
         } else if (value === '4') {
             change = 'Cancelled';
+        } else if (value === '5') {
+            change = 'Archived';
         }
 
         loadDocuments(change);

@@ -80,9 +80,14 @@ class DocumentFactory {
     }
 
     public function ajaxGetDocument($get) {
-        $sql = "SELECT * FROM dts_document WHERE archive = 0";
+        $sql = "SELECT * FROM dts_document";
         if ($get !== 'All') {
-            $sql .= " WHERE status = '$get'";
+            if($get === 'Archived')
+                $sql .= " WHERE archive = 1";
+            else
+                $sql .= " WHERE status = '$get' AND archive = 0";
+        }else{
+            $sql .= " WHERE archive = 0";
         }
         $sql .= " ORDER BY id ASC";
         $query = $this->_ci->db->query($sql);
