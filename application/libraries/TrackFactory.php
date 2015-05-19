@@ -13,7 +13,7 @@ class TrackFactory {
     }
 
     public function getUserDocument($track) {
-        $sql = "SELECT d.subject, d.description, d.action, d.from, d.dueDate, d.due15Days, d.deadline,
+        $sql = "SELECT d.archive, d.subject, d.description, d.action, d.from, d.dueDate, d.due15Days, d.deadline,
                         d.attachment, d.status, d.referenceNumber, d.dateReceived,
                         t.id, t.document, t.user, t.received
                 FROM dts_document d, dts_track t 
@@ -91,6 +91,7 @@ class TrackFactory {
         $track->setDue15Days($row->due15Days);
         $track->setDateReceived($row->dateReceived);
         $track->setAction($row->action);
+        $track->setArchive($row->archive);
 
         $track->setId($row->id);
         $track->setDocument($row->document);

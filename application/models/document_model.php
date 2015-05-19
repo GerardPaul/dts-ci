@@ -14,6 +14,7 @@ class Document_Model extends CI_Model {
     private $_action;
     private $_due15Days;
     private $_deadline;
+    private $_archive;
 
     function __construct() {
         parent::__construct();
@@ -113,6 +114,14 @@ class Document_Model extends CI_Model {
 
     public function getAction() {
         return $this->_action;
+    }
+    
+    public function setArchive($value) {
+        $this->_archive = $value;
+    }
+
+    public function getArchive() {
+        return $this->_archive;
     }
 
     /*

@@ -6,8 +6,15 @@
             <div class="col-sm-6">
                 <div class="visible-md visible-lg visible-sm visible-xs btn-group" id="actionButtons">
                     <a class="btn btn-sm btn-default" href="<?php echo base_url(); ?>admin/document" data-toggle="tooltip" title="Back to Documents"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
-                    <button type="button" class="btn btn-sm btn-primary" title="Forward this document to person/s responsible." data-toggle="modal" data-target="#forwardModal" data-backdrop="static" data-keyboard="false"><i class="glyphicon glyphicon-share"></i> Forward To</button>
-                    <button type="button" class="btn btn-sm btn-warning" title="Change status of this document." data-toggle="modal" data-target="#changeStatusModal" data-backdrop="static" data-keyboard="false"><i class="glyphicon glyphicon-refresh"></i> Change Status</button>
+                    <?php 
+                    $archive = 0;
+                    if ($document !== FALSE) {
+                        $archive = $document->getArchive();
+                    }
+                    if($archive == 0){ ?>
+                        <button type="button" class="btn btn-sm btn-primary" title="Forward this document to person/s responsible." data-toggle="modal" data-target="#forwardModal" data-backdrop="static" data-keyboard="false"><i class="glyphicon glyphicon-share"></i> Forward To</button>
+                        <button type="button" class="btn btn-sm btn-warning" title="Change status of this document." data-toggle="modal" data-target="#changeStatusModal" data-backdrop="static" data-keyboard="false"><i class="glyphicon glyphicon-refresh"></i> Change Status</button>
+                    <?php } ?>
                 </div>
                 <div class="space-10"></div>
             </div>

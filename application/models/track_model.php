@@ -17,6 +17,7 @@ class Track_Model extends CI_Model {
     private $_document;
     private $_user;
     private $_received;
+    private $_archive;
 
     function __construct() {
         parent::__construct();
@@ -140,6 +141,14 @@ class Track_Model extends CI_Model {
 
     public function getAction() {
         return $this->_action;
+    }
+    
+    public function setArchive($value) {
+        $this->_archive = $value;
+    }
+
+    public function getArchive() {
+        return $this->_archive;
     }
 
     public function commit() {
