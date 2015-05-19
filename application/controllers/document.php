@@ -144,7 +144,7 @@ class Document extends CI_Controller {
             return '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         } else if ($status == 'On-Going') {
             return '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
-        } else if ($status == 'Complied') {
+        } else if ($status == 'Compiled') {
             return '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' . $status . '" data-toggle="tooltip"></i>&nbsp;' . $status . '</span>';
         }
     }

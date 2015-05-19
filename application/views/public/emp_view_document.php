@@ -167,7 +167,7 @@ HTML;
                         <div class="col-md-8">
                             <select class="form-control" name="status" id="status">
                                 <option value="">- Select -</option>
-                                <option value="Complied">Complied</option>
+                                <option value="Compiled">Compiled</option>
                             </select>
                         </div>
                     </div>

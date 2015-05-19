@@ -101,7 +101,7 @@ class DocumentFactory {
         return false;
     }
 
-    public function getUncomplied($from, $to) {
+    public function getUncompiled($from, $to) {
         $sql = "SELECT d.id, d.subject, d.description, d.dateReceived, d.from, d.dueDate, d.due15Days, d.deadline 
                 FROM dts_document d 
                 WHERE (d.status = 'On-Going' OR d.status = 'Cancelled') 

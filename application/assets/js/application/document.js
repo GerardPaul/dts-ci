@@ -278,7 +278,7 @@ $(document).ready(function () {
         if (value === '1') {
             change = 'All';
         } else if (value === '2') {
-            change = 'Complied';
+            change = 'Compiled';
         } else if (value === '3') {
             change = 'On-Going';
         } else if (value === '4') {
@@ -345,7 +345,7 @@ function loadDocuments(change) {
                 stat = '<span class="text-danger status"><i class="glyphicon glyphicon-remove-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
             } else if (status === 'On-Going') {
                 stat = '<span class="text-warning status"><i class="glyphicon glyphicon-info-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
-            } else if (status === 'Complied') {
+            } else if (status === 'Compiled') {
                 stat = '<span class="text-success status"><i class="glyphicon glyphicon-ok-sign" title="' + status + '" data-toggle="tooltip"></i>&nbsp;</span>';
             }
             
