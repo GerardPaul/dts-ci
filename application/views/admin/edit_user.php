@@ -6,13 +6,13 @@
             </a>
         </div>
     </div>
-    <input type="hidden" name="userId" id="userId" value="<?php echo $userId; ?>" >
+    <!--<input type="hidden" name="userId" id="userId" value="<?php echo $userId; ?>" >-->
     <div class="space-10"></div>
     <div class="row">
         <div class="col-xs-12">
             <div class="well">
                 <form id="addUserForm" method="post" class="form-horizontal" action="<?php echo base_url('admin/user/update/' . $user->getId()); ?>">							
-                    <input type="hidden" name="userId" value="<?php echo $user->getId(); ?>">
+                    <input type="hidden" name="userId" id="userId" value="<?php echo $user->getId(); ?>">
                     <div class="form-group">
                         <label class="col-md-2 control-label">Account</label>
                         <div class="col-md-8">

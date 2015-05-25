@@ -172,12 +172,27 @@ class UserFactory {
         return false;
     }
 
+//    private function checkId($userId, $item, $value){
+//        $sql = "SELECT $item FROM dts_user WHERE id = ? AND $item = ?";
+//        $query = $this->_ci->db->query($sql, array($userId, $value));
+//        if ($query->num_rows() > 0) {
+//            $value1 = $query->row($item);
+//            if($value1 == $value){
+//                return true;
+//            }else{
+//                return false;
+//            }
+//        }else{
+//            return true;
+//        }
+//    }
+    
     private function checkId($userId, $item, $value){
-        $sql = "SELECT $item FROM dts_user WHERE id = ?";
-        $query = $this->_ci->db->query($sql, array($userId));
+        $sql = "SELECT id FROM dts_user WHERE $item = ?";
+        $query = $this->_ci->db->query($sql, array($value));
         if ($query->num_rows() > 0) {
-            $value1 = $query->row($item);
-            if($value1 == $value){
+            $value1 = $query->row('id');
+            if($value1 == $userId){
                 return true;
             }else{
                 return false;
