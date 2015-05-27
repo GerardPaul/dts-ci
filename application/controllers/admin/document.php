@@ -476,7 +476,7 @@ class Document extends CI_Controller {
 
                 $users = array();
                 foreach ($_POST['selectedList'] as $user) {
-                    $users[] = $user;
+                    $users[] = substr($user, 0, strpos($user, '_'));
                     $usernames .= $this->userfactory->getUsername($user) . ", ";
                 }
 

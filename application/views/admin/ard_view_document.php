@@ -168,9 +168,18 @@ HTML;
                             <div class="col-xs-5">
                                 <select name="list" id="list" class="selectList form-control" multiple="multiple">
                                     <?php
+                                    $prevDivision = '';
+                                    $i = 0;
                                     foreach ($allUsers as $user) {
                                         if ($user->getUserType() !== 'ADMIN' && $user->getUserType() !== 'RD' && $user->getUserType() != 'ARD') {
-                                            echo '<option value="' . $user->getId() . '">' . $user->getLastName() . ',' . $user->getFirstName() . '</option>';
+                                            $userDivision = $user->getDivision();
+                                            if($prevDivision != $userDivision){
+                                                echo "<option value='division' style='font-weight:bold; color:#84B4DD' disabled>".$user->getDivisionName()."</option>";
+                                                $prevDivision = $userDivision;
+                                                $i++;
+                                            }
+                                            echo '<option value="' . $user->getId() . '_'.$i.'">' . $user->getLastName() . ',' . $user->getFirstName() . '</option>';
+                                            $i++;
                                         }
                                     }
                                     ?>

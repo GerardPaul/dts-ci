@@ -316,12 +316,17 @@ function moveItem() {
     var selected = $('#list option:selected');
     selected.appendTo('#selectedList');
 
-    $('#assign').removeClass('disabled');
+    var num = $('#list option').length;
+    if(num > 0){
+        $('#assign').removeClass('disabled');
+    }
 }
 
 function removeItem() {
     var selected = $('#selectedList option:selected');
-    selected.appendTo('#list');
+    var value = $('#selectedList option:selected').val();
+    var position = value.substr(value.indexOf('_')+1) - 1;
+    $('#list option:eq('+position+')').after(selected);
 
     var num = $('#selectedList option').length;
     if (num === 0) {
