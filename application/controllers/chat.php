@@ -120,7 +120,7 @@ class Chat extends CI_Controller {
                 if($message->getUser() == $user){
                     $chatContents .= '<div class="col-xs-12"><div class="message self"><div class="row"><div class="col-sm-10"><p>'.  stripslashes($message->getMessage()).'</p></div><div class="col-sm-2"><time>'.$message->getCreated().'</time></div></div></div></div>';
                 }else{
-                    $chatContents .= '<div class="col-xs-12"><span>'.$message->getFullname().'</span><div class="message other"><div class="row"><div class="col-sm-10"><p>'.  stripslashes($message->getMessage()).'</p></div><div class="col-sm-2"><time>'.$message->getCreated().'</time></div></div></div></div>';
+                    $chatContents .= '<div class="col-xs-12"><span><b>'.$message->getFullname().'</b></span><div class="message other"><div class="row"><div class="col-sm-10"><p>'.  stripslashes($message->getMessage()).'</p></div><div class="col-sm-2"><time>'.$message->getCreated().'</time></div></div></div></div>';
                 }
             }
             $result = array('status' => 'ok', 'content' => $chatContents);
