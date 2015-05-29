@@ -102,7 +102,7 @@
                                 <td>{$download}</td>
                         </tr>
                         <tr>
-                                <th>Seen By</th>
+                                <th>Contributors</th>
                                 <td>{$seen}</td>
                         </tr>
                     </table>

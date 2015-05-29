@@ -62,7 +62,15 @@ class TrackFactory {
         $names = '';
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                $names .= $row->name . "<br>";
+                $names .= "<i class='glyphicon glyphicon-eye-open' data-toggle='tooltip' title='Seen'></i> ". $row->name . "<br>";
+            }
+        }
+        
+        $sql1 = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document AND t.received = '0000-00-00'";
+        $query1 = $this->_ci->db->query($sql1);
+        if ($query1->num_rows() > 0) {
+            foreach ($query1->result() as $row) {
+                $names .= "<i class='glyphicon glyphicon-eye-close' data-toggle='tooltip' title='Not Seen'></i> ". $row->name . "<br>";
             }
         }
         return $names;
