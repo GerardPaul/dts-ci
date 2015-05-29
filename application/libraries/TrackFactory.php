@@ -57,7 +57,7 @@ class TrackFactory {
     }
     
     public function getNamesReceived($document){
-        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document";
+        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document AND t.received <> '0000-00-00'";
         $query = $this->_ci->db->query($sql);
         $names = '';
         if ($query->num_rows() > 0) {
