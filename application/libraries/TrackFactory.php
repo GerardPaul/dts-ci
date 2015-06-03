@@ -121,21 +121,48 @@ class TrackFactory {
         $sql = "UPDATE dts_document SET action = '$action', deadline = '$deadline' WHERE id = ?";
         if ($this->_ci->db->query($sql, array($document))) {
             foreach ($users as $user) {
-                $ard = $this->getARD($user);
-
-                if ($ard) {
-                    if (!$this->checkARD($ard, $document)) {
-                        $doc = $this->addUserToTrack($ard, $document);
-                        $this->addDocumentNotification($userId, $ard, $doc);
+                if(is_numeric($user)){
+                    $ard = $this->getARD($user);
+                    if ($ard) {
+                        if (!$this->checkARD($ard, $document)) {
+                            $doc = $this->addUserToTrack($ard, $document);
+                            $this->addDocumentNotification($userId, $ard, $doc);
+                        }
                     }
-                }
 
-                $doc = $this->addUserToTrack($user, $document);
-                $this->addDocumentNotification($userId, $user, $doc);
+                    $doc = $this->addUserToTrack($user, $document);
+                    $this->addDocumentNotification($userId, $user, $doc);
+                }else{
+                    $divisionID = $this->getDivisionIDByName($user);
+                    $this->addDivisiontoTrack($divisionID, $document, $userId);
+                }
             }
             $this->setStatusOnGoing($document);
             $this->addNoteToChat($document, $notes, $userId);
             return true;
+        }
+        return false;
+    }
+    
+    private function addDivisiontoTrack($divisionID, $document,$userId){
+        $sql = "SELECT id FROM dts_user WHERE division = '$divisionID' AND userType <> 'ADMIN' AND userType <> 'RD'";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $user = $row->id;
+                $doc = $this->addUserToTrack($user, $document);
+                $this->addDocumentNotification($userId, $user, $doc);
+            }
+        }
+    }
+    
+    private function getDivisionIDByName($division){
+        $sql = "SELECT id FROM dts_division WHERE name = '$division'";
+        $query = $this->_ci->db->query($sql);
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                return $row->id;
+            }
         }
         return false;
     }

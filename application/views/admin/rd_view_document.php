@@ -163,8 +163,27 @@ HTML;
             <form id="assignForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/assign/<?php echo $document->getDocument(); ?>" onsubmit="return checkUsers();">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Assign To</label>
                         <div class="col-md-12">
+                            <label class="col-md-3">Assign To</label>
+                        </div>
+                        <div class="col-md-12">
+                            <fieldset id="divisions">
+                            <?php
+                                foreach($divisions as $division){
+                                    $divisionName = $division->getDivisionName();
+                                    $lowerCaseDivisionName = strtolower($divisionName);
+                                    echo "<div class='col-md-3'>
+                                            <input type='checkbox' name='division[]' value='$divisionName' id='$lowerCaseDivisionName'>
+                                            <label for='$lowerCaseDivisionName'>All $divisionName</label>
+                                        </div>";
+                            } ?>
+                            </fieldset>
+                            <div class="col-md-4">
+                                <input type="checkbox" name="specific" id="specific">
+                                <label for="specific">Select from List</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="select_list" style="display:none;">
                             <div class="col-xs-5">
                                 <select name="list" id="list" class="selectList form-control" multiple="multiple">
                                     <?php
@@ -195,6 +214,7 @@ HTML;
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-12"><hr></div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-3 control-label">

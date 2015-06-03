@@ -306,6 +306,25 @@ $(document).ready(function () {
         $('.attachments').toggle();
         $('#changeAttachmentButton span').toggle();
     });
+    
+    $('#specific').click(function(){
+        if(this.checked){
+            $('#divisions input').attr('disabled','disabled');
+            $('#select_list').css('display','block');
+        }else{
+            $('#divisions input').removeAttr('disabled','disabled');
+            $('#select_list').css('display','none');
+        }
+    });
+    
+    $('#divisions input').click(function(){
+        if($('#divisions :checkbox:checked').length > 0){
+            $('#assign').removeClass('disabled');
+        }else{
+            $('#assign').addClass('disabled');
+        }
+    });
+   
 });
 
 function loadRDButtons() {
@@ -417,12 +436,20 @@ function loadDocuments(change) {
 }
 
 function checkUsers() {
-    var num = $('#selectedList option').length;
-    if (num >= 1) {
-        $('#selectedList option').prop('selected', true);
-        return true;
-    } else {
-        $('#assign').addClass('disabled');
-        return false;
+    if($('#specific').is(':checked')){
+        var num = $('#selectedList option').length;
+        if (num >= 1) {
+            $('#selectedList option').prop('selected', true);
+            return true;
+        } else {
+            $('#assign').addClass('disabled');
+            return false;
+        }
+    }else{
+        if($('#divisions :checkbox:checked').length > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

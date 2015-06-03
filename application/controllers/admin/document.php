@@ -300,6 +300,7 @@ class Document extends CI_Controller {
 
     private function rdDetails($document, $status, $track, $seen) {
         $this->load->library("UserFactory");
+        $this->load->library("DivisionFactory");
 
         $data = array(
             "document" => $document,
@@ -309,6 +310,7 @@ class Document extends CI_Controller {
             "allUsers" => $this->userfactory->getAllUsers(),
             "username" => $this->username,
             "status" => $status,
+            "divisions" => $this->divisionfactory->getDivision(),
             "users" => $this->trackfactory->getCountUserDocuments($document->getDocument()),
             "load" => 'rddetails',
             "track" => $track,
@@ -469,21 +471,28 @@ class Document extends CI_Controller {
                 }else{
                     $deadline = "00/00/0000";
                 }
-                $deadline = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
+                $deadline1 = date('Y-m-d', strtotime(str_replace('-', '/', $deadline)));
 
                 $this->load->library("UserFactory");
                 $usernames = "";
-
                 $users = array();
-                foreach ($_POST['selectedList'] as $user) {
-                    $users[] = substr($user, 0, strpos($user, '_'));
-                    $usernames .= $this->userfactory->getUsername($user) . ", ";
+                
+                $this->load->library("TrackFactory");
+                
+                if(isset($_POST['division'])){
+                    foreach($_POST['division'] as $division){
+                        $users[] = $division;
+                        $usernames .= $division . ", ";
+                    }
+                }else{
+                    foreach ($_POST['selectedList'] as $user) {
+                        $users[] = substr($user, 0, strpos($user, '_'));
+                        $usernames .= $this->userfactory->getUsername($user) . ", ";
+                    }
                 }
-
                 $track = $this->cleanString($_POST['trackId']);
 
-                $this->load->library("TrackFactory");
-                if ($this->trackfactory->forward($document, $notes, $action, $deadline, $users, $this->userId)) {
+                if ($this->trackfactory->forward($document, $notes, $action, $deadline1, $users, $this->userId)) {
                     if (isset($_POST['urgent'])) {
                         $this->trackfactory->setUrgent($document);
                     }
