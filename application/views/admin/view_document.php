@@ -30,6 +30,10 @@
                     $deadline = date('j-M-Y', strtotime($documents->getDeadline()));
                 }
 
+                $position = strpos($seen, '_');
+                $seenCount = substr($seen, 0, $position);
+                $seenNames = substr($seen, $position+1, strlen($seen));
+                
                 $action = $documents->getAction();
                 if($action=='')
                     $action = '<span class="text-danger">Not set.</span>';
@@ -81,8 +85,8 @@
 						<td>{$download}</td>
 					</tr>
                                         <tr>
-						<th>Contributors</th>
-						<td>{$seen}</td>
+						<th>Seen By ({$seenCount})</th>
+                                                <td>{$seenNames}</td>
 					</tr>
 				</table>
 HTML;

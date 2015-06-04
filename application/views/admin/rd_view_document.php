@@ -48,7 +48,11 @@
                 if ($document->getDeadline() !== '0000-00-00' && $document->getDeadline() !== '1970-01-01') {
                     $deadline = date('j-M-Y', strtotime($document->getDeadline()));
                 }
-
+                
+                $position = strpos($seen, '_');
+                $seenCount = substr($seen, 0, $position);
+                $seenNames = substr($seen, $position+1, strlen($seen));
+                
                 $action = $document->getAction();
                 if($action=='')
                     $action = '<span class="text-danger">Not set.</span>';
@@ -102,8 +106,8 @@
                                 <td>{$download}</td>
                         </tr>
                         <tr>
-                                <th>Contributors</th>
-                                <td>{$seen}</td>
+                                <th>Seen By ({$seenCount})</th>
+                                <td>{$seenNames}</td>
                         </tr>
                     </table>
 HTML;
