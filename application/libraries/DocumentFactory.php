@@ -46,15 +46,27 @@ class DocumentFactory {
     }
     
     public function getNamesReceived($document){
-        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name' FROM dts_track t, dts_user u WHERE u.id = t.user AND t.document = $document";
+        $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name', t.received AS 'received' FROM dts_track t, dts_user u "
+                . "WHERE u.id = t.user AND t.document = $document ORDER BY u.division ASC";
         $query = $this->_ci->db->query($sql);
-        $names = '';
+        
+        $total = 0;
+        $seen = 0;
+        $unseenBy = '';
+        $seenBy = '';
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                $names .= $row->name . "<br>";
+                if($row->received == '0000-00-00'){
+                    $unseenBy .= "<span class='text-warning' data-toggle='tooltip' title='Not Seen'><i class='glyphicon glyphicon-eye-close'></i> ". $row->name . "</span><br>";
+                }else{
+                    $seenBy .= "<span class='text-success' data-toggle='tooltip' title='Seen'><i class='glyphicon glyphicon-eye-open'></i> ". $row->name . "</span><br>";
+                    $seen++;
+                }
+                $total++;
             }
         }
-        return $names;
+        
+        return $seen . " of " . $total . "_" . $seenBy . $unseenBy;
     }
 
     public function getDocument($id = 0) {
