@@ -164,7 +164,7 @@ HTML;
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="forwardLabel">Assign To Person/s Responsible</h4>
             </div>
-            <form id="ardAssignForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/ardAssign/<?php echo $document->getDocument(); ?>" onsubmit="return checkUsers();">
+            <form id="ardAssignForm" class="form-horizontal" method="post" action="<?php echo base_url(); ?>admin/document/ardAssign/<?php echo $document->getDocument(); ?>" onsubmit="return ardCheckUsers();">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Assign To</label>

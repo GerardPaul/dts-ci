@@ -453,3 +453,14 @@ function checkUsers() {
         }
     }
 }
+
+function ardCheckUsers() {
+    var num = $('#selectedList option').length;
+    if (num >= 1) {
+        $('#selectedList option').prop('selected', true);
+        return true;
+    } else {
+        $('#assign').addClass('disabled');
+        return false;
+    }
+}
