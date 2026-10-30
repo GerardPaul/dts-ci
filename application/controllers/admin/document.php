@@ -174,7 +174,7 @@ class Document extends CI_Controller {
     public function add() {
         $this->checkLogin();
         if ($this->login) {
-            if ($this->userType != 'SEC') {
+            if ($this->userType == 'EMP') {
                 $this->error(403);
             } else {
                 $this->load->library("DocumentFactory");
@@ -204,6 +204,14 @@ class Document extends CI_Controller {
                     
                 $id = $this->documentfactory->addDocument($subject, $description, $from, $dueDate, $att, $refNo, $dateReceived);
                 if ($id) {
+                    if ($this->userType == 'ARD' || $this->userType == 'OIC') {
+                        // RD is tracked automatically; the adder needs a track to see the document in their list
+                        $this->load->model('track_model');
+                        $track = new Track_Model();
+                        $track->setDocument($id);
+                        $track->setUser($this->userId);
+                        $track->commit();
+                    }
                     $this->load->library("LogsFactory");
                     $user = $this->username;
                     $action = "$user has added a document, ref no. <a href='" . base_url() . "admin/document/view/$id' target='_blank'>$refNo</a>.";
