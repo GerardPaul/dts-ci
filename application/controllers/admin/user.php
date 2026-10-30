@@ -25,14 +25,7 @@ class User extends CI_Controller {
     }
 
     function cleanString($string) {
-        $detagged = strip_tags($string);
-        if (get_magic_quotes_gpc()) {
-            $stripped = stripslashes($detagged);
-            $escaped = mysql_real_escape_string($stripped);
-        } else {
-            $escaped = mysql_real_escape_string($detagged);
-        }
-        return $escaped;
+        return trim(strip_tags($string));
     }
 
     private function error($er = 0) {

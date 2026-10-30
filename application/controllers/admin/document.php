@@ -25,15 +25,7 @@ class Document extends CI_Controller {
     }
 
     function cleanString($string) {
-        $detagged = strip_tags($string);
-        if (get_magic_quotes_gpc()) {
-            $stripped = stripslashes($detagged);
-            $escaped = mysql_real_escape_string($stripped);
-        } else {
-            $escaped = mysql_real_escape_string($detagged);
-        }
-
-        return addslashes($escaped);
+        return trim(strip_tags($string));
     }
 
     private function error($er) {
@@ -114,8 +106,12 @@ class Document extends CI_Controller {
     }
 
     public function getAllDocuments() {
-        $userType = $_POST['userType'];
-        $userId = $_POST['userId'];
+        $this->checkLogin();
+        if (!$this->login) {
+            show_error('Forbidden', 403);
+        }
+        $userType = $this->userType;
+        $userId = $this->userId;
         $method = $_POST['method'];
 
         if ($userType == 'ADMIN' || $userType == 'SEC') {

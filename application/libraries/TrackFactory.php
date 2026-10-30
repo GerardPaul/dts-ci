@@ -17,8 +17,8 @@ class TrackFactory {
                         d.attachment, d.status, d.referenceNumber, d.dateReceived,
                         t.id, t.document, t.user, t.received
                 FROM dts_document d, dts_track t 
-                WHERE t.id = '$track' AND t.document = d.id";
-        $query = $this->_ci->db->query($sql);
+                WHERE t.id = ? AND t.document = d.id";
+        $query = $this->_ci->db->query($sql, array($track));
         if ($query->num_rows() > 0) {
             return $this->createObjectFromData($query->row());
         }
@@ -26,8 +26,8 @@ class TrackFactory {
     }
 
     public function updateStatus($id, $status) {
-        $sql = "UPDATE dts_document SET status = '$status' WHERE id = ?";
-        if ($this->_ci->db->query($sql, array($id)))
+        $sql = "UPDATE dts_document SET status = ? WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($status, $id)))
             return true;
         return false;
     }
@@ -35,17 +35,19 @@ class TrackFactory {
     public function ajaxGetDocument($get, $user) {
         $sql = "SELECT t.id, d.referenceNumber, d.subject, d.from, d.dueDate, d.due15Days, d.deadline, d.dateReceived, t.received, d.status
                 FROM dts_document d, dts_track t 
-                WHERE t.document = d.id AND t.user = '$user'";
+                WHERE t.document = d.id AND t.user = ?";
+        $binds = array($user);
         if ($get !== 'All') {
             if($get === 'Archived')
                 $sql .= " AND archive = 1";
             else
-                $sql .= " AND status = '$get' AND archive = 0";
+                $sql .= " AND status = ? AND archive = 0";
+            $binds[] = $get;
         }else{
             $sql .= " AND archive = 0";
         }
         $sql .= " ORDER BY id ASC";
-        $query = $this->_ci->db->query($sql);
+        $query = $this->_ci->db->query($sql, $binds);
         if ($query->num_rows() > 0) {
             $documents = array();
             foreach ($query->result() as $row) {
@@ -58,8 +60,8 @@ class TrackFactory {
     
     public function getNamesReceived($document){
         $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name', t.received AS 'received' FROM dts_track t, dts_user u "
-                . "WHERE u.id = t.user AND t.document = $document ORDER BY u.division ASC";
-        $query = $this->_ci->db->query($sql);
+                . "WHERE u.id = t.user AND t.document = ? ORDER BY u.division ASC";
+        $query = $this->_ci->db->query($sql, array($document));
         
         $total = 0;
         $seen = 0;
@@ -81,8 +83,8 @@ class TrackFactory {
     }
 
     public function getCountUserDocuments($document) {
-        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE document = $document";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE document = ?";
+        $query = $this->_ci->db->query($sql, array($document));
         if ($query->num_rows() > 0) {
             return $query->row('count');
         }
@@ -115,15 +117,15 @@ class TrackFactory {
 
     public function updateReceived($user, $track) {
         $date = date('Y-m-d');
-        $sql = "UPDATE dts_track SET received = '$date' WHERE id = $track AND user = $user";
-        if ($this->_ci->db->query($sql))
+        $sql = "UPDATE dts_track SET received = ? WHERE id = ? AND user = ?";
+        if ($this->_ci->db->query($sql, array($date, $track, $user)))
             return true;
         return false;
     }
     
     public function forward($document, $notes, $action, $deadline, $users, $userId) {
-        $sql = "UPDATE dts_document SET action = '$action', deadline = '$deadline' WHERE id = ?";
-        if ($this->_ci->db->query($sql, array($document))) {
+        $sql = "UPDATE dts_document SET action = ?, deadline = ? WHERE id = ?";
+        if ($this->_ci->db->query($sql, array($action, $deadline, $document))) {
             foreach ($users as $user) {
                 if(is_numeric($user)){
                     $ard = $this->getARD($user);
@@ -149,8 +151,8 @@ class TrackFactory {
     }
     
     private function addDivisiontoTrack($divisionID, $document,$userId){
-        $sql = "SELECT id FROM dts_user WHERE division = '$divisionID' AND userType <> 'ADMIN' AND userType <> 'RD'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT id FROM dts_user WHERE division = ? AND userType <> 'ADMIN' AND userType <> 'RD'";
+        $query = $this->_ci->db->query($sql, array($divisionID));
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $user = $row->id;
@@ -161,8 +163,8 @@ class TrackFactory {
     }
     
     private function getDivisionIDByName($division){
-        $sql = "SELECT id FROM dts_division WHERE name = '$division'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT id FROM dts_division WHERE name = ?";
+        $query = $this->_ci->db->query($sql, array($division));
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 return $row->id;
@@ -200,12 +202,12 @@ class TrackFactory {
     }
 
     private function setStatusOnGoing($document) {
-        $sql = "SELECT status FROM dts_document WHERE id = '$document'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT status FROM dts_document WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($document));
         if ($query->num_rows() > 0) {
             if ($query->row('status') == '') {
-                $sql1 = "UPDATE dts_document SET status = 'On-Going' WHERE id = '$document'";
-                $this->_ci->db->query($sql1);
+                $sql1 = "UPDATE dts_document SET status = 'On-Going' WHERE id = ?";
+                $this->_ci->db->query($sql1, array($document));
             }
         }
     }
@@ -221,8 +223,8 @@ class TrackFactory {
     }
 
     private function checkUser($user, $document) {
-        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE user = '$user' AND document = '$document'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT COUNT(*) AS 'count' FROM dts_track WHERE user = ? AND document = ?";
+        $query = $this->_ci->db->query($sql, array($user, $document));
         if ($query->num_rows() > 0) {
             $count = (int) $query->row('count');
             return $count;
@@ -231,8 +233,8 @@ class TrackFactory {
     }
 
     private function checkARD($user, $document) {
-        $sql = "SELECT * FROM dts_track WHERE user = '$user' AND document = '$document'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT * FROM dts_track WHERE user = ? AND document = ?";
+        $query = $this->_ci->db->query($sql, array($user, $document));
         if ($query->num_rows() > 0) {
             return true;
         }
@@ -246,8 +248,8 @@ class TrackFactory {
             $userType = $query->row('userType');
             $division = $query->row('division');
             if ($userType != 'ARD') {
-                $sql1 = "SELECT id FROM dts_user WHERE division = '$division' AND userType = 'ARD'";
-                $query1 = $this->_ci->db->query($sql1);
+                $sql1 = "SELECT id FROM dts_user WHERE division = ? AND userType = 'ARD'";
+                $query1 = $this->_ci->db->query($sql1, array($division));
                 if ($query1->num_rows() > 0) {
                     return $query1->row('id');
                 } else {
@@ -262,13 +264,13 @@ class TrackFactory {
     }
 
     public function setUrgent($id){
-        $sql = "SELECT subject FROM dts_document WHERE id = $id ";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT subject FROM dts_document WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($id));
         if($query->num_rows() > 0){
             $subject  = $query->row('subject');
             if($subject[0] != '!'){
-                $sql1 = "UPDATE dts_document SET subject = '!!! URGENT !!! $subject' WHERE id = $id";
-                $this->_ci->db->query($sql1);
+                $sql1 = "UPDATE dts_document SET subject = ? WHERE id = ?";
+                $this->_ci->db->query($sql1, array('!!! URGENT !!! ' . $subject, $id));
             }
         }
     }

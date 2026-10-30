@@ -193,3 +193,13 @@ ALTER TABLE `dts_user`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Added later: objects the application code uses that the 2014 export lacked.
+ALTER TABLE `dts_document` ADD COLUMN `archive` tinyint(1) NOT NULL DEFAULT 0;
+
+CREATE TABLE IF NOT EXISTS `dts_files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `document` int(11) NOT NULL,
+  `file_url` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

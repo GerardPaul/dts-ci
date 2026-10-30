@@ -57,8 +57,8 @@ class ChatFactory {
     }
     
     private function getUsersInvolved($document, $creator){
-        $sql = "SELECT id, user FROM dts_track WHERE document = $document AND user <> $creator";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT id, user FROM dts_track WHERE document = ? AND user <> ?";
+        $query = $this->_ci->db->query($sql, array($document, $creator));
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $receiver = $row->user;

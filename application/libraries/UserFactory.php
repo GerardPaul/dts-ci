@@ -132,14 +132,16 @@ class UserFactory {
     }
 
     public function updateProfile($userId, $firstname, $lastname, $email, $username, $password) {
-        $sql = "UPDATE dts_user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username' WHERE id = ?";
+        $sql = "UPDATE dts_user SET firstname = ?, lastname = ?, email = ?, username = ? WHERE id = ?";
+        $binds = array($firstname, $lastname, $email, $username, $userId);
         if ($password != 'password') {
             $salt1 = md5(uniqid(rand(), true));
             $salt = substr($salt1, 0, 50);
             $hashPassword = hash('sha256', $salt . $password . $salt);
-            $sql = "UPDATE dts_user SET firstname = '$firstname', lastname = '$lastname', email = '$email', username = '$username', password = '$hashPassword', salt = '$salt' WHERE id = ?";
+            $sql = "UPDATE dts_user SET firstname = ?, lastname = ?, email = ?, username = ?, password = ?, salt = ? WHERE id = ?";
+            $binds = array($firstname, $lastname, $email, $username, $hashPassword, $salt, $userId);
         }
-        if ($this->_ci->db->query($sql, array($userId)))
+        if ($this->_ci->db->query($sql, $binds))
             return true;
         return false;
     }
