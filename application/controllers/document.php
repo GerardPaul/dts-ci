@@ -25,15 +25,7 @@ class Document extends CI_Controller {
     }
 
     private function cleanString($string) {
-        $detagged = strip_tags($string);
-        if (get_magic_quotes_gpc()) {
-            $stripped = stripslashes($detagged);
-            $escaped = mysql_real_escape_string($stripped);
-        } else {
-            $escaped = mysql_real_escape_string($detagged);
-        }
-
-        return addslashes($escaped);
+        return trim(strip_tags($string));
     }
 
     private function error($er) {
@@ -82,10 +74,13 @@ class Document extends CI_Controller {
     }
 
     public function getAllDocuments() {
-        $userId = $_POST['userId'];
+        $this->checkLogin();
+        if (!$this->login) {
+            show_error('Forbidden', 403);
+        }
 
         $this->load->library("TrackFactory");
-        echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $userId));
+        echo json_encode($this->trackfactory->ajaxGetDocument($_POST['change'], $this->userId));
     }
 
     public function details($track = 0) {

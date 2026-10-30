@@ -13,8 +13,8 @@ class NotificationFactory {
     }
 
     public function ajaxCountNotifications($receiverId) {
-        $sql = "SELECT COUNT(id) AS 'num' FROM dts_notification WHERE receiver = '$receiverId' AND status = '0' ORDER BY dateCreated DESC";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT COUNT(id) AS 'num' FROM dts_notification WHERE receiver = ? AND status = '0' ORDER BY dateCreated DESC";
+        $query = $this->_ci->db->query($sql, array($receiverId));
         if ($query->num_rows() > 0) {
             return $query->row('num');
         }
@@ -24,8 +24,8 @@ class NotificationFactory {
     public function ajaxGetNotifications($receiverId) {
         $sql = "SELECT n.id, n.receiver, n.object, n.type, n.status, n.dateCreated, u.username AS 'creator', d.referenceNumber AS 'documentRefNo'
                     FROM dts_notification n, dts_user u, dts_document d, dts_track t
-                    WHERE n.creator = u.id AND n.object = t.id AND t.document = d.id AND n.receiver = '$receiverId' AND n.status = '0' ORDER BY dateCreated DESC";
-        $query = $this->_ci->db->query($sql);
+                    WHERE n.creator = u.id AND n.object = t.id AND t.document = d.id AND n.receiver = ? AND n.status = '0' ORDER BY dateCreated DESC";
+        $query = $this->_ci->db->query($sql, array($receiverId));
         if ($query->num_rows() > 0) {
             $notifications = array();
             foreach ($query->result() as $row) {
@@ -44,8 +44,8 @@ class NotificationFactory {
     }
     
     public function seenMessageNotification($document, $user){
-        $sql = "UPDATE dts_notification SET status = '1' WHERE receiver = '$user' AND object = '$document' AND type = '2'";
-        if ($this->_ci->db->query($sql))
+        $sql = "UPDATE dts_notification SET status = '1' WHERE receiver = ? AND object = ? AND type = '2'";
+        if ($this->_ci->db->query($sql, array($user, $document)))
             return true;
         return false;
     }

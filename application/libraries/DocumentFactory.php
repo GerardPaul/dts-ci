@@ -47,8 +47,8 @@ class DocumentFactory {
     
     public function getNamesReceived($document){
         $sql = "SELECT CONCAT(u.lastname, ', ', u.firstname) AS 'name', t.received AS 'received' FROM dts_track t, dts_user u "
-                . "WHERE u.id = t.user AND t.document = $document ORDER BY u.division ASC";
-        $query = $this->_ci->db->query($sql);
+                . "WHERE u.id = t.user AND t.document = ? ORDER BY u.division ASC";
+        $query = $this->_ci->db->query($sql, array($document));
         
         $total = 0;
         $seen = 0;
@@ -97,12 +97,12 @@ class DocumentFactory {
             if($get === 'Archived')
                 $sql .= " WHERE archive = 1";
             else
-                $sql .= " WHERE status = '$get' AND archive = 0";
+                $sql .= " WHERE status = ? AND archive = 0";
         }else{
             $sql .= " WHERE archive = 0";
         }
         $sql .= " ORDER BY id ASC";
-        $query = $this->_ci->db->query($sql);
+        $query = $this->_ci->db->query($sql, $get !== 'All' && $get !== 'Archived' ? array($get) : array());
         if ($query->num_rows() > 0) {
             $documents = array();
             foreach ($query->result() as $row) {
@@ -117,17 +117,17 @@ class DocumentFactory {
         $sql = "SELECT d.id, d.subject, d.description, d.dateReceived, d.from, d.dueDate, d.due15Days, d.deadline 
                 FROM dts_document d 
                 WHERE (d.status = 'On-Going' OR d.status = 'Cancelled') 
-                AND (d.dateReceived >= '$from' AND d.dateReceived <= '$to') ORDER BY d.dateReceived DESC";
-        $query = $this->_ci->db->query($sql);
+                AND (d.dateReceived >= ? AND d.dateReceived <= ?) ORDER BY d.dateReceived DESC";
+        $query = $this->_ci->db->query($sql, array($from, $to));
         if ($query->num_rows() > 0) {
             $documents = array();
             foreach ($query->result() as $row) {
                 $id = $row->id;
                 $chat = "SELECT c.message, DATE_FORMAT(c.created, '%b %d, %h:%i %p') AS 'created', CONCAT(u.lastname, ',', u.firstname) AS 'fullname'
                             FROM dts_chat c, dts_user u
-                            WHERE c.document = '$id' AND c.user = u.id
+                            WHERE c.document = ? AND c.user = u.id
                             ORDER BY c.created ASC";
-                $chat_q = $this->_ci->db->query($chat);
+                $chat_q = $this->_ci->db->query($chat, array($id));
                 $chat_message = "";
                 if ($query->num_rows() > 0) {
                     foreach($chat_q->result() as $c){
@@ -231,8 +231,8 @@ class DocumentFactory {
     }
 
     public function getAttachments($id){
-        $sql = "SELECT * FROM dts_files WHERE document = $id";
-        $query = $this->_ci->db->query($sql);
+        $sql = "SELECT * FROM dts_files WHERE document = ?";
+        $query = $this->_ci->db->query($sql, array($id));
         if ($query->num_rows() > 0) {
             $attachments = array();
             foreach ($query->result() as $row) {
@@ -244,7 +244,7 @@ class DocumentFactory {
     }
     
     public function updateAttachment($id, $file_url){
-        $sql = "UPDATE dts_document SET attachment = '$file_url' WHERE id = '$id'";
-        $query = $this->_ci->db->query($sql);
+        $sql = "UPDATE dts_document SET attachment = ? WHERE id = ?";
+        $query = $this->_ci->db->query($sql, array($file_url, $id));
     }
 }
