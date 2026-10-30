@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
 
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
         <style>
             body {

@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `dts_user` (
 --
 
 INSERT INTO `dts_user` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `salt`, `userType`, `division`, `resetHash`, `status`) VALUES
-(1, 'Gerard Paul', 'Labitad', 'gerardpaul.labitad@outlook.com', 'administrator', '768846218b45b8d8e07e2b700eb2c4b76e95ccd49ac1dcb48b32f6776862168d', 'f4f79924a7c298a43d83804518790c9c', 'ADMIN', 4, NULL, 1);
+(1, 'Administrator', 'User', 'admin@example.com', 'administrator', 'cd34e9298236ecde006d06c4ab9d9de765c3363488b2f32870e806b26902f293', 'demosalt', 'ADMIN', 4, NULL, 1);
 
 --
 -- Constraints for dumped tables

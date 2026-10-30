@@ -15,7 +15,7 @@ $current_method = $this->router->fetch_method();
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/bootstrap.css"); ?>">
         <link rel="stylesheet" href="<?php echo base_url("application/assets/css/custom.css"); ?>">
 
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/jquery-2.1.1.min.js"); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url("application/assets/js/moment.min.js"); ?>"></script>

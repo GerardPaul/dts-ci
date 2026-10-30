@@ -382,3 +382,99 @@ table thead{
 #move button{
     display: block;
 }
+
+/*--UI polish--*/
+body{
+    background-color: #f4f6f9;
+    color: #333;
+}
+.navbar-inverse{
+    background: #1b3a5c;
+    border-bottom: 3px solid #2f8fd8;
+}
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a{
+    color: #dbe7f3;
+}
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-brand:hover{
+    color: #fff;
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover{
+    background-color: #2f8fd8;
+    color: #fff;
+}
+h1{
+    font-size: 26px;
+    font-weight: 600;
+    color: #1b3a5c;
+    margin: 25px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dde3ea;
+}
+h3{
+    color: #1b3a5c;
+}
+.btn-primary{
+    background-color: #2f8fd8;
+    border-color: #2a80c2;
+}
+.btn-primary:hover,
+.btn-primary:focus{
+    background-color: #2a80c2;
+    border-color: #236aa3;
+}
+.btn{
+    border-radius: 3px;
+}
+.container > table,
+.container > .dataTables_wrapper,
+.container > form,
+.container > .table-responsive{
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #dde3ea;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+}
+table thead{
+    background-color: #1f4e79;
+}
+.table > thead > tr > th{
+    border-bottom: 0;
+    font-weight: 600;
+}
+.table-hover > tbody > tr:hover,
+#documentsTable tbody tr:hover{
+    background-color: #eef5fb;
+}
+#documentsTable{
+    font-size: 12.5px;
+}
+#documentsTable td{
+    vertical-align: middle;
+}
+#documentDetails th{
+    color: #1b3a5c;
+}
+.form-control:focus{
+    border-color: #2f8fd8;
+    box-shadow: 0 0 0 2px rgba(47, 143, 216, .2);
+}
+#footer{
+    background-color: #fff;
+    border-top: 1px solid #dde3ea;
+}
+.form-signin{
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    padding: 25px;
+}
+.login-header{
+    color: #1b3a5c;
+}
