@@ -4,7 +4,7 @@
 				<script>
 					document.write(new Date().getFullYear());
 				</script>
-                                <a href="http://gpplworx.com" target="_blank">Gerard Paul P. Labitad</a>
+                                <a href="https://gerardpaul.github.io/thegpworx/" target="_blank" rel="noopener">TheGPWorx</a>
 			</p>
 		</div>
 	</div>
